@@ -12,7 +12,7 @@ public class ExerciseVideo {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXERCISE_ID")
+    @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
 
     private String exerciseVideoUrl;

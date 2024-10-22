@@ -14,11 +14,11 @@ public class ExerciseRecord {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RECORD_ID")
+    @JoinColumn(name = "RECORD_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Record record;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXERCISE_ID")
+    @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
 
     private Integer sets;
