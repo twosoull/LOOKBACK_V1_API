@@ -28,4 +28,22 @@ public class Muscle {
     private String createdBy;
     private String updatedBy;
 
+    // 기본 생성자
+    protected Muscle() {}
+
+    // Excel 데이터를 위한 생성자
+    public Muscle(String muscleName, String origin, String insertion, String role,
+                  String description, Long activationLevel, MuscleGroup muscleGroup) {
+        this.muscleName = muscleName;
+        this.origin = origin;
+        this.insertion = insertion;
+        this.role = role;
+        this.description = description;
+        this.activationLevel = activationLevel;
+        this.muscleGroup = muscleGroup;
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = "admin";
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = "admin";
+    }
 }

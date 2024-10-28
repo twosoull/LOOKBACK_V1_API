@@ -33,4 +33,23 @@ public class ExerciseMuscleMapping {
     private String createdBy;
     private String updatedBy;
 
+    // 기본 생성자
+    protected ExerciseMuscleMapping() {}
+
+    // Excel 데이터를 위한 생성자
+    public ExerciseMuscleMapping(Exercise exercise, MuscleCategory primaryMuscleCategory,
+                                 MuscleCategory secondMuscleCategory, String role,
+                                 Long activationLevel, String description) {
+        this.exercise = exercise;
+        this.primaryMuscleCategory = primaryMuscleCategory;
+        this.secondMuscleCategory = secondMuscleCategory;
+        this.role = role;
+        this.activationLevel = activationLevel;
+        this.description = description;
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = "admin";
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = "admin";
+    }
+
 }

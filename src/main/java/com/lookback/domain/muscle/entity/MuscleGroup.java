@@ -22,4 +22,17 @@ public class MuscleGroup {
     private LocalDateTime updatedAt;
     private String updatedBy;
 
+    // 기본 생성자
+    protected MuscleGroup() {}
+
+    // Excel 데이터를 위한 생성자
+    public MuscleGroup(String muscleGroupName, String description, MuscleCategory muscleCategory) {
+        this.muscleGroupName = muscleGroupName;
+        this.description = description;
+        this.muscleCategory = muscleCategory;
+        this.createdAt = LocalDateTime.now();
+        this.createdBy = "admin";
+        this.updatedAt = LocalDateTime.now();
+        this.updatedBy = "admin";
+    }
 }
