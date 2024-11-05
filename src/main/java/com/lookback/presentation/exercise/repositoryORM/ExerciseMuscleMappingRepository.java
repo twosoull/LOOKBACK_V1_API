@@ -1,4 +1,4 @@
-package com.lookback.domain.muscle.repository;
+package com.lookback.presentation.exercise.repositoryORM;
 
 import com.lookback.domain.muscle.entity.ExerciseMuscleMapping;
 import org.springframework.data.jpa.repository.JpaRepository;

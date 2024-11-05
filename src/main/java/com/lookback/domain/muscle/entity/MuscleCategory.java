@@ -1,12 +1,17 @@
 package com.lookback.domain.muscle.entity;
 
+import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Table(name = "MUSCLE_CATEGORY")
-public class MuscleCategory {
+@AllArgsConstructor
+public class MuscleCategory extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "MUSCLE_CATEGORY_ID")
@@ -14,9 +19,7 @@ public class MuscleCategory {
 
     private String muscleCategoryName;
     private String description;
-    private LocalDateTime createdAt;
     private String createdBy;
-    private LocalDateTime updatedAt;
     private String updatedBy;
 
     // 기본 생성자
@@ -26,9 +29,13 @@ public class MuscleCategory {
     public MuscleCategory(String muscleCategoryName, String description) {
         this.muscleCategoryName = muscleCategoryName;
         this.description = description;
-        this.createdAt = LocalDateTime.now();
         this.createdBy = "admin";
-        this.updatedAt = LocalDateTime.now();
         this.updatedBy = "admin";
+    }
+
+    public static MuscleCategory createCategory(String muscleCategoryName, String description) {
+        return builder()
+                .muscleCategoryName(muscleCategoryName)
+                .description(description).build();
     }
 }

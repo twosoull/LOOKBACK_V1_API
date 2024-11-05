@@ -3,10 +3,10 @@ package com.lookback.domain.excel;
 import com.lookback.domain.exercise.repository.ExerciseRepository;
 import com.lookback.domain.muscle.entity.*;
 import com.lookback.domain.exercise.entity.Exercise;
-import com.lookback.domain.muscle.repository.ExerciseMuscleMappingRepository;
-import com.lookback.domain.muscle.repository.MuscleCategoryRepository;
-import com.lookback.domain.muscle.repository.MuscleGroupRepository;
-import com.lookback.domain.muscle.repository.MuscleRepository;
+import com.lookback.presentation.exercise.repositoryORM.ExerciseMuscleMappingRepository;
+import com.lookback.presentation.exercise.repositoryORM.MuscleCategoryJpaRepository;
+import com.lookback.presentation.exercise.repositoryORM.MuscleGroupJpaRepository;
+import com.lookback.presentation.exercise.repositoryORM.MuscleJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +20,9 @@ import java.util.Iterator;
 @RequiredArgsConstructor
 public class ExcelService {
 
-    private final MuscleCategoryRepository muscleCategoryRepository;
-    private final MuscleGroupRepository muscleGroupRepository;
-    private final MuscleRepository muscleRepository;
+    private final MuscleCategoryJpaRepository muscleCategoryRepository;
+    private final MuscleGroupJpaRepository muscleGroupRepository;
+    private final MuscleJpaRepository muscleRepository;
     private final ExerciseRepository exerciseRepository;
     private final ExerciseMuscleMappingRepository exerciseMuscleMappingRepository;
 

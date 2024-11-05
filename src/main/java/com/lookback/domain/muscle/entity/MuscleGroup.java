@@ -1,11 +1,12 @@
 package com.lookback.domain.muscle.entity;
 
+import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class MuscleGroup {
+public class MuscleGroup extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "MUSCLE_GROUP_ID")

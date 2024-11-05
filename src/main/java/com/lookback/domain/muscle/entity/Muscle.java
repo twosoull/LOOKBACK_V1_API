@@ -1,5 +1,6 @@
 package com.lookback.domain.muscle.entity;
 
+import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Muscle {
+public class Muscle extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "MUSCLE_ID")

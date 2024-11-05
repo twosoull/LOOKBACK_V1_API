@@ -1,11 +1,12 @@
 package com.lookback.domain.exercise.entity;
 
+import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
-public class ExerciseVideo {
+public class ExerciseVideo extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "EXERCISE_VIDEO_ID")

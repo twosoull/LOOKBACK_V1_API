@@ -8,4 +8,8 @@ public class ExerciseService {
     public void retrieveExercises () {
 
     }
+
+    public void createMuscleCategory () {
+
+    }
 }
