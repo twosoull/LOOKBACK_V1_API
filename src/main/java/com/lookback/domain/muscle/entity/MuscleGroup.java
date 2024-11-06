@@ -1,11 +1,16 @@
 package com.lookback.domain.muscle.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.muscle.command.MuscleGroupCommand;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@AllArgsConstructor
 public class MuscleGroup extends BaseEntity {
 
     @Id @GeneratedValue
@@ -18,9 +23,7 @@ public class MuscleGroup extends BaseEntity {
 
     private String muscleGroupName;
     private String description;
-    private LocalDateTime createdAt;
     private String createdBy;
-    private LocalDateTime updatedAt;
     private String updatedBy;
 
     // 기본 생성자
@@ -31,9 +34,15 @@ public class MuscleGroup extends BaseEntity {
         this.muscleGroupName = muscleGroupName;
         this.description = description;
         this.muscleCategory = muscleCategory;
-        this.createdAt = LocalDateTime.now();
         this.createdBy = "admin";
-        this.updatedAt = LocalDateTime.now();
         this.updatedBy = "admin";
+    }
+
+    public static MuscleGroup createMuscleGroup(String muscleGroupName, String description, MuscleCategory muscleCategory) {
+        return builder()
+                .muscleGroupName(muscleGroupName)
+                .description(description)
+                .muscleCategory(muscleCategory)
+                .build();
     }
 }

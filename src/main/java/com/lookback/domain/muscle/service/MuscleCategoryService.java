@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MuscleService {
+public class MuscleCategoryService {
 
     private final MuscleCategoryRepository muscleCategoryRepository;
 
     @Transactional
-    public void create(MuscleCategoryCommand.create create) {
+    public MuscleCategoryCommand.Saved save(MuscleCategoryCommand.Save save) {
 
-        MuscleCategory muscleCategory =  MuscleCategory.createCategory(create.muscleCategoryName(), create.description());
-        muscleCategoryRepository.create(muscleCategory);
-
+        MuscleCategory muscleCategory =  MuscleCategory.createCategory(save.muscleCategoryName(), save.description());
+        return MuscleCategoryCommand.of(muscleCategoryRepository.save(muscleCategory));
     }
+
 }

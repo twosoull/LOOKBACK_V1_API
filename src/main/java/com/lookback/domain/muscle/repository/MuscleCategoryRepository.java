@@ -4,5 +4,7 @@ import com.lookback.domain.muscle.entity.MuscleCategory;
 
 public interface MuscleCategoryRepository {
 
-    void create(MuscleCategory muscleCategory);
+    MuscleCategory save(MuscleCategory muscleCategory);
+
+    MuscleCategory findById(Long muscleCategoryId);
 }
