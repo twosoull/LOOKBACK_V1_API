@@ -17,4 +17,13 @@ public class ExerciseVideo extends BaseEntity {
     private Exercise exercise;
 
     private String exerciseVideoUrl;
+
+    public ExerciseVideo(Exercise exercise, String exerciseVideoUrl) {
+        this.exercise = exercise;
+        this.exerciseVideoUrl = exerciseVideoUrl;
+    }
+
+    public ExerciseVideo() {
+
+    }
 }

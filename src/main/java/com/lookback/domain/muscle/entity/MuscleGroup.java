@@ -5,11 +5,13 @@ import com.lookback.domain.muscle.command.MuscleGroupCommand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 public class MuscleGroup extends BaseEntity {
 
@@ -44,5 +46,11 @@ public class MuscleGroup extends BaseEntity {
                 .description(description)
                 .muscleCategory(muscleCategory)
                 .build();
+    }
+
+    public static MuscleGroup fromCommandSave(MuscleGroupCommand.Save command, MuscleCategory muscleCategory) {
+        return createMuscleGroup(command.muscleGroupName(),
+                                 command.description(),
+                                 muscleCategory);
     }
 }

@@ -1,8 +1,6 @@
 package com.lookback.domain.excel;
 
-import com.lookback.domain.excel.ExcelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +32,7 @@ public class ExcelController {
 
             return ResponseEntity.ok("Excel data imported successfully.");
         } catch (Exception e) {
+            e.printStackTrace(); // 예외 로그 출력
             return ResponseEntity.status(500).body("Failed to import Excel data: " + e.getMessage());
         }
     }

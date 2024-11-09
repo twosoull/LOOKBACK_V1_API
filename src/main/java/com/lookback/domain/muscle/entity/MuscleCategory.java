@@ -1,6 +1,7 @@
 package com.lookback.domain.muscle.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.muscle.command.MuscleCategoryCommand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,9 +36,15 @@ public class MuscleCategory extends BaseEntity {
         this.updatedBy = "admin";
     }
 
-    public static MuscleCategory createCategory(String muscleCategoryName, String description) {
+    public static MuscleCategory create(String muscleCategoryName, String description) {
         return builder()
                 .muscleCategoryName(muscleCategoryName)
                 .description(description).build();
     }
+
+    public static MuscleCategory fromCommandSave(MuscleCategoryCommand.Save save) {
+        return create(save.muscleCategoryName(), save.description());
+    }
+
+
 }

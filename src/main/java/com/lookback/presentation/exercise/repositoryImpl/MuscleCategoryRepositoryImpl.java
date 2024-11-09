@@ -23,7 +23,6 @@ public class MuscleCategoryRepositoryImpl implements MuscleCategoryRepository {
     @Override
     public MuscleCategory findById(Long muscleCategoryId) {
         return muscleCategoryJpaRepository.findById(muscleCategoryId).orElseThrow(
-                () -> new RestApiException(RESOURCE_NOT_FOUND)
-        );
+                () -> new RestApiException(RESOURCE_NOT_FOUND));
     }
 }

@@ -7,7 +7,7 @@ public class MuscleCategoryCommand {
     public record Save(String muscleCategoryName,
                          String description) {}
 
-    public record Saved(Long muscleCategoryId,
+    public record Saved(Long id,
                         String muscleCategoryName,
                         String description) {}
 

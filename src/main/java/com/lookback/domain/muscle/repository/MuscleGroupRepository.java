@@ -5,5 +5,7 @@ import com.lookback.domain.muscle.entity.MuscleGroup;
 import org.springframework.stereotype.Repository;
 
 public interface MuscleGroupRepository {
-    void save(MuscleGroup muscleGroup);
+    MuscleGroup save(MuscleGroup muscleGroup);
+
+    MuscleGroup findById(Long id);
 }

@@ -1,12 +1,11 @@
 package com.lookback.domain.excel;
 
-import com.lookback.domain.exercise.repository.ExerciseRepository;
-import com.lookback.domain.muscle.entity.*;
 import com.lookback.domain.exercise.entity.Exercise;
-import com.lookback.presentation.exercise.repositoryORM.ExerciseMuscleMappingRepository;
-import com.lookback.presentation.exercise.repositoryORM.MuscleCategoryJpaRepository;
-import com.lookback.presentation.exercise.repositoryORM.MuscleGroupJpaRepository;
-import com.lookback.presentation.exercise.repositoryORM.MuscleJpaRepository;
+import com.lookback.domain.exercise.entity.ExerciseVideo;
+import com.lookback.domain.exercise.repository.ExerciseRepository;
+import com.lookback.domain.exercise.repository.ExerciseVideoRepository;
+import com.lookback.domain.muscle.entity.*;
+import com.lookback.presentation.exercise.repositoryORM.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,7 @@ public class ExcelService {
     private final MuscleGroupJpaRepository muscleGroupRepository;
     private final MuscleJpaRepository muscleRepository;
     private final ExerciseRepository exerciseRepository;
-    private final ExerciseMuscleMappingRepository exerciseMuscleMappingRepository;
+    private final ExerciseVideoRepository exerciseVideoRepository;
 
     @Transactional
     public void importDataFromExcel(String filePath) throws Exception {
@@ -35,19 +34,19 @@ public class ExcelService {
             importMuscleGroups(workbook);
             importMuscles(workbook);
             importExercises(workbook);
-            importExerciseMuscleMappings(workbook);
-
+            importExerciseVideos(workbook);
         }
     }
 
     private void importMuscleCategories(Workbook workbook) {
         Sheet sheet = workbook.getSheet("MuscleCategory");
+        if (sheet == null) throw new IllegalArgumentException("MuscleCategory 시트를 찾을 수 없습니다.");
         Iterator<Row> rows = sheet.iterator();
-        rows.next(); // Skip header row
+        rows.next();
 
         while (rows.hasNext()) {
             Row row = rows.next();
-            MuscleCategory category = new MuscleCategory(
+            MuscleCategory category = MuscleCategory.create(
                     row.getCell(1).getStringCellValue(),
                     row.getCell(2).getStringCellValue()
             );
@@ -57,6 +56,7 @@ public class ExcelService {
 
     private void importMuscleGroups(Workbook workbook) {
         Sheet sheet = workbook.getSheet("MuscleGroup");
+        if (sheet == null) throw new IllegalArgumentException("MuscleGroup 시트를 찾을 수 없습니다.");
         Iterator<Row> rows = sheet.iterator();
         rows.next();
 
@@ -65,7 +65,7 @@ public class ExcelService {
             Long categoryId = (long) row.getCell(1).getNumericCellValue();
             MuscleCategory category = muscleCategoryRepository.findById(categoryId).orElse(null);
 
-            MuscleGroup group = new MuscleGroup(
+            MuscleGroup group = MuscleGroup.createMuscleGroup(
                     row.getCell(2).getStringCellValue(),
                     row.getCell(3).getStringCellValue(),
                     category
@@ -76,6 +76,7 @@ public class ExcelService {
 
     private void importMuscles(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Muscle");
+        if (sheet == null) throw new IllegalArgumentException("Muscle 시트를 찾을 수 없습니다.");
         Iterator<Row> rows = sheet.iterator();
         rows.next();
 
@@ -84,7 +85,7 @@ public class ExcelService {
             Long groupId = (long) row.getCell(1).getNumericCellValue();
             MuscleGroup group = muscleGroupRepository.findById(groupId).orElse(null);
 
-            Muscle muscle = new Muscle(
+            Muscle muscle = Muscle.create(
                     row.getCell(2).getStringCellValue(),
                     row.getCell(3).getStringCellValue(),
                     row.getCell(4).getStringCellValue(),
@@ -99,46 +100,49 @@ public class ExcelService {
 
     private void importExercises(Workbook workbook) {
         Sheet sheet = workbook.getSheet("Exercise");
+        if (sheet == null) throw new IllegalArgumentException("Exercise 시트를 찾을 수 없습니다.");
         Iterator<Row> rows = sheet.iterator();
         rows.next();
 
         while (rows.hasNext()) {
             Row row = rows.next();
+            Long categoryId = (long) row.getCell(1).getNumericCellValue();
+            Long groupId = (long) row.getCell(2).getNumericCellValue();
+            Long primeMuscleId = (long) row.getCell(3).getNumericCellValue();
+            Long auxiliaryMuscleId = (long) row.getCell(4).getNumericCellValue();
+
+            MuscleCategory category = muscleCategoryRepository.findById(categoryId).orElse(null);
+            MuscleGroup group = muscleGroupRepository.findById(groupId).orElse(null);
+            Muscle primeMuscle = muscleRepository.findById(primeMuscleId).orElse(null);
+            Muscle auxiliaryMuscle = muscleRepository.findById(auxiliaryMuscleId).orElse(null);
+
             Exercise exercise = new Exercise(
-                    row.getCell(1).getStringCellValue(),
-                    row.getCell(2).getStringCellValue(),
-                    row.getCell(3).getStringCellValue(),
-                    (int) row.getCell(4).getNumericCellValue(),
-                    row.getCell(5).getStringCellValue()
+                    row.getCell(5).getStringCellValue(),
+                    row.getCell(6).getStringCellValue(),
+                    row.getCell(7).getStringCellValue(),
+                    (int) row.getCell(8).getNumericCellValue(),
+                    row.getCell(9).getStringCellValue()
             );
             exerciseRepository.save(exercise);
         }
     }
 
-    private void importExerciseMuscleMappings(Workbook workbook) {
-        Sheet sheet = workbook.getSheet("ExerciseMuscleMapping");
+    private void importExerciseVideos(Workbook workbook) {
+        Sheet sheet = workbook.getSheet("ExerciseVideo");
+        if (sheet == null) throw new IllegalArgumentException("ExerciseVideo 시트를 찾을 수 없습니다.");
         Iterator<Row> rows = sheet.iterator();
         rows.next();
 
         while (rows.hasNext()) {
             Row row = rows.next();
             Long exerciseId = (long) row.getCell(1).getNumericCellValue();
-            Long primaryCategoryId = (long) row.getCell(2).getNumericCellValue();
-            Long secondCategoryId = row.getCell(3) != null ? (long) row.getCell(3).getNumericCellValue() : null;
+            Exercise exercise = exerciseRepository.findById(exerciseId);
 
-            Exercise exercise = exerciseRepository.findById(exerciseId).orElse(null);
-            MuscleCategory primaryCategory = muscleCategoryRepository.findById(primaryCategoryId).orElse(null);
-            MuscleCategory secondCategory = secondCategoryId != null ? muscleCategoryRepository.findById(secondCategoryId).orElse(null) : null;
-
-            ExerciseMuscleMapping mapping = new ExerciseMuscleMapping(
+            ExerciseVideo video = new ExerciseVideo(
                     exercise,
-                    primaryCategory,
-                    secondCategory,
-                    row.getCell(4).getStringCellValue(),
-                    (long) row.getCell(5).getNumericCellValue(),
-                    row.getCell(6).getStringCellValue()
+                    row.getCell(2).getStringCellValue()
             );
-            exerciseMuscleMappingRepository.save(mapping);
+            exerciseVideoRepository.save(video);
         }
     }
 }
