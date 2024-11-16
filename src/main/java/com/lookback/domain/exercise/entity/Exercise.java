@@ -1,15 +1,24 @@
 package com.lookback.domain.exercise.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.exercise.command.ExerciseCommand;
 import com.lookback.domain.muscle.entity.Muscle;
 import com.lookback.domain.muscle.entity.MuscleCategory;
 import com.lookback.domain.muscle.entity.MuscleGroup;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Getter
+@Builder
+@AllArgsConstructor
 @Table(name = "EXERCISE")
 public class Exercise extends BaseEntity {
 
@@ -33,6 +42,10 @@ public class Exercise extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUXILIARY_MUSCLE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Muscle AuxiliaryMuscle;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "exercise")
+    private List<ExerciseVideo> exerciseVideos = new ArrayList<>();
 
     private String exerciseName;
     private String exerciseLevel;
@@ -60,5 +73,25 @@ public class Exercise extends BaseEntity {
         this.createdBy = "admin";
         this.updatedAt = LocalDateTime.now();
         this.updatedBy = "admin";
+    }
+
+    public static Exercise create(String exerciseName, String exerciseLevel, String equipment,
+                                  Integer caloriesBurned, String description, MuscleGroup muscleGroup) {
+
+        return builder().exerciseName(exerciseName)
+                        .exerciseLevel(exerciseLevel)
+                        .equipment(equipment)
+                        .caloriesBurned(caloriesBurned)
+                        .description(description)
+                        .muscleGroup(muscleGroup).build();
+    }
+
+    public static Exercise fromCommandSave(ExerciseCommand.Save save, MuscleGroup muscleGroup) {
+        return create(save.exerciseName(),
+                      save.exerciseLevel(),
+                      save.equipment(),
+                      save.caloriesBurned(),
+                      save.description(),
+                      muscleGroup);
     }
 }
