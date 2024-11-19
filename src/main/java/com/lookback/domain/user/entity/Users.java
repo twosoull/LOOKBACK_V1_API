@@ -1,11 +1,13 @@
 package com.lookback.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "USERS")
 public class Users {
 
@@ -28,4 +30,21 @@ public class Users {
     private String status; //계정상태
     private LocalDateTime updatedAt;
 
+    public Users(Long id, String email, String password, String snsProvider, String snsId, String userName, String nickName, String profileImageUrl, String phone, String verified, String gender, LocalDateTime signupDate, LocalDateTime lastLoginDate, String status, LocalDateTime updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.snsProvider = snsProvider;
+        this.snsId = snsId;
+        this.userName = userName;
+        this.nickName = nickName;
+        this.profileImageUrl = profileImageUrl;
+        this.phone = phone;
+        this.verified = verified;
+        this.gender = gender;
+        this.signupDate = signupDate;
+        this.lastLoginDate = lastLoginDate;
+        this.status = status;
+        this.updatedAt = updatedAt;
+    }
 }

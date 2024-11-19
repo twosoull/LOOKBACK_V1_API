@@ -38,12 +38,9 @@ public class ExerciseService {
                     videos.stream()
                             .map(video -> ExerciseVideo.fromCommandSave(video, exercise))
                             .forEach(exerciseVideo -> {
-
-                                log.info("통과하나");
-                                        exercise.getExerciseVideos().add(exerciseVideo);
-                                        exerciseVideoRepository.save(exerciseVideo);
-                                    }
-                            );
+                                exercise.getExerciseVideos().add(exerciseVideo);
+                                exerciseVideoRepository.save(exerciseVideo);
+                            });
                 });
     }
 }
