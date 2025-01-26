@@ -10,15 +10,11 @@ public class MuscleGroupCommand {
                        String description) {}
 
     public record Saved(Long muscleGroupId,
-                        Long muscleCategoryId,
-                        String muscleGroupName,
-                        String description) {}
+                        Long muscleCategoryId) {}
 
     public static MuscleGroupCommand.Saved of(MuscleGroup mg) {
         return new MuscleGroupCommand.Saved(mg.getId(),
-                mg.getMuscleCategory().getId(),
-                mg.getMuscleGroupName(),
-                mg.getDescription());
+                mg.getMuscleCategory().getId());
     }
 
 
