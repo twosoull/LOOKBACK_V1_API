@@ -4,6 +4,7 @@ import com.lookback.domain.record.entity.Record;
 import com.lookback.domain.user.entity.Users;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class RecordCommand {
@@ -12,20 +13,18 @@ public class RecordCommand {
                        Long userId,
                        Long rating,
                        String comment,
-                       LocalDateTime recordDate
+                       LocalDate recordDate
     ){}
 
     public record Saved(Long recordId,
-                        Long rating,
                         String comment,
-                        LocalDateTime recordDate,
+                        LocalDate recordDate,
                         LocalDateTime createdAt,
                         LocalDateTime updatedAt
     ){}
 
     public static RecordCommand.Saved of(Record record) {
         return new RecordCommand.Saved(record.getId(),
-                                       record.getRating(),
                                        record.getComment(),
                                        record.getRecordDate(),
                                        record.getCreatedAt(),

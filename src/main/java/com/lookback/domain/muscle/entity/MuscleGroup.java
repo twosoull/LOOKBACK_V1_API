@@ -1,6 +1,7 @@
 package com.lookback.domain.muscle.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.exercise.entity.Exercise;
 import com.lookback.domain.muscle.command.MuscleGroupCommand;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,11 +21,14 @@ public class MuscleGroup extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Exercise exercise;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MUSCLE_CATEGORY_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MuscleCategory muscleCategory;
 
-    private String muscleGroupName;
-    private String description;
+    private String muscleType;
     private String createdBy;
     private String updatedBy;
 
@@ -33,8 +37,6 @@ public class MuscleGroup extends BaseEntity {
 
     // Excel 데이터를 위한 생성자
     public MuscleGroup(String muscleGroupName, String description, MuscleCategory muscleCategory) {
-        this.muscleGroupName = muscleGroupName;
-        this.description = description;
         this.muscleCategory = muscleCategory;
         this.createdBy = "admin";
         this.updatedBy = "admin";
@@ -42,8 +44,6 @@ public class MuscleGroup extends BaseEntity {
 
     public static MuscleGroup createMuscleGroup(String muscleGroupName, String description, MuscleCategory muscleCategory) {
         return builder()
-                .muscleGroupName(muscleGroupName)
-                .description(description)
                 .muscleCategory(muscleCategory)
                 .build();
     }

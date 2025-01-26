@@ -1,6 +1,5 @@
 package com.lookback.presentation.exercise.repositoryORM;
 
-import com.lookback.domain.muscle.entity.ExerciseMuscleMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

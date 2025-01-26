@@ -20,6 +20,10 @@ public class MuscleCategory extends BaseEntity {
     @Column(name = "MUSCLE_CATEGORY_ID")
     private Long id;
 
+    private String muscleName;
+
+    private Long parents_id;
+
     private String muscleCategoryName;
     private String description;
     private String createdBy;
