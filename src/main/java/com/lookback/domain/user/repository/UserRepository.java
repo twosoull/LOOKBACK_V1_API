@@ -10,4 +10,12 @@ public interface UserRepository {
     List<Users> findAll();
 
     List<Users> findByTrainerYn(String trainerYn);
+
+    List<Users> findStudentsByTrainerOrderByUserNameAsc(Long trainerId);
+
+    List<Users> findStudentsByTrainerOrderByRecentDesc(Long trainerId);
+
+    List<Users> findStudentsByTrainerAndUserNameOrderByUserNameAsc(Long trainerId, String userName);
+
+    Users findById(Long usersId);
 }

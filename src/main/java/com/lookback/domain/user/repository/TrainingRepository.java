@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface TrainingRepository {
     List<Training> findByTrainerIdAndTrainingStatus(Long trainingId, String trainingStatus);
+
+    Training save(Training training);
 }

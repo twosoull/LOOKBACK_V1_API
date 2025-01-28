@@ -5,10 +5,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FindTrainingUsersRequest {
-    private Long trainerId;
-    private String trainingStatus;
-    private String sortBy;
+public class SaveTrainingUserRequest {
 
-    private String userName;
+    private Long trainerId;
+    private Long studentId;
+    private String trainingStatus;
+
+
+
 }

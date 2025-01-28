@@ -18,4 +18,9 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public List<Training> findByTrainerIdAndTrainingStatus(Long trainingId, String trainingStatus) {
         return trainingJpaRepository.findByTrainerIdAndTrainingStatus(trainingId, trainingStatus);
     }
+
+    @Override
+    public Training save(Training training) {
+        return trainingJpaRepository.save(training);
+    }
 }

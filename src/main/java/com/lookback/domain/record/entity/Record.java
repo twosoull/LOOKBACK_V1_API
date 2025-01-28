@@ -1,6 +1,7 @@
 package com.lookback.domain.record.entity;
 
 import com.lookback.domain.record.command.RecordCommand;
+import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,10 @@ public class Record {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="RECORD_SHARE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private RecordShare recordShare;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="TRAINING_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Training Training;
 
     private LocalDate recordDate;
     private LocalTime recordTime;

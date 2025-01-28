@@ -15,7 +15,9 @@ public enum CommonErrorCode implements ErrorCode {
     UNABLE_CALCULATE_ORDER(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "대기열 순서를 찾을 수 없습니다."),
     NEGATIVE_VALUE(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "대기열 순서를 찾을 수 없습니다."),
     NOT_FOUND_TOKEN(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "토큰이 없습니다."),
-    EXPIRED_TOKEN(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "만료된 토큰입니다.");
+    EXPIRED_TOKEN(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "만료된 토큰입니다."),
+    RETRIEVE_ERROR(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "조회에 실패했습니다.");
+
     private final int status;
     private final HttpStatus httpStatus;
     private final String message;
