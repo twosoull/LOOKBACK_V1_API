@@ -1,5 +1,6 @@
 package com.lookback.domain.record.entity;
 
+import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import jakarta.persistence.*;
 
@@ -16,8 +17,8 @@ public class RecordShare {
 
     //작성자(예: 트레이너)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REG_USERS_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Users user;
+    @JoinColumn(name = "TRAINING_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Training training;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

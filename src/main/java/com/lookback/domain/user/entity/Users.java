@@ -17,18 +17,26 @@ public class Users {
 
     private String email;
     private String password;
+    private String phone;
+    private double weight;
+    private double height;
     private String snsProvider;
     private String snsId;
     private String userName;
     private String nickName;
     private String profileImageUrl;
-    private String phone;
     private String verified; //본인인증 여부
     private String gender;
     private LocalDateTime signupDate; //가입일
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
+    private String trainerYn;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Users() {
+
+    }
 
     public Users(Long id, String email, String password, String snsProvider, String snsId, String userName, String nickName, String profileImageUrl, String phone, String verified, String gender, LocalDateTime signupDate, LocalDateTime lastLoginDate, String status, LocalDateTime updatedAt) {
         this.id = id;
