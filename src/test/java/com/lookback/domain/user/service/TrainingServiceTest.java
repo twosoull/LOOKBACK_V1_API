@@ -3,6 +3,7 @@ package com.lookback.domain.user.service;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
 import com.lookback.presentation.users.dto.SaveTrainingUserRequest;
+import com.lookback.presentation.users.dto.UpdateTrainingUsersRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,16 @@ class TrainingServiceTest {
         saveTrainingUserRequest.setTrainingStatus("ACTIVE");
 
         trainingService.saveTrainingUser(saveTrainingUserRequest);
+
+    }
+
+    @Test
+    @Rollback
+    void cancelTrainingUser() {
+        UpdateTrainingUsersRequest updateTrainingUsersRequest = new UpdateTrainingUsersRequest();
+        updateTrainingUsersRequest.setTrainingId(1L);
+
+        trainingService.cancelTraining(updateTrainingUsersRequest);
 
     }
 }

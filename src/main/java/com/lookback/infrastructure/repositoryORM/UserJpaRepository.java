@@ -15,7 +15,7 @@ public interface UserJpaRepository extends JpaRepository<Users, Long> {
     List<Users> findStudentsByTrainerOrderByUserNameAsc(Long trainerId);
 
 
-    @Query("select t.student from Training t inner join Record r on t.id = r.Training.id where t.trainer.id = :trainerId order by r.createdAt DESC")
+    @Query("select t.student from Training t inner join Record r on t.id = r.training.id where t.trainer.id = :trainerId order by r.createdAt DESC")
     List<Users> findStudentsByTrainerOrderByRecentDesc(Long trainerId);
 
     @Query("select t.student from Training t where t.trainer.id = :trainerId And t.student.userName like %:userName% ORDER BY t.student.userName ASC ")

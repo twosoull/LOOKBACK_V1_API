@@ -22,7 +22,10 @@ public class MuscleCategory extends BaseEntity {
 
     private String muscleName;
 
-    private Long parents_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private MuscleCategory parent; // 부모 카테고리 (상체, 하체 등 계층 구조)
+
 
     private String muscleCategoryName;
     private String description;

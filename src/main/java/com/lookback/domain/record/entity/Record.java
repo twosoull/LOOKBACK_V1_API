@@ -11,6 +11,8 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -33,7 +35,10 @@ public class Record {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TRAINING_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Training Training;
+    private Training training;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "record")
+    List<ExerciseRecord> exerciseRecords;
 
     private LocalDate recordDate;
     private LocalTime recordTime;

@@ -1,17 +1,11 @@
 package com.lookback.domain.user.entity;
 
-import com.lookback.domain.record.entity.Record;
-import com.lookback.presentation.users.dto.SaveTrainingUserRequest;
+import com.lookback.domain.common.constant.enums.TrainingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-
-import static org.springframework.http.codec.ServerSentEvent.builder;
 
 @Entity
 @Getter
@@ -32,15 +26,21 @@ public class Training {
     @JoinColumn(name = "STUDENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Users student;
 
-    private String trainingStatus;
+    @Enumerated(EnumType.STRING) // Enum을 String으로 저장
+    @Column(nullable = false)
+    private TrainingStatus trainingStatus;
 
     public Training() {}
 
-    public static Training create(Users trainer, Users student, String trainingStatus) {
+    public static Training create(Users trainer, Users student, TrainingStatus trainingStatus) {
         return builder().trainer(trainer)
                         .student(student)
                         .trainingStatus(trainingStatus)
                         .build();
+    }
+
+    public void cancel(){
+        this.trainingStatus = TrainingStatus.CANCELED;
     }
 
 }

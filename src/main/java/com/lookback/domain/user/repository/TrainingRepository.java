@@ -10,4 +10,6 @@ public interface TrainingRepository {
     List<Training> findByTrainerIdAndTrainingStatus(Long trainingId, String trainingStatus);
 
     Training save(Training training);
+
+    Training findById(Long trainingId);
 }

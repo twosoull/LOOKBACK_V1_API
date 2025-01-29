@@ -1,5 +1,6 @@
 package com.lookback.domain.user.service;
 
+import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.user.command.StringUtil;
 import com.lookback.domain.user.entity.Training;
@@ -8,6 +9,7 @@ import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
 import com.lookback.presentation.users.dto.SaveTrainingUserRequest;
+import com.lookback.presentation.users.dto.UpdateTrainingUsersRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,8 @@ public class TrainingService {
      * */
     @Transactional
     public List<Users> findAllTrainingUsers(FindTrainingUsersRequest request) {
+        //TODO trainerID는 공통으로 가져오기
+
         TrainingServiceValidator.findTrainingUsersRequestValid(request);
 
         //String trainingStatus    = StringUtil.isNullOrEmpty(request.getTrainingStatus()) ? "ACTIVE" : request.getTrainingStatus();
@@ -60,6 +64,8 @@ public class TrainingService {
      * */
     @Transactional
     public List<Users> findTrainingUsersByUserName(FindTrainingUsersRequest request) {
+        //TODO trainerID는 공통으로 가져오기
+
         TrainingServiceValidator.findTrainingUsersRequestValid(request);
 
         List<Users> findStudents;
@@ -76,6 +82,8 @@ public class TrainingService {
      * */
     @Transactional
     public int saveTrainingUser(SaveTrainingUserRequest request) {
+        //TODO trainerID는 공통으로 가져오기
+
         TrainingServiceValidator.saveTrainingUserRequestValid(request);
         Users findTrainer = userRepository.findById(request.getTrainerId());
         Users findStudent = userRepository.findById(request.getStudentId());
@@ -83,7 +91,7 @@ public class TrainingService {
         //TODO 소스정리
         Training training;
         try {
-            training = Training.create(findTrainer, findStudent, request.getTrainingStatus());
+            training = Training.create(findTrainer, findStudent, TrainingStatus.IN_PROGRESS);
             trainingRepository.save(training);
         } catch (Exception e) {
             log.debug(e.getMessage());
@@ -94,6 +102,18 @@ public class TrainingService {
         if(training != null){ result = 1; }
 
         return result;
+    }
+
+    /**
+     * 회원 연결해제
+     * */
+    @Transactional
+    public void cancelTraining(UpdateTrainingUsersRequest request) {
+
+        Training training = trainingRepository.findById(request.getTrainingId());
+        training.cancel();
+
+        //TODO 리턴으로 해제 값을 보내준다. 실패시 오류 값 보내기
     }
 
 }

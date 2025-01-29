@@ -33,6 +33,10 @@ public class Exercise extends BaseEntity {
     @OneToMany(mappedBy = "exercise")
     private List<ExerciseVideo> exerciseVideos = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "exercise")
+    private List<MuscleGroup> muscleGroups = new ArrayList<>();
+
     private String exerciseName;
     private String exerciseLevel;
     private Integer caloriesBurned;

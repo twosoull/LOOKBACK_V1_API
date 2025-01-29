@@ -23,4 +23,9 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public Training save(Training training) {
         return trainingJpaRepository.save(training);
     }
+
+    @Override
+    public Training findById(Long trainingId) {
+        return trainingJpaRepository.findById(trainingId).orElse(null);
+    }
 }
