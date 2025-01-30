@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -22,10 +23,9 @@ public class MuscleCategory extends BaseEntity {
 
     private String muscleName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private MuscleCategory parent; // 부모 카테고리 (상체, 하체 등 계층 구조)
-
+    private List<MuscleCategory> parent; // 부모 카테고리 (상체, 하체 등 계층 구조)
 
     private String muscleCategoryName;
     private String description;

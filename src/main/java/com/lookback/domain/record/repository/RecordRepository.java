@@ -9,4 +9,8 @@ public interface RecordRepository {
     Record save(Record record);
 
     List<Record> findByUsersIdOrderByCreatedAtDesc(Long UsersId);
+
+    List<Record> findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(Long usersId);
+
+    List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId);
 }

@@ -9,4 +9,7 @@ public interface RecordJpaRepository extends JpaRepository<Record, Long> {
 
     List<Record> findByUsersIdOrderByCreatedAtDesc(Long usersId);
 
+    List<Record> findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(Long usersId);
+
+    List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId);
 }

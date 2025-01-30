@@ -24,4 +24,14 @@ public class RecordRepositoryImpl implements RecordRepository {
     public List<Record> findByUsersIdOrderByCreatedAtDesc(Long usersId) {
         return recordJpaRepository.findByUsersIdOrderByCreatedAtDesc(usersId);
     }
+
+    @Override
+    public List<Record> findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(Long usersId) {
+        return recordJpaRepository.findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(usersId);
+    }
+
+    @Override
+    public List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId) {
+        return recordJpaRepository.findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(usersId);
+    }
 }

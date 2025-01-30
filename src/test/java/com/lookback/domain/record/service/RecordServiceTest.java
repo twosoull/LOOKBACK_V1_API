@@ -1,12 +1,18 @@
 package com.lookback.domain.record.service;
 
+import com.lookback.presentation.record.dto.FindRecordRequest;
+import com.lookback.presentation.record.dto.FindRecordResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Slf4j
 class RecordServiceTest {
 
     @Autowired
@@ -14,7 +20,29 @@ class RecordServiceTest {
 
     @Test
     void findRecordById(){
-        recordService.findRecordById();
+        FindRecordRequest findRecordRequest = new FindRecordRequest();
+        findRecordRequest.setType("");
+
+        List<FindRecordResponse> findRecord = recordService.findRecordById(findRecordRequest);
+        for(FindRecordResponse findRecordResponse: findRecord){
+            log.info(findRecordResponse.toString());
+        }
+
+        FindRecordRequest findRecordRequest2 = new FindRecordRequest();
+        findRecordRequest2.setType("pt");
+        List<FindRecordResponse> findRecord2 = recordService.findRecordById(findRecordRequest2);
+
+        for(FindRecordResponse findRecordResponse: findRecord2){
+            log.info(findRecordResponse.toString());
+        }
+
+        FindRecordRequest findRecordRequest3 = new FindRecordRequest();
+        findRecordRequest3.setType("personal");
+        List<FindRecordResponse> findRecord3 = recordService.findRecordById(findRecordRequest3);
+
+        for(FindRecordResponse findRecordResponse: findRecord3){
+            log.info(findRecordResponse.toString());
+        }
     }
 
 }
