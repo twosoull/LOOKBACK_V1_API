@@ -4,11 +4,13 @@ import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import javax.print.DocFlavor;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "RECORD_SHARE")
 public class RecordShare {
 

@@ -13,4 +13,6 @@ public interface RecordRepository {
     List<Record> findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(Long usersId);
 
     List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId);
+
+    Record findById(Long recordId);
 }

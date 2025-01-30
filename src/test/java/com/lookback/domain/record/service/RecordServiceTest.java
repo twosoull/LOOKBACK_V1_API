@@ -1,5 +1,7 @@
 package com.lookback.domain.record.service;
 
+import com.lookback.presentation.record.dto.FindExerciseRecordRequest;
+import com.lookback.presentation.record.dto.FindExerciseRecordResponse;
 import com.lookback.presentation.record.dto.FindRecordRequest;
 import com.lookback.presentation.record.dto.FindRecordResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,16 @@ class RecordServiceTest {
         for(FindRecordResponse findRecordResponse: findRecord3){
             log.info(findRecordResponse.toString());
         }
+    }
+
+    @Test
+    void findExerciseRecordById() {
+        FindExerciseRecordRequest findExerciseRecordRequest = new FindExerciseRecordRequest();
+        findExerciseRecordRequest.setRecordId(2L);
+
+        FindExerciseRecordResponse findExerciseRecordResponse = recordService.findExerciseRecordById(findExerciseRecordRequest);
+
+        log.info(findExerciseRecordResponse.toString());
     }
 
 }

@@ -34,4 +34,9 @@ public class RecordRepositoryImpl implements RecordRepository {
     public List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId) {
         return recordJpaRepository.findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(usersId);
     }
+
+    @Override
+    public Record findById(Long recordId) {
+        return recordJpaRepository.findById(recordId).orElse(null);
+    }
 }

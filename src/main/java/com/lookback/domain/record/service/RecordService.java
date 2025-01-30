@@ -1,27 +1,23 @@
 package com.lookback.domain.record.service;
 
-import com.lookback.domain.muscle.entity.MuscleCategory;
-import com.lookback.domain.muscle.entity.MuscleGroup;
 import com.lookback.domain.record.command.RecordCommand;
 import com.lookback.domain.record.entity.ExerciseRecord;
+import com.lookback.domain.record.entity.ExerciseRecordFile;
 import com.lookback.domain.record.entity.Record;
+import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.domain.user.entity.Users;
-import com.lookback.presentation.muscle.dto.MuscleCategoryDto;
-import com.lookback.presentation.muscle.dto.MuscleGroupDto;
-import com.lookback.presentation.record.dto.FindRecordRequest;
-import com.lookback.presentation.record.dto.FindRecordResponse;
+import com.lookback.presentation.record.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.lookback.presentation.record.dto.FindRecordResponse.getUserRecordsDtosFromEntity;
 
 @Service
 @Slf4j
@@ -29,6 +25,7 @@ import static com.lookback.presentation.record.dto.FindRecordResponse.getUserRec
 public class RecordService {
 
     private final RecordRepository recordRepository;
+    private final ExerciseRecordRepository exerciseRecordRepository;
 
     public RecordCommand.Saved save(RecordCommand.Save save) {
         //TODO 로그인 만들기
@@ -62,6 +59,16 @@ public class RecordService {
         return FindRecordResponse.getUserRecordsDtosFromEntity(findRecords);
     }
 
+    /**
+     * [회원] 기록 상세
+     * - 기록 상세의 운동 목록
+     * */
+    public FindExerciseRecordResponse findExerciseRecordById(FindExerciseRecordRequest findExerciseRecordRequest) {
 
+        List<ExerciseRecord> exerciseRecords = exerciseRecordRepository.findByIdOrderByOrdAsc(findExerciseRecordRequest.getRecordId());
+        Record record = recordRepository.findById(findExerciseRecordRequest.getRecordId());
+
+        return FindExerciseRecordResponse.getExerciseRecordDetailFromEntity(exerciseRecords, record);
+    }
 
 }

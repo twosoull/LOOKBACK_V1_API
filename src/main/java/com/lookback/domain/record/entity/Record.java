@@ -41,7 +41,8 @@ public class Record {
     List<ExerciseRecord> exerciseRecords;
 
     private LocalDate recordDate;
-    private LocalTime recordTime;
+    private LocalTime recordTimeStart;
+    private LocalTime recordTimeEnd;
     private int exerciseMinute;
     private String comment;
     private LocalDateTime createdAt;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +25,9 @@ public class ExerciseRecord {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
+
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "exerciseRecord")
+    private List<ExerciseRecordFile> exerciseRecordFiles;
 
     private Integer sets;
     private Integer repsPerSet;
