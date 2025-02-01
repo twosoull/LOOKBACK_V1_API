@@ -1,12 +1,15 @@
 package com.lookback.domain.record.service;
 
+import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.record.command.RecordCommand;
 import com.lookback.domain.record.entity.ExerciseRecord;
 import com.lookback.domain.record.entity.ExerciseRecordFile;
 import com.lookback.domain.record.entity.Record;
 import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
+import com.lookback.domain.record.repository.RecordShareRepository;
 import com.lookback.domain.user.entity.Users;
+import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.presentation.record.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -26,7 +31,10 @@ public class RecordService {
 
     private final RecordRepository recordRepository;
     private final ExerciseRecordRepository exerciseRecordRepository;
+    private final TrainingRepository trainingRepository;
+    private final RecordShareRepository recordShareRepository;
 
+    @Transactional
     public RecordCommand.Saved save(RecordCommand.Save save) {
         //TODO 로그인 만들기
         Users users = new Users(1L, "twoowo", "dd", "kakao", "dd", "fasd", "fasd", "asdasf", "asfasd", "fasda", "fasdasf", LocalDateTime.now(),
@@ -63,6 +71,7 @@ public class RecordService {
      * [회원] 기록 상세
      * - 기록 상세의 운동 목록
      * */
+    @Transactional
     public FindExerciseRecordResponse findExerciseRecordById(FindExerciseRecordRequest findExerciseRecordRequest) {
 
         List<ExerciseRecord> exerciseRecords = exerciseRecordRepository.findByIdOrderByOrdAsc(findExerciseRecordRequest.getRecordId());
@@ -70,5 +79,27 @@ public class RecordService {
 
         return FindExerciseRecordResponse.getExerciseRecordDetailFromEntity(exerciseRecords, record);
     }
+
+    /**
+     * [회원] 운동 기록 삭제
+     * */
+    @Transactional
+    public void removeRecordById(RemoveRecordRequest removeRecordRequest) {
+        RecordServiceValidator.removeRecordRequestValid(removeRecordRequest);
+
+        Record findRecord = recordRepository.findById(removeRecordRequest.getRecordId());
+        try {
+            if(findRecord !=null) {
+                recordShareRepository.deleteById(findRecord.getRecordShare().getId());
+                trainingRepository.deleteById(findRecord.getTraining().getId());
+                recordRepository.deleteById(findRecord.getId()); //exerciseRecord, exerciseRecordFile 자동삭제
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+
+    }
+
 
 }

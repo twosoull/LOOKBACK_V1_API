@@ -16,6 +16,7 @@ import lombok.Setter;
 public class Training {
 
     @Id @GeneratedValue
+    @Column(name = "TRAINING_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

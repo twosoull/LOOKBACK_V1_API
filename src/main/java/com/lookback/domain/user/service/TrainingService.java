@@ -7,9 +7,7 @@ import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
-import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
-import com.lookback.presentation.users.dto.SaveTrainingUserRequest;
-import com.lookback.presentation.users.dto.UpdateTrainingUsersRequest;
+import com.lookback.presentation.users.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +32,7 @@ public class TrainingService {
      * 회원 목록 (가나다순, 최근 수업일 순)
      * */
     @Transactional
-    public List<Users> findAllTrainingUsers(FindTrainingUsersRequest request) {
+    public FindTrainingUsersResponse findAllTrainingUsers(FindTrainingUsersRequest request) {
         //TODO trainerID는 공통으로 가져오기
 
         TrainingServiceValidator.findTrainingUsersRequestValid(request);
@@ -56,7 +54,7 @@ public class TrainingService {
             throw new RestApiException(RETRIEVE_ERROR);
         }
 
-        return findStudents;
+        return FindTrainingUsersResponse.getFindTrainingUsersResponse(findStudents);
     }
 
     /**

@@ -15,4 +15,6 @@ public interface RecordRepository {
     List<Record> findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(Long usersId);
 
     Record findById(Long recordId);
+
+    void deleteById(Long id);
 }

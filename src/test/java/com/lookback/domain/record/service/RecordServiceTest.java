@@ -1,9 +1,6 @@
 package com.lookback.domain.record.service;
 
-import com.lookback.presentation.record.dto.FindExerciseRecordRequest;
-import com.lookback.presentation.record.dto.FindExerciseRecordResponse;
-import com.lookback.presentation.record.dto.FindRecordRequest;
-import com.lookback.presentation.record.dto.FindRecordResponse;
+import com.lookback.presentation.record.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +54,10 @@ class RecordServiceTest {
         log.info(findExerciseRecordResponse.toString());
     }
 
+    @Test
+    void removeRecordById() {
+        RemoveRecordRequest removeRecordRequest = new RemoveRecordRequest();
+        removeRecordRequest.setRecordId(1L);
+        recordService.removeRecordById(removeRecordRequest);
+    }
 }

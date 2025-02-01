@@ -26,7 +26,7 @@ public class ExerciseRecord {
     @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
 
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "exerciseRecord")
+    @OneToMany(fetch = FetchType.LAZY , mappedBy = "exerciseRecord", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ExerciseRecordFile> exerciseRecordFiles;
 
     private Integer sets;

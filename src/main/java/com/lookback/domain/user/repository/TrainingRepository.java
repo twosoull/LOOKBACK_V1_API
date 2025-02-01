@@ -11,5 +11,7 @@ public interface TrainingRepository {
 
     Training save(Training training);
 
-    Training findById(Long trainingId);
+    Training findById(Long id);
+
+    void deleteById(Long id);
 }

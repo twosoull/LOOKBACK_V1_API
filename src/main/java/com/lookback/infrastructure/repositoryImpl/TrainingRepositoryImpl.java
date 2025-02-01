@@ -28,4 +28,9 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public Training findById(Long trainingId) {
         return trainingJpaRepository.findById(trainingId).orElse(null);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        trainingJpaRepository.deleteById(id);
+    }
 }

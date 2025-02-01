@@ -39,4 +39,9 @@ public class RecordRepositoryImpl implements RecordRepository {
     public Record findById(Long recordId) {
         return recordJpaRepository.findById(recordId).orElse(null);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        recordJpaRepository.deleteById(id);
+    }
 }

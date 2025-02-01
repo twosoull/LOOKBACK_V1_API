@@ -73,4 +73,6 @@ class TrainingServiceTest {
         trainingService.cancelTraining(updateTrainingUsersRequest);
 
     }
+
+
 }

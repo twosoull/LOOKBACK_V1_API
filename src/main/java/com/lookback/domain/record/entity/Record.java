@@ -29,7 +29,7 @@ public class Record {
     @JoinColumn(name = "USERS_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Users users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="RECORD_SHARE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private RecordShare recordShare;
 
@@ -37,7 +37,7 @@ public class Record {
     @JoinColumn(name="TRAINING_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Training training;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "record")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ExerciseRecord> exerciseRecords;
 
     private LocalDate recordDate;
