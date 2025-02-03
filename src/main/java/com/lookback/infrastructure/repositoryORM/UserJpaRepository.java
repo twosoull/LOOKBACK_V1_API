@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserJpaRepository extends JpaRepository<Users, Long> {
     List<Users> findByTrainerYn(@Param("trainerYn") String trainerYn);
@@ -20,4 +21,6 @@ public interface UserJpaRepository extends JpaRepository<Users, Long> {
 
     @Query("select t.student from Training t where t.trainer.id = :trainerId And t.student.userName like %:userName% ORDER BY t.student.userName ASC ")
     List<Users> findStudentsByTrainerAndUserNameOrderByUserNameAsc(Long trainerId, String userName);
+
+    Optional<Users> findByEmail(String email);
 }

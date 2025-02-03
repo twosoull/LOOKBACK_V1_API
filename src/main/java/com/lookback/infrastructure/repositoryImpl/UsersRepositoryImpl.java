@@ -51,4 +51,16 @@ public class UsersRepositoryImpl implements UserRepository {
         );
     }
 
+    @Override
+    public Users findByEmail(String email) {
+        return userJpaRepository.findByEmail(email).orElseThrow(
+                () -> new RestApiException(RETRIEVE_ERROR)
+        );
+    }
+
+    @Override
+    public Users save(Users users) {
+        return userJpaRepository.save(users);
+    }
+
 }

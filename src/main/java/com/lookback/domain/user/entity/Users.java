@@ -2,12 +2,14 @@ package com.lookback.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "USERS")
 public class Users {
 
@@ -31,6 +33,9 @@ public class Users {
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
     private String trainerYn;
+
+    @Column(length = 500)
+    private String refreshToken;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

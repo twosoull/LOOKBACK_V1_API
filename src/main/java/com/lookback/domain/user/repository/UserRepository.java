@@ -18,4 +18,8 @@ public interface UserRepository {
     List<Users> findStudentsByTrainerAndUserNameOrderByUserNameAsc(Long trainerId, String userName);
 
     Users findById(Long usersId);
+
+    Users findByEmail(String email);
+
+    Users save(Users users);
 }
