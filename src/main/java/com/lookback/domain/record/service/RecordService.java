@@ -45,7 +45,7 @@ public class RecordService {
         return RecordCommand.of(savedRecord);
     }
     /**
-     * [사용자]
+     * [회원]
      * 운동 기록 목록(pt와 개인 운동 목록)( 전체, pt, 개인) 카테고리로 나눠진다.
      * */
     @Transactional
@@ -54,7 +54,7 @@ public class RecordService {
         //TODO 예외 처리
         Long usersId = 202L;
 
-        String type              = findRecordRequest.getType();
+        String type = findRecordRequest.getType();
         List<Record> findRecords;
         if("pt".equals(type)) {
             findRecords = recordRepository.findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(usersId);
