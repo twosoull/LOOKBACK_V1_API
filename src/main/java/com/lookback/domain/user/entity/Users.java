@@ -17,9 +17,14 @@ public class Users {
     @Column(name = "USERS_ID")
     private Long id;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USERS_ID")
+    private Trainer trainer;
+
     private String email;
     private String password;
     private String phone;
+    private Long birthDt;
     private double weight;
     private double height;
     private String snsProvider;

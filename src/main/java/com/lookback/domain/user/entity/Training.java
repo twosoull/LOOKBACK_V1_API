@@ -21,7 +21,7 @@ public class Training {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRAINER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Users trainer;
+    private Trainer trainer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STUDENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -33,7 +33,7 @@ public class Training {
 
     public Training() {}
 
-    public static Training create(Users trainer, Users student, TrainingStatus trainingStatus) {
+    public static Training create(Trainer trainer, Users student, TrainingStatus trainingStatus) {
         return builder().trainer(trainer)
                         .student(student)
                         .trainingStatus(trainingStatus)

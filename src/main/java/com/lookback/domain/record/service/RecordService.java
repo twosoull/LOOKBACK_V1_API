@@ -44,7 +44,7 @@ public class RecordService {
         Record savedRecord = recordRepository.save(Record.fromCommandSave(save, users));
         return RecordCommand.of(savedRecord);
     }
-    /**
+    /**`
      * [회원]
      * 운동 기록 목록(pt와 개인 운동 목록)( 전체, pt, 개인) 카테고리로 나눠진다.
      * */

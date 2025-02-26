@@ -31,7 +31,7 @@ public class FindExerciseRecordResponse {
 
         boolean isPt = record.getRecordShare() != null;
         if(isPt){
-            findExerciseRecordResponse.setTrainerName(record.getRecordShare().getTraining().getTrainer().getNickName());
+            findExerciseRecordResponse.setTrainerName(record.getRecordShare().getTraining().getTrainer().getUser().getNickName());
             findExerciseRecordResponse.setRecordDate(record.getRecordDate());
             findExerciseRecordResponse.setRecordTimeStart(record.getRecordTimeStart());
             findExerciseRecordResponse.setRecordTimeEnd(record.getRecordTimeEnd());

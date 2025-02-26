@@ -1,5 +1,6 @@
 package com.lookback.presentation.users.dto;
 
+import com.lookback.common.converter.CommonConverter;
 import com.lookback.domain.user.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,8 @@ public class UsersDto {
     private String email;
     private String password;
     private String phone;
+    private Long age;
+    private Long birthDt;
     private double weight;
     private double height;
     private String snsProvider;
@@ -22,6 +25,7 @@ public class UsersDto {
     private String profileImageUrl;
     private String verified; //본인인증 여부
     private String gender;
+    private String lastLessonDate;
     private LocalDateTime signupDate; //가입일
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
@@ -33,6 +37,7 @@ public class UsersDto {
         usersDto.setEmail(users.getEmail());
         usersDto.setPassword(users.getPassword());
         usersDto.setPhone(users.getPhone());
+        usersDto.setAge(CommonConverter.ageConverter(users.getBirthDt()));
         usersDto.setWeight(users.getWeight());
         usersDto.setHeight(users.getHeight());
         usersDto.setSnsProvider(users.getSnsProvider());
@@ -46,6 +51,7 @@ public class UsersDto {
         usersDto.setLastLoginDate(users.getLastLoginDate());
         usersDto.setStatus(users.getStatus());
         usersDto.setTrainerYn(users.getTrainerYn());
+        //usersDto.setLastLessonDate(users.getRe== null ? "" : users.getLastLoginDate().toString());
         return usersDto;
     }
 }

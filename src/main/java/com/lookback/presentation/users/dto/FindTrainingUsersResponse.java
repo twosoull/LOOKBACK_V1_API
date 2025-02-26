@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 @Setter
 public class FindTrainingUsersResponse {
 
-    List<UsersDto> usersDtos = new ArrayList<>();
+    List<UsersDto> result = new ArrayList<>();
 
     public static FindTrainingUsersResponse getFindTrainingUsersResponse(List<Users> usersList) {
         FindTrainingUsersResponse findTrainingUsersResponse = new FindTrainingUsersResponse();
         findTrainingUsersResponse
-                .setUsersDtos(usersList.stream()
+                .setResult(usersList.stream()
                             .map(users -> UsersDto.fromEntity(users))
                             .collect(Collectors.toList()));
         return findTrainingUsersResponse;

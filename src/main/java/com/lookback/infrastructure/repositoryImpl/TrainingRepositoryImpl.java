@@ -1,7 +1,9 @@
 package com.lookback.infrastructure.repositoryImpl;
 
+import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.repository.TrainingRepository;
+import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
 import com.lookback.infrastructure.repositoryORM.TrainingJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -32,5 +34,10 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     @Override
     public void deleteById(Long id) {
         trainingJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserTrainingQueryDto> findTrainingsForTrainer(Long trainerId, TrainingStatus trainingStatus) {
+        return trainingJpaRepository.findTrainingsForTrainer(trainerId, trainingStatus);
     }
 }

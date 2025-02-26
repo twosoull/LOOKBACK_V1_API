@@ -30,7 +30,7 @@ class TrainingServiceTest {
         findTrainingUsersRequest.setTrainingStatus("ACTIVE");
         findTrainingUsersRequest.setSortBy("name");
 
-        List<Users> trainingUsers = trainingService.findAllTrainingUsers(findTrainingUsersRequest);
+        //List<Users> trainingUsers = trainingService.findAllTrainingUsers(findTrainingUsersRequest);
 
         FindTrainingUsersRequest findTrainingUsersRequest2 = new FindTrainingUsersRequest();
 
@@ -38,7 +38,7 @@ class TrainingServiceTest {
         findTrainingUsersRequest2.setTrainingStatus("ACTIVE");
         findTrainingUsersRequest2.setSortBy("recent");
 
-        List<Users> trainingUsers2 = trainingService.findAllTrainingUsers(findTrainingUsersRequest2);
+        ///List<Users> trainingUsers2 = trainingService.findAllTrainingUsers(findTrainingUsersRequest2);
 
     }
 

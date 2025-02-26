@@ -5,16 +5,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "TRAINER_INFO_DETAIL_FILE")
+@Table(name = "TRAINER_INFO_FILE")
 @Getter
-public class TrainerInfoDetailFile extends BaseEntity {
+public class TrainerInfoFile extends BaseEntity {
 
     @Id @GeneratedValue
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TRAINER_INFO_DETAIL_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private TrainerInfoDetail trainerInfoDetail;
+    @JoinColumn(name = "TRAINER_INFO_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private TrainerInfo trainerInfoDetail;
 
     private String saveFileName;
     private String originalFileName;

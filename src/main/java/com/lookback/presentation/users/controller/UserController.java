@@ -2,7 +2,10 @@ package com.lookback.presentation.users.controller;
 
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.user.entity.Users;
+import com.lookback.domain.user.service.TrainingService;
 import com.lookback.presentation.common.ApiResponse;
+import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
+import com.lookback.presentation.users.dto.FindTrainingUsersResponse;
 import com.lookback.presentation.users.dto.UsersDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
@@ -15,8 +18,9 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 
 @RestController
 @RequiredArgsConstructor
-public class
-UserController {
+public class UserController {
+
+    private final TrainingService trainingService;
 
     @GetMapping("/mockTest/exception")
     public void exceptionTest() {

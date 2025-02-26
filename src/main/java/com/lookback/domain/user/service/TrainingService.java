@@ -3,17 +3,20 @@ package com.lookback.domain.user.service;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.user.command.StringUtil;
+import com.lookback.domain.user.entity.Trainer;
 import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
+import com.lookback.domain.user.repository.TrainerRepository;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
+import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
+import com.lookback.presentation.trainer.dto.UserTrainingDto;
 import com.lookback.presentation.users.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +27,7 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 @Slf4j
 public class TrainingService {
 
+    private final TrainerRepository trainerRepository;
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
 
@@ -32,6 +36,23 @@ public class TrainingService {
      * 회원 목록 (가나다순, 최근 수업일 순)
      * */
     @Transactional
+    public List<UserTrainingDto> findTrainingsForTrainer(FindTrainingUsersRequest request){
+        //TODO trainerID는 공통으로 가져오기
+        Long trainerId = 1L;
+        String sortBy            = StringUtil.isNullOrEmpty(request.getSortBy()) ? "name" : request.getTrainingStatus();
+        List<UserTrainingQueryDto> findQueryDto = trainingRepository.findTrainingsForTrainer(trainerId,TrainingStatus.IN_PROGRESS);
+
+        return findQueryDto.stream()
+                .map(queryDto -> new UserTrainingDto(
+                        queryDto.getId(),
+                        queryDto.getUserName(),
+                        queryDto.getBirthDt(),
+                        queryDto.getLatestCreatedAt()
+                )).collect(Collectors.toList());
+    }
+
+
+/*    @Transactional
     public FindTrainingUsersResponse findAllTrainingUsers(FindTrainingUsersRequest request) {
         //TODO trainerID는 공통으로 가져오기
 
@@ -55,7 +76,7 @@ public class TrainingService {
         }
 
         return FindTrainingUsersResponse.getFindTrainingUsersResponse(findStudents);
-    }
+    }*/
 
     /**
      * 회원 검색 (트레이너의 수강생인 회원 중 이름으로 검색)
@@ -83,7 +104,8 @@ public class TrainingService {
         //TODO trainerID는 공통으로 가져오기
 
         TrainingServiceValidator.saveTrainingUserRequestValid(request);
-        Users findTrainer = userRepository.findById(request.getTrainerId());
+
+        Trainer findTrainer = trainerRepository.findById(request.getTrainerId());
         Users findStudent = userRepository.findById(request.getStudentId());
 
         //TODO 소스정리
