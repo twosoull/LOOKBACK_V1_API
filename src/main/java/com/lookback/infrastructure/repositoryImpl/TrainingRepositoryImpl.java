@@ -6,6 +6,7 @@ import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
 import com.lookback.infrastructure.repositoryORM.TrainingJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,7 +38,12 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     }
 
     @Override
-    public List<UserTrainingQueryDto> findTrainingsForTrainer(Long trainerId, TrainingStatus trainingStatus) {
-        return trainingJpaRepository.findTrainingsForTrainer(trainerId, trainingStatus);
+    public List<UserTrainingQueryDto> findTrainingsForTrainerOrderByCreateAt(Long trainerId, TrainingStatus trainingStatus) {
+        return trainingJpaRepository.findTrainingsForTrainerOrderByCreateAt(trainerId, trainingStatus);
+    }
+
+    @Override
+    public List<UserTrainingQueryDto> findTrainingsForTrainerOrderByUserName(Long trainerId, TrainingStatus trainingStatus) {
+        return trainingJpaRepository.findTrainingsForTrainerOrderByUserName(trainerId, trainingStatus);
     }
 }

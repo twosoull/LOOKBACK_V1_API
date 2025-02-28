@@ -15,6 +15,7 @@ import com.lookback.presentation.users.dto.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,8 +40,19 @@ public class TrainingService {
     public List<UserTrainingDto> findTrainingsForTrainer(FindTrainingUsersRequest request){
         //TODO trainerID는 공통으로 가져오기
         Long trainerId = 1L;
-        String sortBy            = StringUtil.isNullOrEmpty(request.getSortBy()) ? "name" : request.getTrainingStatus();
-        List<UserTrainingQueryDto> findQueryDto = trainingRepository.findTrainingsForTrainer(trainerId,TrainingStatus.IN_PROGRESS);
+        String sortBy  = "recent";
+        if(!StringUtil.isNullOrEmpty(request.getSortBy()) && request.getSortBy().equals("userName")){
+            sortBy = "userName";
+        }
+
+        List<UserTrainingQueryDto> findQueryDto = null;
+        //정렬
+        if(sortBy.equals("userName")){
+            findQueryDto = trainingRepository.findTrainingsForTrainerOrderByUserName(trainerId,TrainingStatus.IN_PROGRESS);
+        } else {
+            findQueryDto = trainingRepository.findTrainingsForTrainerOrderByCreateAt(trainerId,TrainingStatus.IN_PROGRESS);
+        }
+
 
         return findQueryDto.stream()
                 .map(queryDto -> new UserTrainingDto(
