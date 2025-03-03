@@ -4,6 +4,7 @@ import com.lookback.domain.user.entity.Users;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository {
@@ -22,4 +23,6 @@ public interface UserRepository {
     Users findByEmail(String email);
 
     Users save(Users users);
+
+    Optional<Users> findByKakaoId(String kakaoId);
 }

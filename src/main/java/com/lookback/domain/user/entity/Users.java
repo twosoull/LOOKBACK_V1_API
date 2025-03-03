@@ -1,6 +1,8 @@
 package com.lookback.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.cglib.core.Local;
@@ -11,11 +13,16 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "USERS")
+@Builder
+@AllArgsConstructor
 public class Users {
 
     @Id @GeneratedValue
     @Column(name = "USERS_ID")
     private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String kakaoId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_ID")
@@ -38,6 +45,7 @@ public class Users {
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
     private String trainerYn;
+    private String isProfileComplete;
 
     @Column(length = 500)
     private String refreshToken;
@@ -45,7 +53,6 @@ public class Users {
     private LocalDateTime updatedAt;
 
     public Users() {
-
     }
 
     public Users(Long id, String email, String password, String snsProvider, String snsId, String userName, String nickName, String profileImageUrl, String phone, String verified, String gender, LocalDateTime signupDate, LocalDateTime lastLoginDate, String status, LocalDateTime updatedAt) {
@@ -65,4 +72,17 @@ public class Users {
         this.status = status;
         this.updatedAt = updatedAt;
     }
+
+    public static Users createUser(String kakaoId, String email, String nickName, String profileImage) {
+        Users user = new Users();
+        user.builder()
+                .kakaoId(kakaoId)
+                .email(email)
+                .nickName(nickName)
+                .profileImageUrl(profileImage)
+                .build();
+
+        return user;
+    }
+
 }

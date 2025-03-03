@@ -23,4 +23,6 @@ public interface UserJpaRepository extends JpaRepository<Users, Long> {
     List<Users> findStudentsByTrainerAndUserNameOrderByUserNameAsc(Long trainerId, String userName);
 
     Optional<Users> findByEmail(String email);
+
+    Optional<Users> findByKakaoId(String kakaoId);
 }

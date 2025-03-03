@@ -63,4 +63,9 @@ public class UsersRepositoryImpl implements UserRepository {
         return userJpaRepository.save(users);
     }
 
+    @Override
+    public Optional<Users> findByKakaoId(String kakaoId) {
+        return userJpaRepository.findByKakaoId(kakaoId);
+    }
+
 }
