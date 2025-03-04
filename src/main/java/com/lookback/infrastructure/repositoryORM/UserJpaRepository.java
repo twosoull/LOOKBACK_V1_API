@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserJpaRepository extends JpaRepository<Users, Long> {
-    List<Users> findByTrainerYn(@Param("trainerYn") String trainerYn);
-
     //TODO 나중에 정렬 쿼리를 하나로 합칠 것
     @Query("select t.student from Training t where t.trainer.id = :trainerId ORDER BY t.student.userName ASC ")
     List<Users> findStudentsByTrainerOrderByUserNameAsc(Long trainerId);

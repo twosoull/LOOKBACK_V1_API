@@ -24,11 +24,6 @@ public class UsersRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<Users> findByTrainerYn(String trainerYn) {
-        return userJpaRepository.findByTrainerYn(trainerYn);
-    }
-
-    @Override
     public List<Users> findStudentsByTrainerOrderByUserNameAsc(Long trainerId) {
 
         return userJpaRepository.findStudentsByTrainerOrderByUserNameAsc(trainerId);

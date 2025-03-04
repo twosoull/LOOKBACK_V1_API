@@ -1,5 +1,6 @@
 package com.lookback.domain.user.entity;
 
+import com.lookback.domain.common.constant.enums.UserTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +45,8 @@ public class Users {
     private LocalDateTime signupDate; //가입일
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
-    private String trainerYn;
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
     private String isProfileComplete;
 
     @Column(length = 500)
@@ -83,6 +85,15 @@ public class Users {
                 .build();
 
         return user;
+    }
+
+    public String getUserTypeStr() {
+        return this.userType.name();
+    }
+
+    public static UserTypeEnum getUserType(String userType) {
+        return userType.equals("TRAINER") ?
+                UserTypeEnum.TRAINER : UserTypeEnum.MEMBER;
     }
 
 }

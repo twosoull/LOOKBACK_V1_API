@@ -13,8 +13,9 @@ public class CommonConverter {
      * @return 나이 (int)
      */
     public static Long ageConverter(Long birthDt) {
+
         if (birthDt == null) {
-            throw new IllegalArgumentException("Birth date cannot be null");
+            return 00000000L;
         }
 
         // Long 값을 String으로 변환

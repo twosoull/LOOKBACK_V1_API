@@ -10,6 +10,7 @@ import com.lookback.presentation.users.dto.FindTrainingUsersResponse;
 import com.lookback.presentation.users.dto.UpdateUserInfo;
 import com.lookback.presentation.users.dto.UsersDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user/updateBasicInfo")
-    public void updateBasicInfo(HttpServletRequest request, UpdateUserInfo updateUserInfo) {
-        userService.updateBasicInfo(request, updateUserInfo);
+    public ResponseEntity<ApiResponse<T>> updateBasicInfo(HttpServletRequest request
+            , HttpServletResponse response, UpdateUserInfo updateUserInfo) {
+        return new ResponseEntity(ApiResponse.success(
+                userService.updateBasicInfo(request, updateUserInfo)
+                ,response
+        ), HttpStatus.OK);
     }
-
+/*
     @GetMapping("/mockTest/test")
     public ResponseEntity<ApiResponse<T>> Test() {
         return new ResponseEntity(ApiResponse.success(new UsersDto()), HttpStatus.OK);
     }
-
+*/
 }

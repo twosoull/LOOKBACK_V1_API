@@ -29,7 +29,7 @@ public class UsersDto {
     private LocalDateTime signupDate; //가입일
     private LocalDateTime lastLoginDate;
     private String status; //계정상태
-    private String trainerYn;
+    private String userType;
 
     public static UsersDto fromEntity(Users users) {
         UsersDto usersDto = new UsersDto();
@@ -50,7 +50,7 @@ public class UsersDto {
         usersDto.setSignupDate(users.getSignupDate());
         usersDto.setLastLoginDate(users.getLastLoginDate());
         usersDto.setStatus(users.getStatus());
-        usersDto.setTrainerYn(users.getTrainerYn());
+        usersDto.setUserType(users.getUserTypeStr());
         //usersDto.setLastLessonDate(users.getRe== null ? "" : users.getLastLoginDate().toString());
         return usersDto;
     }

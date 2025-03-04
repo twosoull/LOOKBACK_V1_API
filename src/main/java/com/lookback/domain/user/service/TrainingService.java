@@ -53,7 +53,6 @@ public class TrainingService {
             findQueryDto = trainingRepository.findTrainingsForTrainerOrderByCreateAt(trainerId,TrainingStatus.IN_PROGRESS);
         }
 
-
         return findQueryDto.stream()
                 .map(queryDto -> new UserTrainingDto(
                         queryDto.getId(),

@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface UserRepository {
     List<Users> findAll();
 
-    List<Users> findByTrainerYn(String trainerYn);
-
     List<Users> findStudentsByTrainerOrderByUserNameAsc(Long trainerId);
 
     List<Users> findStudentsByTrainerOrderByRecentDesc(Long trainerId);

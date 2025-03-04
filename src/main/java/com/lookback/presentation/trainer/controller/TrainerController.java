@@ -5,6 +5,8 @@ import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.trainer.dto.UserTrainingDto;
 import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
 import com.lookback.presentation.users.dto.FindTrainingUsersResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,10 @@ public class TrainerController {
     private final TrainingService trainingService;
 
     @GetMapping("/trainer/member")
-    public ResponseEntity<ApiResponse<T>> trainerMember(FindTrainingUsersRequest findTrainingUsersRequest) {
+    public ResponseEntity<ApiResponse<T>> trainerMember(
+            HttpServletRequest request, HttpServletResponse response,
+            FindTrainingUsersRequest findTrainingUsersRequest) {
         List<UserTrainingDto> findTrainingsForTrainer = trainingService.findTrainingsForTrainer(findTrainingUsersRequest);
-        return new ResponseEntity(ApiResponse.success(findTrainingsForTrainer), HttpStatus.OK);
+        return new ResponseEntity(ApiResponse.success(findTrainingsForTrainer, response), HttpStatus.OK);
     }
 }

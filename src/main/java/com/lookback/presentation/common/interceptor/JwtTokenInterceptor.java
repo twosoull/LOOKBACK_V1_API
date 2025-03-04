@@ -6,12 +6,15 @@ import com.lookback.presentation.users.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.Enumeration;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class JwtTokenInterceptor implements HandlerInterceptor {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
@@ -34,7 +37,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
         try {
             // 🔹 JWT에서 사용자 정보 추출
             String token = authorizationHeader.replace("Bearer ", "");
-            Claims claims = jwtUtil.extractClaims(token);
+            Claims claims = jwtUtil.extractClaims(request, response, token);
             String kakaoId = (String) claims.get("kakaoId");
 
             // 🔹 데이터베이스에서 사용자 조회
@@ -50,6 +53,7 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
             return true;
         } catch (Exception e) {
+            log.debug(e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Unauthorized: Invalid token");
             return false;
