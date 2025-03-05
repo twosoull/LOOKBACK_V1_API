@@ -112,7 +112,12 @@ public class JwtUtil {
             response.setHeader("New-Access-Token", newAccessToken);
             response.setHeader("New-Refresh-Token", newRefreshToken);
 
-            return refreshClaims; // ✅ 새 토큰이 발급된 경우 기존 Refresh Token의 Claims 반환
+            // ✅ Refresh Token 검증
+            return Jwts.parserBuilder()
+                    .setSigningKey(accessKey)
+                    .build()
+                    .parseClaimsJws(newAccessToken)
+                    .getBody(); // ✅ 새 토큰이 발급된 경우 기존 Refresh Token의 Claims 반환
         } catch (ExpiredJwtException e) {
             throw new RestApiException(REFRESH_TOKEN_EXPIRED);
         } catch (JwtException e) {
