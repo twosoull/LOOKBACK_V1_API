@@ -11,7 +11,6 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,10 +27,6 @@ public class Record {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USERS_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Users users;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="RECORD_SHARE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private RecordShare recordShare;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TRAINING_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))

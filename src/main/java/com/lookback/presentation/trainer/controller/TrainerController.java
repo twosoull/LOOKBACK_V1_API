@@ -26,7 +26,7 @@ public class TrainerController {
     public ResponseEntity<ApiResponse<T>> trainerMember(
             HttpServletRequest request, HttpServletResponse response,
             FindTrainingUsersRequest findTrainingUsersRequest) {
-        List<UserTrainingDto> findTrainingsForTrainer = trainingService.findTrainingsForTrainer(findTrainingUsersRequest);
+        List<UserTrainingDto> findTrainingsForTrainer = trainingService.findTrainingsForTrainer(request ,findTrainingUsersRequest);
         return new ResponseEntity(ApiResponse.success(findTrainingsForTrainer, response), HttpStatus.OK);
     }
 }

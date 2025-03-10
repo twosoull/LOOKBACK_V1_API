@@ -29,16 +29,14 @@ public class FindExerciseRecordResponse {
         FindExerciseRecordResponse findExerciseRecordResponse = new FindExerciseRecordResponse();
         List<ExerciseRecordDto> exerciseRecordDtos = getExerciseRecordDtos(exerciseRecords);
 
-        boolean isPt = record.getRecordShare() != null;
-        if(isPt){
-            findExerciseRecordResponse.setTrainerName(record.getRecordShare().getTraining().getTrainer().getUser().getNickName());
-            findExerciseRecordResponse.setRecordDate(record.getRecordDate());
-            findExerciseRecordResponse.setRecordTimeStart(record.getRecordTimeStart());
-            findExerciseRecordResponse.setRecordTimeEnd(record.getRecordTimeEnd());
-        }
+
+        findExerciseRecordResponse.setRecordDate(record.getRecordDate());
+        findExerciseRecordResponse.setRecordTimeStart(record.getRecordTimeStart());
+        findExerciseRecordResponse.setRecordTimeEnd(record.getRecordTimeEnd());
+
 
         findExerciseRecordResponse.setExerciseRecords(exerciseRecordDtos);
-        findExerciseRecordResponse.setPt(isPt);
+        //findExerciseRecordResponse.setPt(isPt);
 
         return findExerciseRecordResponse;
     }

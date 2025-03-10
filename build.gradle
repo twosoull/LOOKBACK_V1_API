@@ -39,9 +39,6 @@ dependencies {
 
     //implementation 'org.springframework.boot:spring-boot-starter-security'
     //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'io.jsonwebtoken:jjwt:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -70,10 +67,26 @@ sourceSets {
 
 // gradle clean 시에 QClass 디렉토리 삭제
 clean {
-    delete file('src/main/generated')
+    delete file('build/generated')
 }
 
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// QueryDSL을 위한 설정
+def generatedDir = file("build/generated") // Q 파일 생성 디렉토리 설정
+
+sourceSets {
+    main {
+        java {
+            srcDirs += generatedDir // 생성된 Q 파일이 포함되도록 설정
+        }
+    }
+}
+
+// JavaCompile 작업에 QueryDSL 처리기 선언 및 생성 디렉토리 추가
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = generatedDir
 }

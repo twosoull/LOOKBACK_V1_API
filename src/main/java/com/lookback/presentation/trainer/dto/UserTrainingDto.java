@@ -1,5 +1,6 @@
 package com.lookback.presentation.trainer.dto;
 
+import com.lookback.common.converter.CommonConverter;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,13 +11,13 @@ public class UserTrainingDto {
 
     private Long userId;
     private String userName;
-    private Long birthDate;
-    private LocalDateTime latestCreatedAt;
+    private Long age;
+    private String latestCreatedAt;
 
-    public UserTrainingDto(Long userId, String userName, Long birthDate, LocalDateTime latestCreatedAt) {
+    public UserTrainingDto(Long userId, String userName, Long birthDate, LocalDate latestCreatedAt) {
         this.userId = userId;
         this.userName = userName;
-        this.birthDate = birthDate;
-        this.latestCreatedAt = latestCreatedAt;
+        this.age = CommonConverter.ageConverter(birthDate);
+        this.latestCreatedAt = CommonConverter.formatLocalDateTime(latestCreatedAt);
     }
 }

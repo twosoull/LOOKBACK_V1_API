@@ -1,6 +1,7 @@
 package com.lookback.common.converter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -30,6 +31,24 @@ public class CommonConverter {
 
         // 나이를 계산 (현재 날짜 기준)
         return ChronoUnit.YEARS.between(parsedBirthDate, currentDate);
+    }
+
+    public static String formatLocalDateTime(LocalDate dateTime) {
+            if (dateTime == null) {
+                return null;
+            }
+            int currentYear = LocalDateTime.now().getYear();
+            int year = dateTime.getYear();
+
+            DateTimeFormatter formatter;
+            if (year == currentYear) {
+                //올해면 년도 삭제
+                formatter = DateTimeFormatter.ofPattern("MM/dd");
+            } else {
+                formatter = DateTimeFormatter.ofPattern("yy/MM/dd");
+            }
+
+            return dateTime.format(formatter);
     }
 
 }

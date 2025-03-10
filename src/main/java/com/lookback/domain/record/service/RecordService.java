@@ -3,11 +3,9 @@ package com.lookback.domain.record.service;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.record.command.RecordCommand;
 import com.lookback.domain.record.entity.ExerciseRecord;
-import com.lookback.domain.record.entity.ExerciseRecordFile;
 import com.lookback.domain.record.entity.Record;
 import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
-import com.lookback.domain.record.repository.RecordShareRepository;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.presentation.record.dto.*;
@@ -16,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
@@ -32,7 +27,6 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final ExerciseRecordRepository exerciseRecordRepository;
     private final TrainingRepository trainingRepository;
-    private final RecordShareRepository recordShareRepository;
 
     @Transactional
     public RecordCommand.Saved save(RecordCommand.Save save) {
@@ -55,13 +49,13 @@ public class RecordService {
         Long usersId = 202L;
 
         String type = findRecordRequest.getType();
-        List<Record> findRecords;
+        List<Record> findRecords = null;
         if("pt".equals(type)) {
-            findRecords = recordRepository.findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(usersId);
+            //findRecords = recordRepository.findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(usersId);
         } else if("personal".equals(type)) {
-            findRecords = recordRepository.findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(usersId);
+            //findRecords = recordRepository.findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(usersId);
         } else {
-            findRecords = recordRepository.findByUsersIdOrderByCreatedAtDesc(usersId);
+            //findRecords = recordRepository.findByUsersIdOrderByCreatedAtDesc(usersId);
         }
 
         return FindRecordResponse.getUserRecordsDtosFromEntity(findRecords);
@@ -90,7 +84,6 @@ public class RecordService {
         Record findRecord = recordRepository.findById(removeRecordRequest.getRecordId());
         try {
             if(findRecord !=null) {
-                recordShareRepository.deleteById(findRecord.getRecordShare().getId());
                 trainingRepository.deleteById(findRecord.getTraining().getId());
                 recordRepository.deleteById(findRecord.getId()); //exerciseRecord, exerciseRecordFile 자동삭제
             }

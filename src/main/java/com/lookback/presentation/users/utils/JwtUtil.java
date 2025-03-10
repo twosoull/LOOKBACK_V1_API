@@ -23,7 +23,7 @@ public class JwtUtil {
 
     private final SecretKey accessKey;
     private final SecretKey refreshKey;
-    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 ;
+    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24; //24시간
     private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // ✅ 7일
     private final UserRepository userRepository;
 

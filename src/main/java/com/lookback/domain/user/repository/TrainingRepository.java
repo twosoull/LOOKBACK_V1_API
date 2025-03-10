@@ -22,4 +22,6 @@ public interface TrainingRepository {
 
     List<UserTrainingQueryDto> findTrainingsForTrainerOrderByUserName(Long trainerId, TrainingStatus trainingStatus);
 
+    List<UserTrainingQueryDto> findTrainingsForTrainerOrderBySortByType(Long userId, TrainingStatus trainingStatus, String sort);
+
 }

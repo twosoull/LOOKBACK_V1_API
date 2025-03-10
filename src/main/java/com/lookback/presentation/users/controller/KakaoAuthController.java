@@ -1,5 +1,6 @@
 package com.lookback.presentation.users.controller;
 
+import com.lookback.domain.common.constant.enums.UserTypeEnum;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.presentation.users.utils.JwtUtil;
@@ -122,12 +123,18 @@ public class KakaoAuthController {
 
         String refreshToken = jwtUtil.createRefreshToken(user.getKakaoId());
 
+        UserTypeEnum userType = user.getUserType();
+
+        if(userType == null){
+            userType = UserTypeEnum.MEMBER;
+        }
 
         // JWT 발급 후 반환
         return ResponseEntity.ok(
                 Map.of("jwtToken", jwtToken,
                 "refreshToken", refreshToken,
-                "isProfileComplete", isProfileComplete));
+                "isProfileComplete", isProfileComplete,
+                    "userType",userType.name()));
     }
 }
 

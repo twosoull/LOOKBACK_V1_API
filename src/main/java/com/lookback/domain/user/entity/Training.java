@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import com.lookback.domain.record.entity.Record;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +29,9 @@ public class Training {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STUDENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Users student;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "training")
+    private List<Record> records;
 
     @Enumerated(EnumType.STRING) // Enum을 String으로 저장
     @Column(nullable = false)

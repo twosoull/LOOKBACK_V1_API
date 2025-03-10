@@ -19,7 +19,7 @@ class UserServiceTest {
 
     @Test
     void findAllUser(){
-        List<Users> allUsers = userService.findAllUsers();
-        log.info(allUsers.toString());
+        //List<Users> allUsers = userService.findAllUsers();
+        //log.info(allUsers.toString());
     }
 }

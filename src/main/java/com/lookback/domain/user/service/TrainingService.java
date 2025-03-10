@@ -1,5 +1,6 @@
 package com.lookback.domain.user.service;
 
+import com.lookback.common.context.UserContext;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.user.command.StringUtil;
@@ -12,6 +13,7 @@ import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
 import com.lookback.presentation.trainer.dto.UserTrainingDto;
 import com.lookback.presentation.users.dto.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,21 +39,15 @@ public class TrainingService {
      * 회원 목록 (가나다순, 최근 수업일 순)
      * */
     @Transactional
-    public List<UserTrainingDto> findTrainingsForTrainer(FindTrainingUsersRequest request){
-        //TODO trainerID는 공통으로 가져오기
-        Long trainerId = 1L;
+    public List<UserTrainingDto> findTrainingsForTrainer(HttpServletRequest request, FindTrainingUsersRequest requestDto){
+        Users user = UserContext.getUser(request);
+        Long trainerId = user.getId();
         String sortBy  = "recent";
-        if(!StringUtil.isNullOrEmpty(request.getSortBy()) && request.getSortBy().equals("userName")){
+        if(!StringUtil.isNullOrEmpty(requestDto.getSortBy()) && requestDto.getSortBy().equals("userName")){
             sortBy = "userName";
         }
 
-        List<UserTrainingQueryDto> findQueryDto = null;
-        //정렬
-        if(sortBy.equals("userName")){
-            findQueryDto = trainingRepository.findTrainingsForTrainerOrderByUserName(trainerId,TrainingStatus.IN_PROGRESS);
-        } else {
-            findQueryDto = trainingRepository.findTrainingsForTrainerOrderByCreateAt(trainerId,TrainingStatus.IN_PROGRESS);
-        }
+        List<UserTrainingQueryDto> findQueryDto = trainingRepository.findTrainingsForTrainerOrderBySortByType(trainerId, TrainingStatus.IN_PROGRESS, sortBy);
 
         return findQueryDto.stream()
                 .map(queryDto -> new UserTrainingDto(
