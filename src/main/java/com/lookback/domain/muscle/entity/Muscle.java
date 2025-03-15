@@ -21,7 +21,7 @@ public class Muscle extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MUSCLE_GROUP_ID")
+    @JoinColumn(name = "MUSCLE_GROUP_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MuscleGroup muscleGroup;
 
     private String muscleName;

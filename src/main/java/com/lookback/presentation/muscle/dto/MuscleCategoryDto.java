@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class MuscleCategoryDto {
 
+    private Long muscleCategoryId;
     private String muscleName;
     private String muscleCategoryName;
 

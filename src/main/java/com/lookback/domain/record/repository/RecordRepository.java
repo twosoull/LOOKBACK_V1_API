@@ -17,4 +17,6 @@ public interface RecordRepository {
     Record findById(Long recordId);
 
     void deleteById(Long id);
+
+    List<Record> findByUsersId(Long UsersId, String category);
 }

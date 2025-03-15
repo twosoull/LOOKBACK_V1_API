@@ -39,23 +39,25 @@ public class TrainingService {
      * 회원 목록 (가나다순, 최근 수업일 순)
      * */
     @Transactional
-    public List<UserTrainingDto> findTrainingsForTrainer(HttpServletRequest request, FindTrainingUsersRequest requestDto){
+    public UserTrainingDto findTrainingsForTrainer(HttpServletRequest request, FindTrainingUsersRequest requestDto){
         Users user = UserContext.getUser(request);
         Long trainerId = user.getId();
-        String sortBy  = "recent";
+        String sortBy  = requestDto.getSortBy();
         if(!StringUtil.isNullOrEmpty(requestDto.getSortBy()) && requestDto.getSortBy().equals("userName")){
             sortBy = "userName";
         }
 
         List<UserTrainingQueryDto> findQueryDto = trainingRepository.findTrainingsForTrainerOrderBySortByType(trainerId, TrainingStatus.IN_PROGRESS, sortBy);
-
-        return findQueryDto.stream()
+        List<UserTrainingDto> list = findQueryDto.stream()
                 .map(queryDto -> new UserTrainingDto(
                         queryDto.getId(),
                         queryDto.getUserName(),
                         queryDto.getBirthDt(),
                         queryDto.getLatestCreatedAt()
                 )).collect(Collectors.toList());
+
+
+        return UserTrainingDto.fromList(list,list.size());
     }
 
 

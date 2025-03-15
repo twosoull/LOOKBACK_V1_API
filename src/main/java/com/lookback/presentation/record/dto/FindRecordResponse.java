@@ -20,11 +20,11 @@ public class FindRecordResponse {
 
     private Long recordId;
     private Long trainingId;
-
+    private String recordDate;
+    private boolean isPt;
     private List<MuscleGroupDto> muscleGroup;
 
-    private String createdAt;
-
+/*
     public static List<FindRecordResponse> getUserRecordsDtosFromEntity(List<Record> findRecords ) {
         List<FindRecordResponse> findRecordResponses = new ArrayList<>();
 
@@ -70,5 +70,5 @@ public class FindRecordResponse {
             muscleCategoryDto.setMuscleCategoryName(muscleCategory.getMuscleCategoryName());
         }
         return muscleCategoryDto;
-    }
+    }*/
 }

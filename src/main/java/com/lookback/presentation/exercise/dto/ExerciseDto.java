@@ -1,19 +1,12 @@
 package com.lookback.presentation.exercise.dto;
 
+import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.presentation.muscle.dto.MuscleGroupDto;
+
 public class ExerciseDto {
+    private Long exerciseId;
 
-    public record Request(Long muscleGroupId,
-                          Long muscleCategoryId){}
+    private String exerciseType;
+    private MuscleGroupDto muscleGroup;
 
-    public record Response(Long muscleCategoryId,
-                           String muscleCategoryName,
-                           Long muscleGroupId,
-                           String muscleGroupName,
-                           Long exerciseId,
-                           String exerciseName,
-                           String exerciseLevel,
-                           String equipment, //장비
-                           Long caloriesBurned, //소요 칼로리
-                           String description
-                           ){}
 }

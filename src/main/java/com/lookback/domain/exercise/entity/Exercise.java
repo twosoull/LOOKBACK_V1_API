@@ -1,6 +1,7 @@
 package com.lookback.domain.exercise.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
 import com.lookback.domain.exercise.command.ExerciseCommand;
 import com.lookback.domain.muscle.entity.EquipmentCategory;
 import com.lookback.domain.muscle.entity.MuscleGroup;
@@ -26,7 +27,7 @@ public class Exercise extends BaseEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EQUIPMENT_CATEGORY_ID")
+    @JoinColumn(name = "EQUIPMENT_CATEGORY_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentCategory equipmentCategory;
 
     @Builder.Default
@@ -34,13 +35,17 @@ public class Exercise extends BaseEntity {
     private List<ExerciseVideo> exerciseVideos = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "exercise")
+    @OneToMany(mappedBy = "exercise" )
     private List<MuscleGroup> muscleGroups = new ArrayList<>();
 
     private String exerciseName;
     private String exerciseLevel;
     private Integer caloriesBurned;
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private ExerciseTypeEnum exerciseType;
+
     private LocalDateTime createdAt;
     private String createdBy;
     private LocalDateTime updatedAt;

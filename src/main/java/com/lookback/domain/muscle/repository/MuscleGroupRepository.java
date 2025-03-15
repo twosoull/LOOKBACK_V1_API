@@ -8,4 +8,5 @@ public interface MuscleGroupRepository {
     MuscleGroup save(MuscleGroup muscleGroup);
 
     MuscleGroup findById(Long id);
+
 }

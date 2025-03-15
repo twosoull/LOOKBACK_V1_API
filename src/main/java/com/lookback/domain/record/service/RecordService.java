@@ -1,6 +1,9 @@
 package com.lookback.domain.record.service;
 
+import com.lookback.common.context.UserContext;
 import com.lookback.domain.common.handler.exception.RestApiException;
+import com.lookback.domain.exercise.repository.ExerciseRepository;
+import com.lookback.domain.muscle.repository.MuscleGroupRepository;
 import com.lookback.domain.record.command.RecordCommand;
 import com.lookback.domain.record.entity.ExerciseRecord;
 import com.lookback.domain.record.entity.Record;
@@ -9,12 +12,14 @@ import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.presentation.record.dto.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
@@ -26,7 +31,9 @@ public class RecordService {
 
     private final RecordRepository recordRepository;
     private final ExerciseRecordRepository exerciseRecordRepository;
+    private final ExerciseRepository exerciseRepository;
     private final TrainingRepository trainingRepository;
+    private final MuscleGroupRepository muscleGroupRepository;
 
     @Transactional
     public RecordCommand.Saved save(RecordCommand.Save save) {
@@ -43,19 +50,34 @@ public class RecordService {
      * 운동 기록 목록(pt와 개인 운동 목록)( 전체, pt, 개인) 카테고리로 나눠진다.
      * */
     @Transactional
-    public List<FindRecordResponse> findRecordById(FindRecordRequest findRecordRequest) {
+    public List<FindRecordResponse> findRecordById(HttpServletRequest request, FindRecordRequest findRecordRequest) {
         //TODO 공통에서 userId 가져오기
         //TODO 예외 처리
-        Long usersId = 202L;
+        if(findRecordRequest == null) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
 
-        String type = findRecordRequest.getType();
+        Long usersId = UserContext.getUser(request).getId();
+        if(findRecordRequest.getUserType() != null) {
+            if(findRecordRequest.getUserType().equals("TRAINER")) {
+                usersId = findRecordRequest.getUserId();
+            }
+        }
+
+        String category = findRecordRequest.getType();
         List<Record> findRecords = null;
-        if("pt".equals(type)) {
-            //findRecords = recordRepository.findByUsersIdAndTrainingIdIsNotNullOrderByCreatedAtDesc(usersId);
-        } else if("personal".equals(type)) {
-            //findRecords = recordRepository.findByUsersIdAndTrainingIdIsNullOrderByCreatedAtDesc(usersId);
-        } else {
-            //findRecords = recordRepository.findByUsersIdOrderByCreatedAtDesc(usersId);
+
+        List<Record> records = recordRepository.findByUsersId(usersId, category);
+        for(Record r : records) {
+            List<ExerciseRecord> findExRecordOrdAsc = exerciseRecordRepository.findByIdOrderByOrdAsc(r.getId());
+            List<Long> exerciseIds = new ArrayList<>();
+            for(ExerciseRecord er : findExRecordOrdAsc) {
+                exerciseIds.add(er.getExercise().getId());
+            }
+            //muscleGroupRepository.findMuscleCategoryByExcercise(exerciseIds);
+
+                //머슬카테고리 찾기
+                //exerciseRepository.findByIdIn(exerciseId);
         }
 
         return FindRecordResponse.getUserRecordsDtosFromEntity(findRecords);

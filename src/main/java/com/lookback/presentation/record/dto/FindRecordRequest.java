@@ -9,6 +9,7 @@ public class FindRecordRequest {
 
     private Long userId;
     private Long recordId;
+    private String userType; //TRAINER, MEMBER
 
     private String type;  //all, pt, personal
 }

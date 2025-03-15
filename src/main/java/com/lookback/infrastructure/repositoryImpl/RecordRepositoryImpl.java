@@ -44,4 +44,9 @@ public class RecordRepositoryImpl implements RecordRepository {
     public void deleteById(Long id) {
         recordJpaRepository.deleteById(id);
     }
+
+    @Override
+    public List<Record> findByUsersId(Long usersId, String category) {
+        return recordJpaRepository.findByUsersIdOrderByRecordDateDesc(usersId, category);
+    }
 }

@@ -11,6 +11,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,7 +34,7 @@ public class Record {
     private Training training;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "record", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<ExerciseRecord> exerciseRecords;
+    List<ExerciseRecord> exerciseRecords = new ArrayList<>();
 
     private LocalDate recordDate;
     private LocalTime recordTimeStart;
