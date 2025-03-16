@@ -8,8 +8,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ExerciseController {
 
-    public ResponseEntity<ExerciseDto.Response> retrieveExercises(@RequestBody ExerciseDto.Request exerciseDtoRequest) {
 
-        return null;
-    }
 }

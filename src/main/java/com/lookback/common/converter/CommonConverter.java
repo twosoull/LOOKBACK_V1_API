@@ -1,9 +1,12 @@
 package com.lookback.common.converter;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 
 public class CommonConverter {
 
@@ -49,6 +52,38 @@ public class CommonConverter {
             }
 
             return dateTime.format(formatter);
+    }
+
+    //올해일 경우 10월 1일, 올해가 아닐 경우 24년 10월 1일 데이터로 변환
+    public static String formatData(String dateString) {
+        // 입력 날짜를 LocalDate로 변환
+        LocalDate date = LocalDate.parse(dateString);
+
+        // 현재 연도 가져오기
+        int currentYear = LocalDate.now().getYear();
+        int targetYear = date.getYear();
+
+        // 날짜 포맷 결정
+        if (targetYear == currentYear) {
+            return String.format("%d월 %d일", date.getMonthValue(), date.getDayOfMonth());
+        } else {
+            return String.format("%d년 %d월 %d일", targetYear % 100, date.getMonthValue(), date.getDayOfMonth());
+        }
+    }
+
+    public static String formatWeekOfKorea(String dateString) {
+        // 입력 날짜를 LocalDate로 변환
+        LocalDate date = LocalDate.parse(dateString);
+
+        // 현재 연도 가져오기
+        int currentYear = LocalDate.now().getYear();
+        int targetYear = date.getYear();
+
+        // 요일 가져오기 (한글 요일로 변환)
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+
+        return dayOfWeekKorean;
     }
 
 }

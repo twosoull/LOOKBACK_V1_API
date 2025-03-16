@@ -11,6 +11,8 @@ import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
+import com.lookback.presentation.exercise.dto.ExerciseDto;
+import com.lookback.presentation.muscle.dto.MuscleGroupDto;
 import com.lookback.presentation.record.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -50,9 +52,7 @@ public class RecordService {
      * 운동 기록 목록(pt와 개인 운동 목록)( 전체, pt, 개인) 카테고리로 나눠진다.
      * */
     @Transactional
-    public List<FindRecordResponse> findRecordById(HttpServletRequest request, FindRecordRequest findRecordRequest) {
-        //TODO 공통에서 userId 가져오기
-        //TODO 예외 처리
+    public FindRecordResponse findMembersRecordList(HttpServletRequest request, FindRecordRequest findRecordRequest) {
         if(findRecordRequest == null) {
             throw new RestApiException(RESOURCE_NOT_FOUND);
         }
@@ -63,24 +63,37 @@ public class RecordService {
                 usersId = findRecordRequest.getUserId();
             }
         }
-
         String category = findRecordRequest.getType();
-        List<Record> findRecords = null;
-
         List<Record> records = recordRepository.findByUsersId(usersId, category);
+
+        List<FindRecordResponse> findRecordResponses = new ArrayList<>();
         for(Record r : records) {
+            List<String> recordOfExerciseTypes = new ArrayList<>();
+            List<String> usedMuscleNames = new ArrayList<>();
             List<ExerciseRecord> findExRecordOrdAsc = exerciseRecordRepository.findByIdOrderByOrdAsc(r.getId());
+
             List<Long> exerciseIds = new ArrayList<>();
             for(ExerciseRecord er : findExRecordOrdAsc) {
+                recordOfExerciseTypes.add(er.getExercise().getExerciseType().name());
                 exerciseIds.add(er.getExercise().getId());
-            }
-            //muscleGroupRepository.findMuscleCategoryByExcercise(exerciseIds);
 
-                //머슬카테고리 찾기
-                //exerciseRepository.findByIdIn(exerciseId);
+                List<MuscleGroupDto> findMuscleGroup = muscleGroupRepository.findMuscleCategoriesByExercise(exerciseIds);
+                findMuscleGroup.forEach(mg -> {
+                    usedMuscleNames.add(mg.getCategoryParentsName());
+                });
+            }
+            List<String> notDupMuscleNames = new ArrayList<>();
+            for(String muscleName : usedMuscleNames) {
+                if(!notDupMuscleNames.contains(muscleName)) {
+                    notDupMuscleNames.add(muscleName);
+                }
+            }
+
+            FindRecordResponse findRecordResponse = FindRecordResponse.create(r, notDupMuscleNames, recordOfExerciseTypes);
+            findRecordResponses.add(findRecordResponse);
         }
 
-        return FindRecordResponse.getUserRecordsDtosFromEntity(findRecords);
+        return FindRecordResponse.addList(findRecordResponses);
     }
 
     /**
