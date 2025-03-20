@@ -11,6 +11,7 @@ import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
+import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.presentation.exercise.dto.ExerciseDto;
 import com.lookback.presentation.muscle.dto.MuscleGroupDto;
 import com.lookback.presentation.record.dto.*;
@@ -31,6 +32,8 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 @RequiredArgsConstructor
 public class RecordService {
 
+
+    private final UserRepository userRepository;
     private final RecordRepository recordRepository;
     private final ExerciseRecordRepository exerciseRecordRepository;
     private final ExerciseRepository exerciseRepository;
@@ -57,15 +60,20 @@ public class RecordService {
             throw new RestApiException(RESOURCE_NOT_FOUND);
         }
 
+        //트레이너가 회원의 정보를 찾는 경우 parameter의 userId로 찾는다.
         Long usersId = UserContext.getUser(request).getId();
         if(findRecordRequest.getUserType() != null) {
             if(findRecordRequest.getUserType().equals("TRAINER")) {
                 usersId = findRecordRequest.getUserId();
             }
         }
+        //해당 유저의 정보 가져오기
+        Users findMember = userRepository.findById(usersId);
+
         String category = findRecordRequest.getType();
         List<Record> records = recordRepository.findByUsersId(usersId, category);
 
+        //record 기록과 각각의 운동타입(유산소,근력,스트레칭), 근육의 부위 2뎁스( 어깨, 등, 가슴) 등을 찾아온다.
         List<FindRecordResponse> findRecordResponses = new ArrayList<>();
         for(Record r : records) {
             List<String> recordOfExerciseTypes = new ArrayList<>();
@@ -79,7 +87,9 @@ public class RecordService {
 
                 List<MuscleGroupDto> findMuscleGroup = muscleGroupRepository.findMuscleCategoriesByExercise(exerciseIds);
                 findMuscleGroup.forEach(mg -> {
-                    usedMuscleNames.add(mg.getCategoryParentsName());
+                    if(mg != null && mg.getCategoryParentsName() != null && !mg.getCategoryParentsName().equals("")) {
+                        usedMuscleNames.add(mg.getCategoryParentsName());
+                    }
                 });
             }
             List<String> notDupMuscleNames = new ArrayList<>();
@@ -93,7 +103,7 @@ public class RecordService {
             findRecordResponses.add(findRecordResponse);
         }
 
-        return FindRecordResponse.addList(findRecordResponses);
+        return FindRecordResponse.add(findRecordResponses, findMember);
     }
 
     /**
