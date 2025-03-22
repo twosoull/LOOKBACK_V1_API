@@ -3,6 +3,7 @@ package com.lookback.common.converter;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
@@ -70,6 +71,40 @@ public class CommonConverter {
             return String.format("%d년 %d월 %d일", targetYear % 100, date.getMonthValue(), date.getDayOfMonth());
         }
     }
+    //20240801 -> "2024.08.01"
+    public static String formatDataOfDot(Long dateLong) {
+        // 입력 날짜를 LocalDate로 변환
+        String dateString = String.valueOf(dateLong);
+        // "yyyyMMdd" 형식으로 파싱
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate date = LocalDate.parse(dateString, inputFormatter);
+
+        // 원하는 형식으로 출력
+        return String.format("%04d.%02d.%02d", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+
+    }
+
+    public static String getAge(String birthDateString) {
+        // 문자열을 날짜로 파싱 (예: 19990801 -> 1999-08-01)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        LocalDate birthDate = LocalDate.parse(birthDateString, formatter);
+
+        // 오늘 날짜
+        LocalDate today = LocalDate.now();
+
+        // 기간 계산
+        int age = Period.between(birthDate, today).getYears();
+
+        // 아직 생일이 안 지났으면 -1
+        if (today.getMonthValue() < birthDate.getMonthValue() ||
+                (today.getMonthValue() == birthDate.getMonthValue() && today.getDayOfMonth() < birthDate.getDayOfMonth())) {
+            age--;
+        }
+
+        return String.valueOf(age);
+    }
+
+
 
     public static String formatWeekOfKorea(String dateString) {
         // 입력 날짜를 LocalDate로 변환
@@ -84,6 +119,12 @@ public class CommonConverter {
         String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
 
         return dayOfWeekKorean;
+    }
+
+    public static String convertGender(String gender) {
+        if (gender.equals("M")) {return "남자";}
+        if (gender.equals("W")) {return "여자";}
+        return "";
     }
 
 }

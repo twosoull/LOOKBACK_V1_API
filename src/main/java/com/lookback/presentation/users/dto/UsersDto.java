@@ -15,7 +15,7 @@ public class UsersDto {
     private String password;
     private String phone;
     private Long age;
-    private Long birthDt;
+    private String birthDt;
     private double weight;
     private double height;
     private String snsProvider;
@@ -37,6 +37,7 @@ public class UsersDto {
         usersDto.setEmail(users.getEmail());
         usersDto.setPassword(users.getPassword());
         usersDto.setPhone(users.getPhone());
+        usersDto.setBirthDt(CommonConverter.formatDataOfDot(users.getBirthDt()));
         usersDto.setAge(CommonConverter.ageConverter(users.getBirthDt()));
         usersDto.setWeight(users.getWeight());
         usersDto.setHeight(users.getHeight());
@@ -46,7 +47,7 @@ public class UsersDto {
         usersDto.setNickName(users.getNickName());
         usersDto.setProfileImageUrl(users.getProfileImageUrl());
         usersDto.setVerified(users.getVerified());
-        usersDto.setGender(users.getGender());
+        usersDto.setGender(CommonConverter.convertGender(users.getGender()));
         usersDto.setSignupDate(users.getSignupDate());
         usersDto.setLastLoginDate(users.getLastLoginDate());
         usersDto.setStatus(users.getStatus());
