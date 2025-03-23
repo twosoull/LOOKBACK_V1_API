@@ -1,6 +1,7 @@
 package com.lookback.domain.record.service;
 
 import com.lookback.common.context.UserContext;
+import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.exercise.repository.ExerciseRepository;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
@@ -9,6 +10,7 @@ import com.lookback.domain.record.entity.ExerciseRecord;
 import com.lookback.domain.record.entity.Record;
 import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
+import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
@@ -62,14 +64,17 @@ public class RecordService {
 
         //트레이너가 회원의 정보를 찾는 경우 parameter의 userId로 찾는다.
         Long usersId = UserContext.getUser(request).getId();
+        Long trainerId = null;
         if(findRecordRequest.getUserType() != null) {
             if(findRecordRequest.getUserType().equals("TRAINER")) {
                 usersId = findRecordRequest.getUserId();
+                //본인이 트레이너라면, 세션 아이디는 트레이너가 된다.
+                trainerId = UserContext.getUser(request).getId();
             }
         }
         //해당 유저의 정보 가져오기
         Users findMember = userRepository.findById(usersId);
-
+        Training training = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(trainerId,usersId, TrainingStatus.IN_PROGRESS);
         String category = findRecordRequest.getType();
         List<Record> records = recordRepository.findByUsersId(usersId, category);
 
@@ -103,7 +108,7 @@ public class RecordService {
             findRecordResponses.add(findRecordResponse);
         }
 
-        return FindRecordResponse.add(findRecordResponses, findMember);
+        return FindRecordResponse.add(findRecordResponses, findMember ,training.getId());
     }
 
     /**

@@ -13,4 +13,5 @@ import java.util.List;
 public interface TrainingJpaRepository extends JpaRepository<Training, Long>, TrainingRepositoryCustom {
     List<Training> findByTrainerIdAndTrainingStatus(@Param("trainerId")Long trainerId, @Param("trainingStatus")String trainingStatus);
 
+    Training findByTrainerIdAndStudentIdAndTrainingStatus(Long trainerId, Long usersId, TrainingStatus trainingStatus);
 }

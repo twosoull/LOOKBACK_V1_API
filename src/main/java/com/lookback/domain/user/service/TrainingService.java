@@ -11,18 +11,20 @@ import com.lookback.domain.user.repository.TrainerRepository;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
+import com.lookback.presentation.trainer.dto.CancelTrainingDto;
+import com.lookback.presentation.trainer.dto.UpdateTrainingUsersRequest;
 import com.lookback.presentation.trainer.dto.UserTrainingDto;
 import com.lookback.presentation.users.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RETRIEVE_ERROR;
 
 @Service
@@ -53,6 +55,7 @@ public class TrainingService {
                         queryDto.getId(),
                         queryDto.getUserName(),
                         queryDto.getBirthDt(),
+                        queryDto.getTrainingId(),
                         queryDto.getLatestCreatedAt()
                 )).collect(Collectors.toList());
 
@@ -137,12 +140,21 @@ public class TrainingService {
      * 회원 연결해제
      * */
     @Transactional
-    public void cancelTraining(UpdateTrainingUsersRequest request) {
+    public CancelTrainingDto cancelTraining(UpdateTrainingUsersRequest request) {
+        Training training = null;
+        try {
+            training = trainingRepository.findById(request.getTrainingId());
+            training.cancel();
 
-        Training training = trainingRepository.findById(request.getTrainingId());
-        training.cancel();
+            if(training == null) {
+                throw new RestApiException(RESOURCE_NOT_FOUND);
+            }
+        } catch (Exception e) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
 
-        //TODO 리턴으로 해제 값을 보내준다. 실패시 오류 값 보내기
+
+        return CancelTrainingDto.fromEntity(training);
     }
 
 }

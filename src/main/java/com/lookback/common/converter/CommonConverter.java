@@ -57,6 +57,9 @@ public class CommonConverter {
 
     //올해일 경우 10월 1일, 올해가 아닐 경우 24년 10월 1일 데이터로 변환
     public static String formatData(String dateString) {
+        if(dateString == null) {
+            return "";
+        }
         // 입력 날짜를 LocalDate로 변환
         LocalDate date = LocalDate.parse(dateString);
 
@@ -73,6 +76,10 @@ public class CommonConverter {
     }
     //20240801 -> "2024.08.01"
     public static String formatDataOfDot(Long dateLong) {
+        if(dateLong == null) {
+            return "";
+        }
+
         // 입력 날짜를 LocalDate로 변환
         String dateString = String.valueOf(dateLong);
         // "yyyyMMdd" 형식으로 파싱
@@ -107,6 +114,9 @@ public class CommonConverter {
 
 
     public static String formatWeekOfKorea(String dateString) {
+        if(dateString == null) {
+            return "";
+        }
         // 입력 날짜를 LocalDate로 변환
         LocalDate date = LocalDate.parse(dateString);
 
@@ -122,6 +132,9 @@ public class CommonConverter {
     }
 
     public static String convertGender(String gender) {
+        if(gender == null) {
+            return "";
+        }
         if (gender.equals("M")) {return "남자";}
         if (gender.equals("W")) {return "여자";}
         return "";

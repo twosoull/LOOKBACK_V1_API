@@ -1,5 +1,6 @@
 package com.lookback.domain.user.entity;
 
+import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "TRAINING")
-public class Training {
+public class Training extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "TRAINING_ID")

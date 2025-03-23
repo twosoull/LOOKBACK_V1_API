@@ -14,6 +14,7 @@ public class UserTrainingDto {
     private Long userId;
     private String userName;
     private Long age;
+    private Long trainingId;
     private String latestCreatedAt;
     private List<UserTrainingDto> list = new ArrayList<>();
     private int totalCount;
@@ -21,10 +22,11 @@ public class UserTrainingDto {
     public UserTrainingDto() {
     }
 
-    public UserTrainingDto(Long userId, String userName, Long birthDate, LocalDate latestCreatedAt) {
+    public UserTrainingDto(Long userId, String userName, Long birthDate, Long trainingId, LocalDate latestCreatedAt) {
         this.userId = userId;
         this.userName = userName;
         this.age = CommonConverter.ageConverter(birthDate);
+        this.trainingId = trainingId;
         this.latestCreatedAt = CommonConverter.formatLocalDateTime(latestCreatedAt);
     }
 
@@ -34,4 +36,5 @@ public class UserTrainingDto {
         userTrainingDto.setTotalCount(totalCount);
         return userTrainingDto;
     }
+    
 }

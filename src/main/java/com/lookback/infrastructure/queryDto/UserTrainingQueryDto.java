@@ -18,4 +18,5 @@ public class UserTrainingQueryDto {
     private String userName;
     private Long birthDt;
     private LocalDate latestCreatedAt;
+    private Long trainingId;
 }

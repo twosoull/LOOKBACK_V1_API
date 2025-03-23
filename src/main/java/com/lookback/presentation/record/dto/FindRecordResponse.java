@@ -28,10 +28,11 @@ public class FindRecordResponse {
     List<String> usedMuscleNames = new ArrayList<>();
     List<String> recordOfExerciseTypes = new ArrayList<>();
 
-    public static FindRecordResponse add(List<FindRecordResponse> findRecordResponseList, Users users) {
+    public static FindRecordResponse add(List<FindRecordResponse> findRecordResponseList, Users users, Long trainingId) {
         FindRecordResponse findRecordResponse = new FindRecordResponse();
         findRecordResponse.setList(findRecordResponseList);
         findRecordResponse.setUser(UsersDto.fromEntity(users));
+        findRecordResponse.setTrainingId(trainingId);
         return findRecordResponse;
     }
     public static FindRecordResponse create(Record record, List<String> useMuscleNames, List<String> recordOfExerciseTypes) {

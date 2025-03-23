@@ -1,4 +1,4 @@
-package com.lookback.presentation.users.dto;
+package com.lookback.presentation.trainer.dto;
 
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import lombok.Getter;

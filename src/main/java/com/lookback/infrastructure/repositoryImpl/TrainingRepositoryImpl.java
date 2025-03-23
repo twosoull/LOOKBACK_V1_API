@@ -53,4 +53,9 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public List<UserTrainingQueryDto> findTrainingsForTrainerOrderBySortByType(Long userId, TrainingStatus trainingStatus, String sortBy) {
         return trainingJpaRepository.findTrainingsForTrainerOrderBySortByType(userId,trainingStatus, sortBy);
     }
+
+    @Override
+    public Training findByTrainerIdAndStudentIdAndTrainingStatus(Long trainerId, Long usersId, TrainingStatus trainingStatus) {
+        return trainingJpaRepository.findByTrainerIdAndStudentIdAndTrainingStatus(trainerId, usersId, trainingStatus);
+    }
 }
