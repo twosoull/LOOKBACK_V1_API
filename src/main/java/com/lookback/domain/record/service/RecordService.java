@@ -14,7 +14,6 @@ import com.lookback.domain.user.entity.Training;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
-import com.lookback.presentation.exercise.dto.ExerciseDto;
 import com.lookback.presentation.muscle.dto.MuscleGroupDto;
 import com.lookback.presentation.record.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,14 +41,29 @@ public class RecordService {
     private final MuscleGroupRepository muscleGroupRepository;
 
     @Transactional
-    public RecordCommand.Saved save(RecordCommand.Save save) {
-        //TODO 로그인 만들기
-        Users users = new Users(1L, "twoowo", "dd", "kakao", "dd", "fasd", "fasd", "asdasf", "asfasd", "fasda", "fasdasf", LocalDateTime.now(),
-                LocalDateTime.now(),"dd",LocalDateTime.now()
-                );
+    public SaveRecordResponse save(HttpServletRequest request, SaveRecordRequest save) {
 
-        Record savedRecord = recordRepository.save(Record.fromCommandSave(save, users));
-        return RecordCommand.of(savedRecord);
+        //TODO 일단 로그인user와 parameter의 usersId로 구분을 하자. 나중에 트레이너 본인도 자신의 기록을 작성할 수도 있으니까.
+        Long usersId = UserContext.getUser(request).getId();
+
+        Record saveRecord = null;
+        //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.
+        if (usersId != save.getUsersId()) {
+            //다른 사람이 작성하는 경우
+            Training training = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(usersId,save.getUsersId(), TrainingStatus.IN_PROGRESS);
+            if(training == null) {
+                throw new RestApiException(RESOURCE_NOT_FOUND);
+            }
+            Users student = training.getStudent();
+            saveRecord = recordRepository.save(Record.createFromSaveDto(student, training, save));
+
+        } else {
+            //본인이 본인의 기록을 작성하는 경우
+            Users findUsers = userRepository.findById(usersId);
+            saveRecord = recordRepository.save(Record.createFromSaveDto(findUsers, save));
+        }
+
+        return SaveRecordResponse.fromEntity(saveRecord);
     }
     /**`
      * [회원]

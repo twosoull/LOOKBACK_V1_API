@@ -4,14 +4,15 @@ import com.lookback.domain.record.service.RecordService;
 import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.record.dto.FindRecordRequest;
 import com.lookback.presentation.record.dto.FindRecordResponse;
+import com.lookback.presentation.record.dto.SaveRecordRequest;
+import com.lookback.presentation.record.dto.SaveRecordResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +25,14 @@ public class RecordController {
             HttpServletRequest request, HttpServletResponse response, FindRecordRequest findRecordRequest) {
         FindRecordResponse membersRecordList = recordService.findMembersRecordList(request, findRecordRequest);
         return new ResponseEntity(ApiResponse.success(membersRecordList, response), HttpStatus.OK);
+    }
+
+    @PostMapping("/record/save")
+    public ResponseEntity<ApiResponse<T>> findMemberRecords(
+            HttpServletRequest request, HttpServletResponse response, @RequestBody SaveRecordRequest saveRecordRequest
+    ) {
+        SaveRecordResponse save = recordService.save(request, saveRecordRequest);
+        return new ResponseEntity(ApiResponse.success(save, response), HttpStatus.OK);
     }
 
 }

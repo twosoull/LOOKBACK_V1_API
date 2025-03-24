@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ShareStatus {
-    SHARED("공유완료"),
+    SAVED("저장"),
+    SHARED("공유완료"), // 저장완료 및 공유까지 완료
     TEMP("임시저장"),
     CANCEL("취소");
 

@@ -1,9 +1,6 @@
 package com.lookback.common.converter;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
@@ -140,4 +137,15 @@ public class CommonConverter {
         return "";
     }
 
+    public static LocalDate convertStringToLocalDate(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate parse = LocalDate.parse(dateString, formatter);
+        return parse;
+    }
+
+    public static LocalTime convertStringToLocalTime(String timeString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime parse = LocalTime.parse(timeString, formatter);
+        return parse;
+    }
 }
