@@ -26,7 +26,7 @@ public class Exercise extends BaseEntity {
     @Column(name = "EXERCISE_ID")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EQUIPMENT_CATEGORY_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private EquipmentCategory equipmentCategory;
 
