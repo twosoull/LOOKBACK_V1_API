@@ -6,8 +6,8 @@ import java.util.Arrays;
 
 public enum ExerciseTypeEnum {
     STRENGTH("근력"),
-    CARDIO("유산소"),
-    STRETCHING("스트레칭");
+    STRETCHING("스트레칭"),
+    CARDIO("유산소");
 
     private final String message;
 
