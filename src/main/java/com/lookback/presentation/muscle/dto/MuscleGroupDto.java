@@ -14,9 +14,18 @@ import java.util.List;
 @ToString
 public class MuscleGroupDto {
 
-    //private MuscleCategoryDto muscleCategory;
+    private Long muscleGroupId;
+    private MuscleCategoryDto muscleCategory;
     private String muscleType;
     private String categoryParentsName;
+
+    public static MuscleGroupDto fromEntity(MuscleGroup muscleGroup) {
+        return MuscleGroupDto.builder()
+                .muscleGroupId(muscleGroup.getId())
+                .muscleCategory(MuscleCategoryDto.fromEntity(muscleGroup.getMuscleCategory()))
+                .muscleType(muscleGroup.getMuscleType())
+                .build();
+    }
 
     public static MuscleGroupDto fromMuscleGroup(String muscleName) {
         return MuscleGroupDto.builder()

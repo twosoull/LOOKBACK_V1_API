@@ -7,6 +7,8 @@ import com.lookback.infrastructure.repositoryORM.ExerciseJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
 
 @Repository
@@ -23,5 +25,10 @@ public class ExerciseRepositoryImpl implements ExerciseRepository {
     public Exercise findById(Long exerciseId) {
         return exerciseJpaRepository.findById(exerciseId).orElseThrow(
                 () -> new RestApiException(RESOURCE_NOT_FOUND));
+    }
+
+    @Override
+    public List<Exercise> findAll() {
+        return exerciseJpaRepository.findAll();
     }
 }

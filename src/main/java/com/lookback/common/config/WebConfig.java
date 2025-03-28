@@ -35,9 +35,9 @@ public class WebConfig implements WebMvcConfigurer {
         return new CorsFilter(source);
     }
 
-    @Override
+/*    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtTokenInterceptor)
                 .excludePathPatterns("/auth/**"); // ✅ 로그인, 회원가입 관련 API는 제외
-    }
+    }*/
 }

@@ -7,6 +7,8 @@ import com.lookback.infrastructure.repositoryORM.MuscleCategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
 
 @Repository
@@ -24,5 +26,10 @@ public class MuscleCategoryRepositoryImpl implements MuscleCategoryRepository {
     public MuscleCategory findById(Long muscleCategoryId) {
         return muscleCategoryJpaRepository.findById(muscleCategoryId).orElseThrow(
                 () -> new RestApiException(RESOURCE_NOT_FOUND));
+    }
+
+    @Override
+    public List<MuscleCategory> findByParentIsNotNull() {
+        return muscleCategoryJpaRepository.findByParentIsNotNull();
     }
 }

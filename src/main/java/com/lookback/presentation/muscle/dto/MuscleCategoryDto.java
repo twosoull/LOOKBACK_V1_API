@@ -1,11 +1,12 @@
 package com.lookback.presentation.muscle.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.lookback.domain.muscle.entity.MuscleCategory;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @ToString
 public class MuscleCategoryDto {
 
@@ -13,4 +14,11 @@ public class MuscleCategoryDto {
     private String muscleName;
     private String muscleCategoryName;
 
+    public static MuscleCategoryDto fromEntity(MuscleCategory muscleCategory) {
+        return MuscleCategoryDto.builder()
+                .muscleCategoryId(muscleCategory.getId())
+                .muscleName(muscleCategory.getMuscleName())
+                .muscleCategoryName(muscleCategory.getMuscleCategoryName())
+                .build();
+    }
 }

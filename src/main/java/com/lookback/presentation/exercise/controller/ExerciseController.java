@@ -5,6 +5,7 @@ import com.lookback.domain.exercise.service.ExerciseService;
 import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.exercise.dto.ExerciseDto;
 import com.lookback.presentation.exercise.dto.ExerciseTypeEnumDto;
+import com.lookback.presentation.exercise.dto.FindExercisesResponse;
 import com.lookback.presentation.record.dto.FindRecordRequest;
 import com.lookback.presentation.record.dto.FindRecordResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,16 +28,9 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
 
     @GetMapping("/exercises")
-    public ResponseEntity<ApiResponse<T>> findExercises(
-            HttpServletRequest request, HttpServletResponse response) {
-
-        List<ExerciseTypeEnumDto> list = Arrays.stream(ExerciseTypeEnum.values()).map(
-                (exerciseTypeEnum) -> ExerciseTypeEnumDto.of(exerciseTypeEnum.name(), exerciseTypeEnum.getMessage())
-        ).toList();
-
-        exerciseService.findExercises();
-
-        return new ResponseEntity(ApiResponse.success(list, response), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<T>> findExercises(HttpServletResponse response) {
+        FindExercisesResponse exercises = exerciseService.findExercises();
+        return new ResponseEntity(ApiResponse.success(exercises, response), HttpStatus.OK);
     }
 
 }

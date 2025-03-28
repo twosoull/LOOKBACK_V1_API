@@ -3,7 +3,7 @@ package com.lookback.domain.exercise.entity;
 import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
 import com.lookback.domain.exercise.command.ExerciseCommand;
-import com.lookback.domain.muscle.entity.EquipmentCategory;
+import com.lookback.domain.muscle.entity.Equipment;
 import com.lookback.domain.muscle.entity.MuscleGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,16 +27,16 @@ public class Exercise extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EQUIPMENT_CATEGORY_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private EquipmentCategory equipmentCategory;
+    @JoinColumn(name = "EQUIPMENT_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Equipment equipment;
 
     @Builder.Default
     @OneToMany(mappedBy = "exercise")
     private List<ExerciseVideo> exerciseVideos = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "exercise" )
-    private List<MuscleGroup> muscleGroups = new ArrayList<>();
+    @OneToMany(mappedBy = "exercise")
+    private List<MuscleGroup> muscleGroups;
 
     private String exerciseName;
     private String exerciseLevel;

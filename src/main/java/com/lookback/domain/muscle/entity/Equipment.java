@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Entity
 @Getter
 @Setter
-public class EquipmentCategory  extends BaseEntity {
+public class Equipment extends BaseEntity {
 
     @Id @GeneratedValue
-    @Column(name = "EQUIPMENT_CATEGORY_ID")
+    @Column(name = "EQUIPMENT_ID")
     private Long id;
     private Long ord;
     private String name;

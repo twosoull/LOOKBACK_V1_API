@@ -1,21 +1,29 @@
 package com.lookback.domain.exercise.service;
 
 import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.domain.common.handler.exception.RestApiException;
+import com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode;
 import com.lookback.domain.exercise.command.ExerciseCommand;
-import com.lookback.domain.exercise.command.ExerciseVideoCommand;
 import com.lookback.domain.exercise.entity.Exercise;
 import com.lookback.domain.exercise.entity.ExerciseVideo;
+import com.lookback.domain.exercise.repository.EquipmentRepository;
 import com.lookback.domain.exercise.repository.ExerciseRepository;
 import com.lookback.domain.exercise.repository.ExerciseVideoRepository;
 import com.lookback.domain.muscle.entity.MuscleGroup;
+import com.lookback.domain.muscle.repository.MuscleCategoryRepository;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
+import com.lookback.presentation.exercise.dto.EquipmentDto;
+import com.lookback.presentation.exercise.dto.ExerciseDto;
 import com.lookback.presentation.exercise.dto.ExerciseTypeEnumDto;
-import jakarta.transaction.Transactional;
+import com.lookback.presentation.exercise.dto.FindExercisesResponse;
+import com.lookback.presentation.muscle.dto.MuscleCategoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +37,9 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseVideoRepository exerciseVideoRepository;
     private final MuscleGroupRepository muscleGroupRepository;
+    private final MuscleCategoryRepository muscleCategoryRepository;
+    private final EquipmentRepository equipmentRepository;
+
     public void save(ExerciseCommand.Save save) {
 
         MuscleGroup findMuscleGroup = muscleGroupRepository.findById(save.MuscleGroupId());
@@ -47,19 +58,56 @@ public class ExerciseService {
                 });
     }
 
-    public void findExercises() {
-
-        List<ExerciseTypeEnumDto> list = Arrays.stream(ExerciseTypeEnum.values()).map(
-                (exerciseTypeEnum) -> ExerciseTypeEnumDto.of(exerciseTypeEnum.name(), exerciseTypeEnum.getMessage())
-        ).toList();
-
-        //모든 운동 불러옴
-
-        //카테고리로 각각 리스트 넣기
-        //enumCategory, strengths, cardios, strechings 총 4개로 만든다.
-        // 여기서 운동들에는 각각 근육id가 맞게 들어가줘야함.
-        // 서브 카테고리들도 장비, 근육 카테고리 불러오기 좀 많이 불러와야겠네
+    @Transactional(readOnly = true)
+    public FindExercisesResponse findExercises() {
+        try {
+            List<Exercise> exercises = exerciseRepository.findAll();
+            List<ExerciseTypeEnumDto> exerciseTypes = Arrays.stream(ExerciseTypeEnum.values()).map(
+                    (exerciseTypeEnum) -> ExerciseTypeEnumDto.of(exerciseTypeEnum.name(), exerciseTypeEnum.getMessage())
+            ).toList();
 
 
+            List<ExerciseDto> strengthExercises = new ArrayList<>();
+            List<ExerciseDto> cardioExercises = new ArrayList<>();
+            List<ExerciseDto> stretchingExercises = new ArrayList<>();
+
+            //카테고리로 각각 리스트 넣기
+            exercises.stream().forEach(e -> {
+                if (e.getExerciseType().equals(ExerciseTypeEnum.STRENGTH)) {
+                    strengthExercises.add(ExerciseDto.fromEntity(e));
+                }
+                if(e.getExerciseType().equals(ExerciseTypeEnum.CARDIO)){
+                    cardioExercises.add(ExerciseDto.fromEntity(e));
+                }
+                if(e.getExerciseType().equals(ExerciseTypeEnum.STRETCHING)){
+                    stretchingExercises.add(ExerciseDto.fromEntity(e));
+                }
+            });
+
+            List<MuscleCategoryDto> muscleCategories =
+                    muscleCategoryRepository
+                            .findByParentIsNotNull()
+                            .stream()
+                            .map(mc -> MuscleCategoryDto.fromEntity(mc))
+                            .toList();
+
+            List<EquipmentDto> equipments =
+                    equipmentRepository.findAll()
+                            .stream()
+                            .map(e -> EquipmentDto.fromEntity(e))
+                            .toList();
+            return FindExercisesResponse.create(
+                    exerciseTypes,
+                    strengthExercises,
+                    cardioExercises,
+                    stretchingExercises,
+                    muscleCategories,
+                    equipments
+            );
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
+        }
     }
 }
