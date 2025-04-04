@@ -12,14 +12,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EquipmentDto {
 
-    private Long EquipmentCategoryId;
+    private Long equipmentId;
     private Long ord;
     private String name;
     private String description;
 
     public static EquipmentDto fromEntity(Equipment equipment) {
         return EquipmentDto.builder()
-                .EquipmentCategoryId(equipment.getId())
+                .equipmentId(equipment.getId())
                 .ord(equipment.getOrd())
                 .name(equipment.getName())
                 .description(equipment.getDescription())

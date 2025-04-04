@@ -22,6 +22,7 @@ public class ExerciseDto {
     private String exerciseLevel;
     private Integer caloriesBurned;
     private String description;
+    private String imageUrl;
     //private List<MuscleGroup> muscleGroups = new ArrayList<>();
     //private List<ExerciseVideo> exerciseVideos = new ArrayList<>();
 
@@ -38,6 +39,7 @@ public class ExerciseDto {
                 .exerciseLevel(exercise.getExerciseLevel())
                 .caloriesBurned(exercise.getCaloriesBurned())
                 .description(exercise.getDescription())
+                .imageUrl(exercise.getImageUrl())
                 .build();
     }
 }

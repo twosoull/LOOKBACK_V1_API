@@ -1,6 +1,7 @@
 package com.lookback.domain.muscle.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.common.constant.enums.MuscleTypeEnum;
 import com.lookback.domain.exercise.entity.Exercise;
 import com.lookback.domain.muscle.command.MuscleGroupCommand;
 import jakarta.persistence.*;
@@ -28,7 +29,8 @@ public class MuscleGroup extends BaseEntity {
     @JoinColumn(name = "MUSCLE_CATEGORY_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MuscleCategory muscleCategory;
 
-    private String muscleType;
+    @Enumerated(EnumType.STRING)
+    private MuscleTypeEnum muscleType;
     private String createdBy;
     private String updatedBy;
 

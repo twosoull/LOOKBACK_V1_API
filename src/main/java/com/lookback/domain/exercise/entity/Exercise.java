@@ -42,6 +42,7 @@ public class Exercise extends BaseEntity {
     private String exerciseLevel;
     private Integer caloriesBurned;
     private String description;
+    private String imageUrl;
 
     @Enumerated(EnumType.STRING)
     private ExerciseTypeEnum exerciseType;

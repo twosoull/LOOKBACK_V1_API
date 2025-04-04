@@ -23,7 +23,7 @@ public class MuscleGroupDto {
         return MuscleGroupDto.builder()
                 .muscleGroupId(muscleGroup.getId())
                 .muscleCategory(MuscleCategoryDto.fromEntity(muscleGroup.getMuscleCategory()))
-                .muscleType(muscleGroup.getMuscleType())
+                .muscleType(muscleGroup.getMuscleType().name())
                 .build();
     }
 
