@@ -17,6 +17,7 @@ public enum CommonErrorCode implements ErrorCode {
     NOT_FOUND_TOKEN(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "토큰이 없습니다."),
     EXPIRED_TOKEN(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "만료된 토큰입니다."),
     RETRIEVE_ERROR(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "조회에 실패했습니다."),
+    FILE_UPLOAD_FAIL(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패 했습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "Refresh Token이 만료되었습니다. 다시 로그인하세요.");
     private final int status;
     private final HttpStatus httpStatus;

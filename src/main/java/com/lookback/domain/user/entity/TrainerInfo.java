@@ -1,9 +1,11 @@
 package com.lookback.domain.user.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.file.entity.UploadFile;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "TRAINER_INFO")
@@ -23,4 +25,5 @@ public class TrainerInfo extends BaseEntity {
     private LocalDateTime endAt;
     private String inProgress;
     private String privateYn;
+
 }

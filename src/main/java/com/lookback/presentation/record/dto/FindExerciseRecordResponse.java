@@ -2,7 +2,6 @@ package com.lookback.presentation.record.dto;
 
 import com.lookback.domain.exercise.entity.Exercise;
 import com.lookback.domain.record.entity.ExerciseRecord;
-import com.lookback.domain.record.entity.ExerciseRecordFile;
 import com.lookback.domain.record.entity.Record;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,19 +53,7 @@ public class FindExerciseRecordResponse {
             exerciseRecordDto.setOrd(exerciseRecord.getOrd());
 
 
-            List<ExerciseRecordMediaDto> exerciseRecordMediaDtos = new ArrayList<>();
-            for(ExerciseRecordFile file :  exerciseRecord.getExerciseRecordFiles()){
-                ExerciseRecordMediaDto exerciseRecordMediaDto = new ExerciseRecordMediaDto();
-                exerciseRecordMediaDto.setFileName(file.getFileName());
-                exerciseRecordMediaDto.setFileType(file.getFileType());
-                exerciseRecordMediaDto.setPath(file.getPath());
-                exerciseRecordMediaDto.setOrgFileName(file.getOrgFileName());
-                exerciseRecordMediaDto.setExerciseRecordMediaId(file.getId());
-                exerciseRecordMediaDtos.add(exerciseRecordMediaDto);
-            }
-
-            exerciseRecordDto.setExerciseRecordMediaDtos(exerciseRecordMediaDtos);
-            exerciseRecordDtos.add(exerciseRecordDto);
+             exerciseRecordDtos.add(exerciseRecordDto);
         }
         return exerciseRecordDtos;
     }

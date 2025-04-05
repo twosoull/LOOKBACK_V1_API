@@ -19,7 +19,6 @@ import com.lookback.presentation.exercise.dto.FindExercisesResponse;
 import com.lookback.presentation.muscle.dto.MuscleCategoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

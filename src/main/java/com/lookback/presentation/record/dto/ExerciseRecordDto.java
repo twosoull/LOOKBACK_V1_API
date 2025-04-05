@@ -1,6 +1,5 @@
 package com.lookback.presentation.record.dto;
 
-import com.lookback.domain.record.entity.ExerciseRecordFile;
 import lombok.Getter;
 import lombok.Setter;
 

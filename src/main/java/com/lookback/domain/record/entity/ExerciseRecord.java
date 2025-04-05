@@ -1,6 +1,7 @@
 package com.lookback.domain.record.entity;
 
 import com.lookback.domain.exercise.entity.Exercise;
+import com.lookback.domain.file.entity.UploadFile;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,6 @@ public class ExerciseRecord {
     @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
 
-    @OneToMany(fetch = FetchType.LAZY , mappedBy = "exerciseRecord", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<ExerciseRecordFile> exerciseRecordFiles;
-
     private Integer sets;
     private Integer repsPerSet;
     private Integer weight;
@@ -39,4 +37,8 @@ public class ExerciseRecord {
     private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
+
+    @OneToMany(mappedBy = "exerciseRecord")
+    private List<ExerciseRecordDetail> exerciseRecordDetails;
+
 }
