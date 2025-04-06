@@ -27,10 +27,6 @@ public class ExerciseRecord {
     @JoinColumn(name = "EXERCISE_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Exercise exercise;
 
-    private Integer sets;
-    private Integer repsPerSet;
-    private Integer weight;
-    private Integer duration;
     private String memo;
     private Integer ord;
     private LocalDateTime createdAt;
@@ -41,4 +37,13 @@ public class ExerciseRecord {
     @OneToMany(mappedBy = "exerciseRecord")
     private List<ExerciseRecordDetail> exerciseRecordDetails;
 
+    public void setRecordById(Long id) {
+        this.record = new Record();
+        this.record.setId(id);
+    }
+
+    public void setExerciseById(Long id) {
+        this.exercise = new Exercise();
+        this.exercise.setId(id);
+    }
 }

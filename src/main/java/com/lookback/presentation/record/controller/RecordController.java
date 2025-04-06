@@ -2,10 +2,7 @@ package com.lookback.presentation.record.controller;
 
 import com.lookback.domain.record.service.RecordService;
 import com.lookback.presentation.common.ApiResponse;
-import com.lookback.presentation.record.dto.FindRecordRequest;
-import com.lookback.presentation.record.dto.FindRecordResponse;
-import com.lookback.presentation.record.dto.SaveRecordRequest;
-import com.lookback.presentation.record.dto.SaveRecordResponse;
+import com.lookback.presentation.record.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +25,20 @@ public class RecordController {
     }
 
     @PostMapping("/record/save")
-    public ResponseEntity<ApiResponse<T>> findMemberRecords(
+    public ResponseEntity<ApiResponse<T>> saveMemberRecord(
             HttpServletRequest request, HttpServletResponse response, @RequestBody SaveRecordRequest saveRecordRequest
     ) {
         SaveRecordResponse save = recordService.save(request, saveRecordRequest);
         return new ResponseEntity(ApiResponse.success(save, response), HttpStatus.OK);
+    }
+
+    @PostMapping("/record/detail/save")
+    public ResponseEntity<ApiResponse<T>> saveMemberExerciseRecords(
+            @RequestBody SaveExerciseRecordRequest saveExerciseRecordRequest,
+            HttpServletResponse response) {
+        recordService.saveExerciseRecords(saveExerciseRecordRequest);
+
+        return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
     }
 
 }

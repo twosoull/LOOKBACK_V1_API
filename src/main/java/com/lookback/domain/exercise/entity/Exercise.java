@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @Table(name = "EXERCISE")
@@ -53,7 +55,7 @@ public class Exercise extends BaseEntity {
     private String updatedBy;
 
     // 기본 생성자
-    protected Exercise() {
+    public Exercise() {
     }
 
     // Excel 데이터를 위한 생성자

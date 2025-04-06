@@ -1,13 +1,19 @@
 package com.lookback.domain.record.service;
 
 import com.lookback.common.context.UserContext;
+import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
+import com.lookback.domain.exercise.entity.Exercise;
 import com.lookback.domain.exercise.repository.ExerciseRepository;
+import com.lookback.domain.file.entity.UploadFile;
+import com.lookback.domain.file.repository.FileRepository;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
 import com.lookback.domain.record.command.RecordCommand;
 import com.lookback.domain.record.entity.ExerciseRecord;
+import com.lookback.domain.record.entity.ExerciseRecordDetail;
 import com.lookback.domain.record.entity.Record;
+import com.lookback.domain.record.repository.ExerciseRecordDetailRepository;
 import com.lookback.domain.record.repository.ExerciseRecordRepository;
 import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.domain.user.entity.Training;
@@ -16,6 +22,8 @@ import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.presentation.muscle.dto.MuscleGroupDto;
 import com.lookback.presentation.record.dto.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +40,16 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 @RequiredArgsConstructor
 public class RecordService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final UserRepository userRepository;
     private final RecordRepository recordRepository;
-    private final ExerciseRecordRepository exerciseRecordRepository;
-    private final ExerciseRepository exerciseRepository;
     private final TrainingRepository trainingRepository;
     private final MuscleGroupRepository muscleGroupRepository;
+    private final ExerciseRecordRepository exerciseRecordRepository;
+    private final ExerciseRecordDetailRepository exerciseRecordDetailRepository;
+    private final FileRepository fileRepository;
 
     @Transactional
     public SaveRecordResponse save(HttpServletRequest request, SaveRecordRequest save) {
@@ -157,5 +168,77 @@ public class RecordService {
 
     }
 
+    @Transactional
+    public void saveExerciseRecords(SaveExerciseRecordRequest saveExerciseRecordRequest) {
+        Record findRecord = recordRepository.findById(saveExerciseRecordRequest.getRecordId());
+        if(findRecord == null) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
 
+        //TODO 벌크쿼리로 변경 필요
+        //1. 운동 기록을 저장 (N건)
+        saveExerciseRecordRequest.getExerciseRecords().forEach(er -> {
+
+            ExerciseRecord findExerciseRecord = er.getExerciseRecordId() != null
+                    ? exerciseRecordRepository.findById(er.getExerciseRecordId()) : null;
+
+            ExerciseRecord targetRecord = null;
+            //수정
+            if(findExerciseRecord != null) {
+                findExerciseRecord.setMemo(er.getMemo());
+                findExerciseRecord.setOrd(er.getOrd());
+                targetRecord = findExerciseRecord;
+            }
+            //저장
+            if(targetRecord == null) {
+                ExerciseRecord exerciseRecord = new ExerciseRecord();
+                exerciseRecord.setExerciseById(er.getExerciseId());
+                exerciseRecord.setRecord(findRecord);
+                exerciseRecord.setMemo(er.getMemo());
+                exerciseRecord.setOrd(er.getOrd());
+                targetRecord = exerciseRecordRepository.save(exerciseRecord);
+            }
+
+            //파일 부모키 연결
+            if(er.getUploadFiles() != null && er.getUploadFiles().size() > 0) {
+                for(UploadFile uf : er.getUploadFiles()) {
+                    UploadFile findFile = fileRepository.findById(uf.getUuid());
+                    findFile.setReferenceId(targetRecord.getId());
+                    findFile.setOrd(uf.getOrd());
+                };
+            }
+
+            //2. 운동 기록 상세 저장
+            if( er.getExerciseRecordDetails() != null && er.getExerciseRecordDetails().size() > 0) {
+                for(ExerciseRecordDetailDto erd : er.getExerciseRecordDetails()) {
+                    ExerciseRecordDetail findErd = erd.getExerciseRecordDetailId() != null ?
+                            exerciseRecordDetailRepository.findById(erd.getExerciseRecordDetailId()) : null;
+                    //수정
+                    if(findErd != null) {
+                        findErd.setOrd(erd.getOrd());
+                        findErd.setRepsPerSet(erd.getRepsPerSet());
+                        findErd.setType(erd.getType());
+                        findErd.setWeight(erd.getWeight());
+                        continue;
+                    }
+
+                    //저장
+                    ExerciseRecordDetail exerciseRecordDetail = new ExerciseRecordDetail();
+                    exerciseRecordDetail.setExerciseRecord(targetRecord);
+                    exerciseRecordDetail.setOrd(erd.getOrd());
+                    exerciseRecordDetail.setRepsPerSet(erd.getRepsPerSet());
+                    exerciseRecordDetail.setWeight(erd.getWeight());
+                    exerciseRecordDetail.setType(erd.getType());
+
+                    exerciseRecordDetailRepository.save(exerciseRecordDetail);
+                };
+            }
+
+        });
+
+        //TODO mvp 때는 저장 성공 후 record 바로 공유상태로
+        findRecord.setShareStatus(ShareStatus.SHARED);
+        entityManager.flush();
+        entityManager.clear();
+    }
 }

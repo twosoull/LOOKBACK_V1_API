@@ -9,14 +9,16 @@ import java.util.List;
 @Getter
 @Setter
 public class SaveExerciseRecordRequest {
-    private String exerciseRecordId;
-    private String recordId;
-    private String exerciseId;
+    private List<SaveExerciseRecordRequest> exerciseRecords;
+    private Long userId;
+    private Long exerciseRecordId;
+    private Long recordId;
+    private Long exerciseId;
     private String duration;
     private String memo;
-    private Long   ord;
+    private Integer ord;
     private String imageUrl;
     private String exerciseName;
-    private List<ExerciseRecordDetailDto> ExerciseRecordDetails;
+    private List<ExerciseRecordDetailDto> exerciseRecordDetails;
     private List<UploadFile> uploadFiles;
 }

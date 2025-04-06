@@ -18,4 +18,14 @@ public class ExerciseRecordRepositoryImpl implements ExerciseRecordRepository {
     public List<ExerciseRecord> findByIdOrderByOrdAsc(Long recordId) {
         return exerciseRecordJpaRepository.findByIdOrderByOrdAsc(recordId);
     }
+
+    @Override
+    public ExerciseRecord save(ExerciseRecord exerciseRecord) {
+        return exerciseRecordJpaRepository.save(exerciseRecord);
+    }
+
+    @Override
+    public ExerciseRecord findById(Long exerciseRecordId) {
+        return exerciseRecordJpaRepository.findById(exerciseRecordId).orElse(null);
+    }
 }

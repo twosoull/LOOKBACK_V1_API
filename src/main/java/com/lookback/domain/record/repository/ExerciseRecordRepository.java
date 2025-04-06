@@ -8,4 +8,8 @@ import java.util.List;
 @Repository
 public interface ExerciseRecordRepository {
     List<ExerciseRecord> findByIdOrderByOrdAsc(Long recordId);
+
+    ExerciseRecord save(ExerciseRecord exerciseRecord);
+
+    ExerciseRecord findById(Long exerciseRecordId);
 }

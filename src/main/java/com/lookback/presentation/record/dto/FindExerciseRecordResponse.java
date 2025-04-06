@@ -49,7 +49,6 @@ public class FindExerciseRecordResponse {
                 exerciseRecordDto.setExerciseName(exerciseRecord.getExercise().getExerciseName());
             }
             exerciseRecordDto.setSets(exerciseRecordDto.getSets());
-            exerciseRecordDto.setWeight(exerciseRecord.getWeight());
             exerciseRecordDto.setOrd(exerciseRecord.getOrd());
 
 
