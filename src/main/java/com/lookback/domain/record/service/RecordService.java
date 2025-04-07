@@ -1,6 +1,7 @@
 package com.lookback.domain.record.service;
 
 import com.lookback.common.context.UserContext;
+import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
@@ -200,11 +201,20 @@ public class RecordService {
             }
 
             //파일 부모키 연결
+            //TODO SAVED가 아닌애들만 찾을 것
             if(er.getUploadFiles() != null && er.getUploadFiles().size() > 0) {
                 for(UploadFile uf : er.getUploadFiles()) {
                     UploadFile findFile = fileRepository.findById(uf.getUuid());
                     findFile.setReferenceId(targetRecord.getId());
                     findFile.setOrd(uf.getOrd());
+                    findFile.setStatus(FileStatus.SAVED);
+                };
+            }
+
+            if(er.getDelFiles() != null && er.getDelFiles().size() > 0) {
+                for(UploadFile uf : er.getDelFiles()) {
+                    UploadFile findFile = fileRepository.findById(uf.getUuid());
+                    findFile.setStatus(FileStatus.DELETE);
                 };
             }
 

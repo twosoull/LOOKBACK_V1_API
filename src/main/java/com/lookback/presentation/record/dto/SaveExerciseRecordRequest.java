@@ -21,4 +21,5 @@ public class SaveExerciseRecordRequest {
     private String exerciseName;
     private List<ExerciseRecordDetailDto> exerciseRecordDetails;
     private List<UploadFile> uploadFiles;
+    private List<UploadFile> delFiles;
 }

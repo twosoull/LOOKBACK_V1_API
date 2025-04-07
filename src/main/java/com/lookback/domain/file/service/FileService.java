@@ -1,5 +1,6 @@
 package com.lookback.domain.file.service;
 
+import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.FileType;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.file.entity.UploadFile;
@@ -20,7 +21,6 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 @Service
 @RequiredArgsConstructor
 public class FileService {
-
 
     @Value("${file.upload-path}")
     private String uploadDir;
@@ -60,7 +60,7 @@ public class FileService {
         } catch (IOException e) {
             throw new RestApiException(FILE_UPLOAD_FAIL);
         }
-        UploadFile uploadFile = UploadFile.of(fileType, originalFilename, fileName, fullPath, extension, relativePath, size);
+        UploadFile uploadFile = UploadFile.of(fileType, originalFilename, fileName, fullPath, extension, relativePath, size, FileStatus.TEMP);
         UploadFile savedUploadFile = fileRepository.save(uploadFile);
 
         return ResponseUploadFile.fromEntity(savedUploadFile);

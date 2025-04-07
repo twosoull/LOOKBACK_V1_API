@@ -1,6 +1,7 @@
 package com.lookback.domain.file.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.FileType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -30,7 +31,10 @@ public class UploadFile extends BaseEntity {
     private Long ord;
     private Long size;
 
-    public static UploadFile of(FileType type, String originalName, String fileName, String fullPath, String extension,String relativePath, Long size) {
+    @Enumerated(EnumType.STRING)
+    private FileStatus status;
+
+    public static UploadFile of(FileType type, String originalName, String fileName, String fullPath, String extension,String relativePath, Long size, FileStatus status) {
         UploadFile file = new UploadFile();
         file.setType(type);
         file.setOriginalName(originalName);
@@ -39,6 +43,7 @@ public class UploadFile extends BaseEntity {
         file.setExtension(extension);
         file.setRelativePath(relativePath);
         file.setSize(size);
+        file.setStatus(status);
         return file;
     }
 }
