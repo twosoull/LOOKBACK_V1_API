@@ -5,12 +5,11 @@ import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
 import com.lookback.domain.common.handler.exception.RestApiException;
-import com.lookback.domain.exercise.entity.Exercise;
-import com.lookback.domain.exercise.repository.ExerciseRepository;
 import com.lookback.domain.file.entity.UploadFile;
 import com.lookback.domain.file.repository.FileRepository;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
-import com.lookback.domain.record.command.RecordCommand;
+import com.lookback.domain.record.dto.RecordWithDetailsDto;
+import com.lookback.domain.record.dto.UsersDomainDto;
 import com.lookback.domain.record.entity.ExerciseRecord;
 import com.lookback.domain.record.entity.ExerciseRecordDetail;
 import com.lookback.domain.record.entity.Record;
@@ -52,31 +51,6 @@ public class RecordService {
     private final ExerciseRecordDetailRepository exerciseRecordDetailRepository;
     private final FileRepository fileRepository;
 
-    @Transactional
-    public SaveRecordResponse save(HttpServletRequest request, SaveRecordRequest save) {
-
-        //TODO 일단 로그인user와 parameter의 usersId로 구분을 하자. 나중에 트레이너 본인도 자신의 기록을 작성할 수도 있으니까.
-        Long usersId = UserContext.getUser(request).getId();
-
-        Record saveRecord = null;
-        //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.
-        if (usersId != save.getUsersId()) {
-            //다른 사람이 작성하는 경우
-            Training training = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(usersId,save.getUsersId(), TrainingStatus.IN_PROGRESS);
-            if(training == null) {
-                throw new RestApiException(RESOURCE_NOT_FOUND);
-            }
-            Users student = training.getStudent();
-            saveRecord = recordRepository.save(Record.createFromSaveDto(student, training, save));
-
-        } else {
-            //본인이 본인의 기록을 작성하는 경우
-            Users findUsers = userRepository.findById(usersId);
-            saveRecord = recordRepository.save(Record.createFromSaveDto(findUsers, save));
-        }
-
-        return SaveRecordResponse.fromEntity(saveRecord);
-    }
     /**`
      * [회원]
      * 운동 기록 목록(pt와 개인 운동 목록)( 전체, pt, 개인) 카테고리로 나눠진다.
@@ -89,9 +63,11 @@ public class RecordService {
 
         //트레이너가 회원의 정보를 찾는 경우 parameter의 userId로 찾는다.
         Long usersId = UserContext.getUser(request).getId();
+        String userType = findRecordRequest.getUserType();
+
         Long trainerId = null;
-        if(findRecordRequest.getUserType() != null) {
-            if(findRecordRequest.getUserType().equals("TRAINER")) {
+        if(userType != null) {
+            if(userType.equals("TRAINER")) {
                 usersId = findRecordRequest.getUserId();
                 //본인이 트레이너라면, 세션 아이디는 트레이너가 된다.
                 trainerId = UserContext.getUser(request).getId();
@@ -137,6 +113,31 @@ public class RecordService {
     }
 
     /**
+     * 운동 기록 상세
+     * @param findRecordRequest
+     * @return
+     */
+    public RecordWithDetailsDto findRecordDetail(FindRecordRequest findRecordRequest) {
+
+        try{
+            RecordWithDetailsDto recordWithDetailsDto = recordRepository.findRecordWithOrderedDetails(findRecordRequest.getRecordId());
+
+            Long trainingId = recordWithDetailsDto.getTrainingId();
+            if(trainingId != null) {
+                Users findUsers = userRepository.findById(trainingId);
+                recordWithDetailsDto.setTrainer(UsersDomainDto.createDto(findUsers.getId(), findUsers.getUserName(), findUsers.getNickName()));
+            }
+
+            return recordWithDetailsDto;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+
+    }
+
+    /**
      * [회원] 기록 상세
      * - 기록 상세의 운동 목록
      * */
@@ -169,6 +170,42 @@ public class RecordService {
 
     }
 
+    /**
+     * 운동 기록 저장 (세부내용 업이 날짜, 시간만 저장한다)
+     * @param request
+     * @param save
+     * @return
+     */
+    @Transactional
+    public SaveRecordResponse save(HttpServletRequest request, SaveRecordRequest save) {
+
+        //TODO 일단 로그인user와 parameter의 usersId로 구분을 하자. 나중에 트레이너 본인도 자신의 기록을 작성할 수도 있으니까.
+        Long usersId = UserContext.getUser(request).getId();
+
+        Record saveRecord = null;
+        //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.
+        if (usersId != save.getUsersId()) {
+            //다른 사람이 작성하는 경우
+            Training training = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(usersId,save.getUsersId(), TrainingStatus.IN_PROGRESS);
+            if(training == null) {
+                throw new RestApiException(RESOURCE_NOT_FOUND);
+            }
+            Users student = training.getStudent();
+            saveRecord = recordRepository.save(Record.createFromSaveDto(student, training, save));
+
+        } else {
+            //본인이 본인의 기록을 작성하는 경우
+            Users findUsers = userRepository.findById(usersId);
+            saveRecord = recordRepository.save(Record.createFromSaveDto(findUsers, save));
+        }
+
+        return SaveRecordResponse.fromEntity(saveRecord);
+    }
+
+    /**
+     * 운동 기록 디테일 저장
+     * @param saveExerciseRecordRequest
+     */
     @Transactional
     public void saveExerciseRecords(SaveExerciseRecordRequest saveExerciseRecordRequest) {
         Record findRecord = recordRepository.findById(saveExerciseRecordRequest.getRecordId());

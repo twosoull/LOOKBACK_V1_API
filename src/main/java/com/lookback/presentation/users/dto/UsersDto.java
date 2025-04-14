@@ -1,6 +1,7 @@
 package com.lookback.presentation.users.dto;
 
 import com.lookback.common.converter.CommonConverter;
+import com.lookback.domain.record.dto.UsersDomainDto;
 import com.lookback.domain.user.entity.Users;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,4 +56,37 @@ public class UsersDto {
         //usersDto.setLastLessonDate(users.getRe== null ? "" : users.getLastLoginDate().toString());
         return usersDto;
     }
+
+    public static UsersDto fromDomainDto(UsersDomainDto users) {
+        UsersDto usersDto = new UsersDto();
+        usersDto.setUserId(users.getUserId());
+        usersDto.setEmail(users.getEmail());
+        usersDto.setPassword(users.getPassword());
+        usersDto.setPhone(users.getPhone());
+        usersDto.setBirthDt(CommonConverter.formatDataOfDot(users.getBirthDt()));
+        usersDto.setAge(CommonConverter.ageConverter(users.getBirthDt()));
+        usersDto.setWeight(users.getWeight());
+        usersDto.setHeight(users.getHeight());
+        usersDto.setSnsProvider(users.getSnsProvider());
+        usersDto.setSnsId(users.getSnsId());
+        usersDto.setUserName(users.getUserName());
+        usersDto.setNickName(users.getNickName());
+        usersDto.setProfileImageUrl(users.getProfileImageUrl());
+        usersDto.setVerified(users.getVerified());
+        usersDto.setGender(CommonConverter.convertGender(users.getGender()));
+        usersDto.setSignupDate(users.getSignupDate());
+        usersDto.setLastLoginDate(users.getLastLoginDate());
+        usersDto.setStatus(users.getStatus());
+        usersDto.setUserType(users.getUserTypeStr());
+        //usersDto.setLastLessonDate(users.getRe== null ? "" : users.getLastLoginDate().toString());
+        return usersDto;
+    }
+
+    public static UsersDto of(String userName, String nickName) {
+        UsersDto usersDto = new UsersDto();
+        usersDto.setUserName(userName);
+        usersDto.setNickName(nickName);
+        return usersDto;
+    }
+
 }

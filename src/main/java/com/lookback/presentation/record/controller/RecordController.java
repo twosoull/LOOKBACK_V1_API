@@ -1,5 +1,6 @@
 package com.lookback.presentation.record.controller;
 
+import com.lookback.domain.record.dto.RecordWithDetailsDto;
 import com.lookback.domain.record.service.RecordService;
 import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.record.dto.*;
@@ -39,6 +40,15 @@ public class RecordController {
         recordService.saveExerciseRecords(saveExerciseRecordRequest);
 
         return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
+    }
+
+    @GetMapping("/record/detail")
+    public ResponseEntity<ApiResponse<T>> getMemberRecordDetails(
+            HttpServletRequest request, HttpServletResponse response,
+            FindRecordRequest findRecordRequest
+    ){
+        FindRecordDetailResponse findRecordDetailResponse = FindRecordDetailResponse.fromDomain(recordService.findRecordDetail(findRecordRequest));
+        return new ResponseEntity(ApiResponse.success(findRecordDetailResponse, response), HttpStatus.OK);
     }
 
 }

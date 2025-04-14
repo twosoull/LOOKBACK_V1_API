@@ -1,5 +1,6 @@
 package com.lookback.domain.record.repository;
 
+import com.lookback.domain.record.dto.RecordWithDetailsDto;
 import com.lookback.domain.record.entity.Record;
 import com.lookback.presentation.record.dto.FindRecordRequest;
 
@@ -19,4 +20,6 @@ public interface RecordRepository {
     void deleteById(Long id);
 
     List<Record> findByUsersId(Long UsersId, String category);
+
+    RecordWithDetailsDto findRecordWithOrderedDetails(Long recordId);
 }

@@ -1,5 +1,6 @@
 package com.lookback.infrastructure.repositoryImpl;
 
+import com.lookback.domain.record.dto.RecordWithDetailsDto;
 import com.lookback.domain.record.entity.Record;
 import com.lookback.domain.record.repository.RecordRepository;
 import com.lookback.infrastructure.repositoryORM.RecordJpaRepository;
@@ -48,5 +49,10 @@ public class RecordRepositoryImpl implements RecordRepository {
     @Override
     public List<Record> findByUsersId(Long usersId, String category) {
         return recordJpaRepository.findByUsersIdOrderByRecordDateDesc(usersId, category);
+    }
+
+    @Override
+    public RecordWithDetailsDto findRecordWithOrderedDetails(Long recordId) {
+        return recordJpaRepository.findRecordWithOrderedDetails(recordId);
     }
 }

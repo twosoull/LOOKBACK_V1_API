@@ -88,7 +88,7 @@ public class Users {
     }
 
     public String getUserTypeStr() {
-        return this.userType.name();
+        return this.userType != null? this.userType.toString() : null;
     }
 
     public static UserTypeEnum getUserType(String userType) {

@@ -2,6 +2,7 @@ package com.lookback.domain.common.constant.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+
 public enum MuscleTypeEnum {
     AGONIST("주동근"),     // 주동근
     SYNERGIST("보조근");   // 보조근

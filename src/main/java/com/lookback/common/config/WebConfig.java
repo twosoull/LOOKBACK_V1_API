@@ -39,7 +39,7 @@ public class WebConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-
+/*
    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtTokenInterceptor)
@@ -48,7 +48,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/resources/**",
                         "/static/**",
                         "/uploads/**"); // ✅ 로그인, 회원가입 관련 API는 제외
-    }
+    }*/
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
