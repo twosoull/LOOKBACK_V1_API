@@ -1,5 +1,7 @@
 package com.lookback.presentation.record.dto;
 
+import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.domain.record.dto.ExerciseRecordDetailDomainDto;
 import com.lookback.domain.record.dto.ExerciseRecordDomainDto;
 import com.lookback.domain.record.dto.UploadFileDomainDto;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ public class ExerciseRecordDto {
     private Long exerciseRecordId;
     private Long exerciseId;
     private String exerciseName;
+    private String exerciseType;
     private Integer sets;
     private Integer weight;
     private Integer ord;
@@ -26,6 +29,7 @@ public class ExerciseRecordDto {
     private String agonistMuscleName;
     private String synergistMuscleName;
     private List<UploadFileDto> uploadFileDtos = new ArrayList<>();
+    private List<ExerciseRecordDetailDto> exerciseRecordDetails;
 
     public ExerciseRecordDto() {}
 
@@ -39,16 +43,18 @@ public class ExerciseRecordDto {
                 .build();
     }
 
-    public static ExerciseRecordDto of(Long exerciseRecordId, Long exerciseId, String exerciseName, String memo, Integer ord, String agonistMuscleName, String synergistMuscleName, List<UploadFileDomainDto> uploadFileDomainDtos) {
+    public static ExerciseRecordDto of(Long exerciseRecordId, Long exerciseId, String exerciseName, String exerciseType, String memo, Integer ord, String agonistMuscleName, String synergistMuscleName, List<ExerciseRecordDetailDomainDto> exerciseRecordDetailDomainDtos, List<UploadFileDomainDto> uploadFileDomainDtos) {
         return ExerciseRecordDto.builder()
                 .exerciseRecordId(exerciseRecordId)
                 .exerciseId(exerciseId)
                 .exerciseName(exerciseName)
+                .exerciseType(exerciseType)
                 .memo(memo)
                 .ord(ord)
                 .agonistMuscleName(agonistMuscleName)
                 .synergistMuscleName(synergistMuscleName)
                 .uploadFileDtos(UploadFileDto.listOf(uploadFileDomainDtos))
+                .exerciseRecordDetails(ExerciseRecordDetailDto.listOf(exerciseRecordDetailDomainDtos))
                 .build();
     }
 
@@ -58,10 +64,12 @@ public class ExerciseRecordDto {
                 er.getExerciseRecordId(),
                 er.getExerciseId(),
                 er.getExerciseName(),
+                er.getExerciseType().name(),
                 er.getMemo(),
                 er.getOrd(),
                 er.getAgonistMuscleName(),
                 er.getSynergistMuscleName(),
+                er.getExerciseRecordDetails(),
                 er.getUploadFileDomainDto()
         )).toList() :null;
     }

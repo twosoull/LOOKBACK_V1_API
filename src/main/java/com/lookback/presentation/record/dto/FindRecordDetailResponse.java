@@ -59,7 +59,6 @@ public class FindRecordDetailResponse {
                 .trainer(UsersDto.of(recordWithDetailsDto.getTrainer().getUserName(), recordWithDetailsDto.getTrainer().getNickName()))
                 .member(UsersDto.fromDomainDto(recordWithDetailsDto.getMember()))
                 .exerciseRecords(ExerciseRecordDto.listOf(recordWithDetailsDto.getExerciseRecords()))
-                .exerciseRecordDetails(ExerciseRecordDetailDto.listOf(recordWithDetailsDto.getExerciseRecordDetails()))
                 .build();
     }
 }

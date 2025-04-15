@@ -74,7 +74,8 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
                         record.shareStatus,
                         Projections.constructor(UsersDomainDto.class,
                                 record.users.nickName,
-                                record.users.userName)
+                                record.users.userName,
+                                record.users.profileImageUrl)
                 ))
                 .from(record)
                 .join(record.users, user)
@@ -88,6 +89,7 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
                 .select(Projections.constructor(ExerciseRecordDomainDto.class,
                         er.id,
                         er.exercise.exerciseName,
+                        er.exercise.exerciseType,
                         er.exercise.id,
                         er.memo,
                         er.ord

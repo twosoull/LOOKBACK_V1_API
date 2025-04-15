@@ -23,7 +23,6 @@ public class RecordWithDetailsDto {
     private UsersDomainDto trainer;
     private UsersDomainDto member;
     private List<ExerciseRecordDomainDto> exerciseRecords;
-    private List<ExerciseRecordDetailDomainDto> exerciseRecordDetails;
 
     public RecordWithDetailsDto(Long recordId, Long trainingId, LocalDate recordDate, LocalTime recordTimeStart, LocalTime recordTimeEnd, int exerciseMinute, String comment, ShareStatus shareStatus, UsersDomainDto member) {
         this.recordId = recordId;
