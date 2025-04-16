@@ -1,5 +1,6 @@
 package com.lookback.presentation.record.dto;
 
+import com.lookback.common.converter.CommonConverter;
 import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.record.dto.ExerciseRecordDetailDomainDto;
 import com.lookback.domain.record.dto.ExerciseRecordDomainDto;
@@ -21,9 +22,9 @@ import java.util.List;
 public class FindRecordDetailResponse {
     private Long recordId;
     private Long trainingId;
-    private LocalDate recordDate;
-    private LocalTime recordTimeStart;
-    private LocalTime recordTimeEnd;
+    private String recordDate;
+    private String recordTimeStart;
+    private String recordTimeEnd;
     private int exerciseMinute;
     private String comment;
     private ShareStatus shareStatus;
@@ -33,7 +34,7 @@ public class FindRecordDetailResponse {
     private List<ExerciseRecordDto> exerciseRecords;
     private List<ExerciseRecordDetailDto> exerciseRecordDetails;
 
-    public FindRecordDetailResponse(Long recordId, Long trainingId, LocalDate recordDate, LocalTime recordTimeStart, LocalTime recordTimeEnd, int exerciseMinute, String comment, ShareStatus shareStatus, UsersDto member) {
+    public FindRecordDetailResponse(Long recordId, Long trainingId, String recordDate, String recordTimeStart, String recordTimeEnd, int exerciseMinute, String comment, ShareStatus shareStatus, UsersDto member) {
         this.recordId = recordId;
         this.trainingId = trainingId;
         this.recordDate = recordDate;
@@ -50,9 +51,10 @@ public class FindRecordDetailResponse {
         return FindRecordDetailResponse.builder()
                 .recordId(recordWithDetailsDto.getRecordId())
                 .trainingId(recordWithDetailsDto.getTrainingId())
-                .recordDate(recordWithDetailsDto.getRecordDate())
-                .recordTimeStart(recordWithDetailsDto.getRecordTimeStart())
-                .recordTimeEnd(recordWithDetailsDto.getRecordTimeEnd())
+                .recordDate(CommonConverter.getFormatDate(recordWithDetailsDto.getRecordDate())
+                        + " (" + CommonConverter.getDayOfWeekKorean(recordWithDetailsDto.getRecordDate()) + ")")
+                .recordTimeStart(CommonConverter.convertLocalTimeToKorString(recordWithDetailsDto.getRecordTimeStart()))
+                .recordTimeEnd(CommonConverter.convertLocalTimeToKorHourMinuteString(recordWithDetailsDto.getRecordTimeEnd()))
                 .exerciseMinute(recordWithDetailsDto.getExerciseMinute())
                 .comment(recordWithDetailsDto.getComment())
                 .shareStatus(recordWithDetailsDto.getShareStatus())

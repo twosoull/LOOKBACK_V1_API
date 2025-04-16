@@ -60,6 +60,15 @@ public class CommonConverter {
         // 입력 날짜를 LocalDate로 변환
         LocalDate date = LocalDate.parse(dateString);
 
+        return getFormatDate(date);
+    }
+
+    //올해일 경우 10월 1일, 올해가 아닐 경우 24년 10월 1일 데이터로 변환
+    public static String getFormatDate(LocalDate date) {
+        if(date == null) {
+            return "";
+        }
+
         // 현재 연도 가져오기
         int currentYear = LocalDate.now().getYear();
         int targetYear = date.getYear();
@@ -71,6 +80,7 @@ public class CommonConverter {
             return String.format("%d년 %d월 %d일", targetYear % 100, date.getMonthValue(), date.getDayOfMonth());
         }
     }
+
     //20240801 -> "2024.08.01"
     public static String formatDataOfDot(Long dateLong) {
         if(dateLong == null) {
@@ -117,6 +127,12 @@ public class CommonConverter {
         // 입력 날짜를 LocalDate로 변환
         LocalDate date = LocalDate.parse(dateString);
 
+        String dayOfWeekKorean = getDayOfWeekKorean(date);
+
+        return dayOfWeekKorean;
+    }
+
+    public static String getDayOfWeekKorean(LocalDate date) {
         // 현재 연도 가져오기
         int currentYear = LocalDate.now().getYear();
         int targetYear = date.getYear();
@@ -124,7 +140,6 @@ public class CommonConverter {
         // 요일 가져오기 (한글 요일로 변환)
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         String dayOfWeekKorean = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-
         return dayOfWeekKorean;
     }
 
@@ -142,10 +157,22 @@ public class CommonConverter {
         LocalDate parse = LocalDate.parse(dateString, formatter);
         return parse;
     }
-
+    //13:15:00 -> 13:15
     public static LocalTime convertStringToLocalTime(String timeString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime parse = LocalTime.parse(timeString, formatter);
         return parse;
+    }
+
+    //13:15:00 -> 오후 1:15
+    public static String convertLocalTimeToKorString(LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("a h:mm", Locale.KOREAN);
+        return time.format(formatter);
+    }
+
+    //13:15:00 -> 1:15
+    public static String convertLocalTimeToKorHourMinuteString(LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm");
+        return time.format(formatter);
     }
 }

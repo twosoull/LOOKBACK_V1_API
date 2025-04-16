@@ -37,9 +37,10 @@ public class UsersDomainDto {
     private UserTypeEnum userType;
     private String isProfileComplete;
 
-    public UsersDomainDto(String nickName, String userName) {
+    public UsersDomainDto(String nickName, String userName, String isProfileComplete) {
         this.nickName = nickName;
         this.userName = userName;
+        this.isProfileComplete = isProfileComplete;
     }
 
     public static UsersDomainDto createDto(Long userId, String userName, String nickName) {
