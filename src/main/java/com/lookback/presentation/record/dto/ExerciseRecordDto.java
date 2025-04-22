@@ -1,13 +1,11 @@
 package com.lookback.presentation.record.dto;
 
 import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.domain.file.entity.UploadFile;
 import com.lookback.domain.record.dto.ExerciseRecordDetailDomainDto;
 import com.lookback.domain.record.dto.ExerciseRecordDomainDto;
 import com.lookback.domain.record.dto.UploadFileDomainDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +13,11 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseRecordDto {
 
+    private Long userId;
     private Long exerciseRecordId;
     private Long exerciseId;
     private String exerciseName;
@@ -28,10 +28,9 @@ public class ExerciseRecordDto {
     private String memo;
     private String agonistMuscleName;
     private String synergistMuscleName;
-    private List<UploadFileDto> uploadFileDtos = new ArrayList<>();
+    private List<UploadFileDto> uploadFiles = new ArrayList<>();
+    private List<UploadFileDto> delFiles = new ArrayList<>();
     private List<ExerciseRecordDetailDto> exerciseRecordDetails;
-
-    public ExerciseRecordDto() {}
 
     public static ExerciseRecordDto of(Long exerciseRecordId, String exerciseName, Integer sets, Integer weight, Integer ord) {
         return ExerciseRecordDto.builder()
@@ -53,7 +52,7 @@ public class ExerciseRecordDto {
                 .ord(ord)
                 .agonistMuscleName(agonistMuscleName)
                 .synergistMuscleName(synergistMuscleName)
-                .uploadFileDtos(UploadFileDto.listOf(uploadFileDomainDtos))
+                .uploadFiles(UploadFileDto.listOf(uploadFileDomainDtos))
                 .exerciseRecordDetails(ExerciseRecordDetailDto.listOf(exerciseRecordDetailDomainDtos))
                 .build();
     }

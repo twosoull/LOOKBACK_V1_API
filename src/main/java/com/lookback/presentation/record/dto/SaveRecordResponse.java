@@ -34,7 +34,7 @@ public class SaveRecordResponse {
         return SaveRecordResponse.builder()
                 .recordId(record.getId())
                 .usersId(record.getUsers().getId())
-                .trainingId(record.getTraining().getId())
+                .trainingId(record.getTrainingIdSafe())
                 .recordDate(record.getRecordDate().toString())
                 .recordTimeStart(record.getRecordTimeStart().toString())
                 .recordTimeEnd(record.getRecordTimeEnd().toString())

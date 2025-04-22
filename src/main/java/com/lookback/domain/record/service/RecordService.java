@@ -1,6 +1,7 @@
 package com.lookback.domain.record.service;
 
 import com.lookback.common.context.UserContext;
+import com.lookback.domain.common.constant.enums.ExerciseDetailTypeEnum;
 import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.ShareStatus;
 import com.lookback.domain.common.constant.enums.TrainingStatus;
@@ -109,7 +110,8 @@ public class RecordService {
             findRecordResponses.add(findRecordResponse);
         }
 
-        return FindRecordResponse.add(findRecordResponses, findMember ,training.getId());
+        return FindRecordResponse.add(findRecordResponses, findMember
+                ,training == null ? null : training.getId() );
     }
 
     /**
@@ -217,6 +219,7 @@ public class RecordService {
         //1. 운동 기록을 저장 (N건)
         saveExerciseRecordRequest.getExerciseRecords().forEach(er -> {
 
+
             ExerciseRecord findExerciseRecord = er.getExerciseRecordId() != null
                     ? exerciseRecordRepository.findById(er.getExerciseRecordId()) : null;
 
@@ -240,7 +243,7 @@ public class RecordService {
             //파일 부모키 연결
             //TODO SAVED가 아닌애들만 찾을 것
             if(er.getUploadFiles() != null && er.getUploadFiles().size() > 0) {
-                for(UploadFile uf : er.getUploadFiles()) {
+                for(UploadFileDto uf : er.getUploadFiles()) {
                     UploadFile findFile = fileRepository.findById(uf.getUuid());
                     findFile.setReferenceId(targetRecord.getId());
                     findFile.setOrd(uf.getOrd());
@@ -249,7 +252,7 @@ public class RecordService {
             }
 
             if(er.getDelFiles() != null && er.getDelFiles().size() > 0) {
-                for(UploadFile uf : er.getDelFiles()) {
+                for(UploadFileDto uf : er.getDelFiles()) {
                     UploadFile findFile = fileRepository.findById(uf.getUuid());
                     findFile.setStatus(FileStatus.DELETE);
                 };
@@ -264,7 +267,7 @@ public class RecordService {
                     if(findErd != null) {
                         findErd.setOrd(erd.getOrd());
                         findErd.setRepsPerSet(erd.getRepsPerSet());
-                        findErd.setType(erd.getType());
+                        findErd.setType(ExerciseDetailTypeEnum.from(erd.getType()));
                         findErd.setWeight(erd.getWeight());
                         continue;
                     }
@@ -275,7 +278,7 @@ public class RecordService {
                     exerciseRecordDetail.setOrd(erd.getOrd());
                     exerciseRecordDetail.setRepsPerSet(erd.getRepsPerSet());
                     exerciseRecordDetail.setWeight(erd.getWeight());
-                    exerciseRecordDetail.setType(erd.getType());
+                    exerciseRecordDetail.setType(ExerciseDetailTypeEnum.from(erd.getType()));
 
                     exerciseRecordDetailRepository.save(exerciseRecordDetail);
                 };

@@ -2,14 +2,12 @@ package com.lookback.domain.exercise.entity;
 
 import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.domain.common.constant.enums.MuscleTypeEnum;
 import com.lookback.domain.exercise.command.ExerciseCommand;
 import com.lookback.domain.muscle.entity.Equipment;
 import com.lookback.domain.muscle.entity.MuscleGroup;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "EXERCISE")
 public class Exercise extends BaseEntity {
@@ -38,7 +37,7 @@ public class Exercise extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "exercise")
-    private List<MuscleGroup> muscleGroups;
+    private List<MuscleGroup> muscleGroups = new ArrayList<>();
 
     private String exerciseName;
     private String exerciseLevel;
@@ -53,10 +52,6 @@ public class Exercise extends BaseEntity {
     private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
-
-    // 기본 생성자
-    public Exercise() {
-    }
 
     // Excel 데이터를 위한 생성자
     public Exercise(String exerciseName, String exerciseLevel,
@@ -85,5 +80,27 @@ public class Exercise extends BaseEntity {
                       save.exerciseLevel(),
                       save.caloriesBurned(),
                       save.description());
+    }
+
+    //주동근 꺼내기
+    public List<MuscleGroup> getAgonistMuscleGroupList() {
+        List<MuscleGroup> agonistList = new ArrayList<>();
+        this.muscleGroups.stream().forEach(mg -> {
+            if(MuscleTypeEnum.AGONIST.equals(mg.getMuscleType())){
+                agonistList.add(mg);
+            }
+        });
+        return agonistList;
+    }
+
+    //보조근 꺼내기
+    public List<MuscleGroup> getSynergistMuscleGroupList() {
+        List<MuscleGroup> synergistList = new ArrayList<>();
+        this.muscleGroups.stream().forEach(mg -> {
+            if(MuscleTypeEnum.SYNERGIST.equals(mg.getMuscleType())){
+                synergistList.add(mg);
+            }
+        });
+        return synergistList;
     }
 }

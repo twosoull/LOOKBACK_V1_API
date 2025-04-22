@@ -52,6 +52,10 @@ public class Record extends BaseEntity {
 
     public Record() {}
 
+    public Long getTrainingIdSafe() {
+        return training != null ? training.getId() : null;
+    }
+
     public static Record createFromSaveDto(Users users, Training training, SaveRecordRequest saveRecordRequest) {
         return Record.builder()
                 .users(users)

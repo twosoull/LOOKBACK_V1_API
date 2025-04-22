@@ -134,7 +134,8 @@ public class KakaoAuthController {
                 Map.of("jwtToken", jwtToken,
                 "refreshToken", refreshToken,
                 "isProfileComplete", isProfileComplete,
-                    "userType",userType.name()));
+                    "userType",userType.name(),
+                    "userId",user.getId()));
     }
 }
 

@@ -4,16 +4,14 @@ import com.lookback.domain.common.constant.enums.ExerciseDetailTypeEnum;
 import com.lookback.domain.record.dto.ExerciseRecordDetailDomainDto;
 import com.lookback.domain.record.entity.ExerciseRecordDetail;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseRecordDetailDto {
 
@@ -22,9 +20,9 @@ public class ExerciseRecordDetailDto {
     private Long ord;
     private Integer repsPerSet;
     private Integer weight;
-    private ExerciseDetailTypeEnum type;
+    private String type;
 
-    public static ExerciseRecordDetailDto of(Long exerciseRecordDetailId, Long exerciseRecordId, Long ord, Integer repsPerSet, Integer weight, ExerciseDetailTypeEnum type) {
+    public static ExerciseRecordDetailDto of(Long exerciseRecordDetailId, Long exerciseRecordId, Long ord, Integer repsPerSet, Integer weight, String type) {
         return ExerciseRecordDetailDto.builder()
                 .exerciseRecordDetailId(exerciseRecordDetailId)
                 .exerciseRecordId(exerciseRecordId)
@@ -43,7 +41,7 @@ public class ExerciseRecordDetailDto {
                 erd.getOrd(),
                 erd.getRepsPerSet(),
                 erd.getWeight(),
-                erd.getType()
+                erd.getType().name()
         )).toList()
         :null;
     }

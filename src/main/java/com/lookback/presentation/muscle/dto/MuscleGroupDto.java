@@ -18,12 +18,14 @@ public class MuscleGroupDto {
     private MuscleCategoryDto muscleCategory;
     private String muscleType;
     private String categoryParentsName;
+    private String muscleName;
 
     public static MuscleGroupDto fromEntity(MuscleGroup muscleGroup) {
         return MuscleGroupDto.builder()
                 .muscleGroupId(muscleGroup.getId())
                 .muscleCategory(MuscleCategoryDto.fromEntity(muscleGroup.getMuscleCategory()))
                 .muscleType(muscleGroup.getMuscleType().name())
+                .muscleName(muscleGroup.getMuscleCategory().getMuscleName())
                 .build();
     }
 

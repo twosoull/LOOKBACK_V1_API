@@ -11,4 +11,5 @@ public interface ExerciseRepository {
     Exercise findById(Long exerciseId);
 
     List<Exercise> findAll();
+
 }

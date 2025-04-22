@@ -1,6 +1,7 @@
 package com.lookback.domain.exercise.service;
 
 import com.lookback.domain.common.constant.enums.ExerciseTypeEnum;
+import com.lookback.domain.common.constant.enums.MuscleTypeEnum;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode;
 import com.lookback.domain.exercise.command.ExerciseCommand;
@@ -9,13 +10,11 @@ import com.lookback.domain.exercise.entity.ExerciseVideo;
 import com.lookback.domain.exercise.repository.EquipmentRepository;
 import com.lookback.domain.exercise.repository.ExerciseRepository;
 import com.lookback.domain.exercise.repository.ExerciseVideoRepository;
+import com.lookback.domain.muscle.entity.Equipment;
 import com.lookback.domain.muscle.entity.MuscleGroup;
 import com.lookback.domain.muscle.repository.MuscleCategoryRepository;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
-import com.lookback.presentation.exercise.dto.EquipmentDto;
-import com.lookback.presentation.exercise.dto.ExerciseDto;
-import com.lookback.presentation.exercise.dto.ExerciseTypeEnumDto;
-import com.lookback.presentation.exercise.dto.FindExercisesResponse;
+import com.lookback.presentation.exercise.dto.*;
 import com.lookback.presentation.muscle.dto.MuscleCategoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -108,5 +107,21 @@ public class ExerciseService {
             e.printStackTrace();
             throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
         }
+    }
+
+    //TODO 후에 한방 쿼리로 변경
+    public FindExerciseResponse findExercise(Long exerciseId) {
+        if (exerciseId == null) throw new RestApiException(CommonErrorCode.RESOURCE_NOT_FOUND);
+
+        Exercise findExercise = exerciseRepository.findById(exerciseId);
+
+        List<MuscleGroup> agonistList      = findExercise.getAgonistMuscleGroupList();   //주동근
+        List<MuscleGroup> synergistList    = findExercise.getSynergistMuscleGroupList(); //보조근
+        List<ExerciseVideo> exerciseVideos = findExercise.getExerciseVideos();
+        Equipment equipment = findExercise.getEquipment();
+
+        FindExerciseResponse findExerciseResponse = FindExerciseResponse.create(findExercise, agonistList, synergistList, exerciseVideos, equipment);
+
+        return findExerciseResponse;
     }
 }

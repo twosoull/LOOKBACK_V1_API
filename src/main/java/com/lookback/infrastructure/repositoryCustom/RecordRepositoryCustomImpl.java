@@ -111,6 +111,11 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
                 .where(muscleGroup.exercise.id.in(exerciseIds))
                 .fetch();
 
+        // 2. exerciseId 리스트 뽑기
+        List<Long> exerciseRecordIds = exerciseRecords.stream()
+                .map(ExerciseRecordDomainDto::getExerciseRecordId)
+                .distinct()
+                .toList();
         //미디어 찾기
         List<UploadFileDomainDto> uploadFiles = queryFactory.select(
                 Projections.constructor(UploadFileDomainDto.class,
@@ -126,14 +131,14 @@ public class RecordRepositoryCustomImpl implements RecordRepositoryCustom {
                         uploadFile.size,
                         uploadFile.status)
                 ).from(uploadFile)
-                .where(uploadFile.referenceId.in(exerciseIds))
+                .where(uploadFile.referenceId.in(exerciseRecordIds))
                 .orderBy(uploadFile.ord.asc())
                 .fetch();
 
         //미디어 넣기
         uploadFiles.stream().forEach(uf -> {
             for (ExerciseRecordDomainDto dto : exerciseRecords) {
-                if(dto.getExerciseId().equals(uf.getReferenceId())) {
+                if(dto.getExerciseRecordId().equals(uf.getReferenceId())) {
                     dto.getUploadFileDomainDto().add(uf);
                 }
             }

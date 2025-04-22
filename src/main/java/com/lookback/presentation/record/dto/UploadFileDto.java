@@ -4,10 +4,7 @@ import com.lookback.domain.common.constant.enums.FileStatus;
 import com.lookback.domain.common.constant.enums.FileType;
 import com.lookback.domain.file.entity.UploadFile;
 import com.lookback.domain.record.dto.UploadFileDomainDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class UploadFileDto {
 

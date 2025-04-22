@@ -1,25 +1,18 @@
 package com.lookback.presentation.record.dto;
 
 import com.lookback.domain.file.entity.UploadFile;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class SaveExerciseRecordRequest {
-    private List<SaveExerciseRecordRequest> exerciseRecords;
-    private Long userId;
-    private Long exerciseRecordId;
+    private List<ExerciseRecordDto> exerciseRecords;
     private Long recordId;
-    private Long exerciseId;
-    private String duration;
-    private String memo;
-    private Integer ord;
-    private String imageUrl;
-    private String exerciseName;
-    private List<ExerciseRecordDetailDto> exerciseRecordDetails;
-    private List<UploadFile> uploadFiles;
-    private List<UploadFile> delFiles;
 }
