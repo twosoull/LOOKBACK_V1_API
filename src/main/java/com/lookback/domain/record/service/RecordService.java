@@ -63,7 +63,7 @@ public class RecordService {
         }
 
         //트레이너가 회원의 정보를 찾는 경우 parameter의 userId로 찾는다.
-        Long usersId = UserContext.getUser(request).getId();
+        Long usersId = UserContext.getUser(request).getUserId();
         String userType = findRecordRequest.getUserType();
 
         Long trainerId = null;
@@ -71,7 +71,7 @@ public class RecordService {
             if(userType.equals("TRAINER")) {
                 usersId = findRecordRequest.getUserId();
                 //본인이 트레이너라면, 세션 아이디는 트레이너가 된다.
-                trainerId = UserContext.getUser(request).getId();
+                trainerId = UserContext.getUser(request).getUserId();
             }
         }
         //해당 유저의 정보 가져오기
@@ -161,9 +161,8 @@ public class RecordService {
 
         Record findRecord = recordRepository.findById(removeRecordRequest.getRecordId());
         try {
-            if(findRecord !=null) {
-                trainingRepository.deleteById(findRecord.getTraining().getId());
-                recordRepository.deleteById(findRecord.getId()); //exerciseRecord, exerciseRecordFile 자동삭제
+            if(findRecord != null) {
+                recordRepository.deleteById(findRecord.getId()); //exerciseRecord, exerciseRecordFile, ExerciseRecordDetail 자동삭제
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,7 +181,7 @@ public class RecordService {
     public SaveRecordResponse save(HttpServletRequest request, SaveRecordRequest save) {
 
         //TODO 일단 로그인user와 parameter의 usersId로 구분을 하자. 나중에 트레이너 본인도 자신의 기록을 작성할 수도 있으니까.
-        Long usersId = UserContext.getUser(request).getId();
+        Long usersId = UserContext.getUser(request).getUserId();
 
         Record saveRecord = null;
         //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.

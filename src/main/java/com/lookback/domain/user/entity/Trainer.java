@@ -3,6 +3,7 @@ package com.lookback.domain.user.entity;
 import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.catalina.User;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "TRAINER")
 @Getter
+@Setter
 public class Trainer extends BaseEntity {
 
     @Id @GeneratedValue

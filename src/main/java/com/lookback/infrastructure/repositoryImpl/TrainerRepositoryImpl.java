@@ -16,4 +16,14 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     public Trainer findById(Long id) {
         return trainerJpaRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public Trainer findByUsersId(Long trainerId) {
+        return trainerJpaRepository.findByUserId(trainerId);
+    }
+
+    @Override
+    public Trainer save(Trainer trainer) {
+        return trainerJpaRepository.save(trainer);
+    }
 }

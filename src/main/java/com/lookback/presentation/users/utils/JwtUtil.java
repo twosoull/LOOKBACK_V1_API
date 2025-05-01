@@ -27,6 +27,21 @@ public class JwtUtil {
     private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // ✅ 7일
     private final UserRepository userRepository;
 
+
+    /**
+     * jwtToken 생성 메소드
+     * @param id, key(현재 snsId로 사용, 일반유저는 random key 값), name
+     * @return
+     */
+    public String getJwtToken(Long id, String key, String name) {
+        String jwtToken = this.createToken(Map.of(
+                "id", id,
+                "key", key,
+                "name", name
+        ));
+        return jwtToken;
+    }
+
     /**
      * 생성자 주입 방식으로 secretKey 설정
      */
@@ -52,10 +67,12 @@ public class JwtUtil {
 
     /**
      * Access Token 생성 (kakaoId)
+     * @param key(현재 snsId로 사용, 일반유저는 random key 값)
+     * @return
      */
-    public String createAccessToken(String kakaoId) {
+    public String createAccessToken(String key) {
         return Jwts.builder()
-                .setSubject(kakaoId)
+                .setSubject(key)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION)) // ✅ 15분 만료
                 .signWith(accessKey, SignatureAlgorithm.HS256)
@@ -64,10 +81,12 @@ public class JwtUtil {
 
     /**
      * Refresh Token 생성
+     * @param key(현재 snsId로 사용, 일반유저는 random key 값)
+     * @return
      */
-    public String createRefreshToken(String kakaoId) {
+    public String createRefreshToken(String key) {
         return Jwts.builder()
-                .setSubject(kakaoId)
+                .setSubject(key)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
                 .signWith(refreshKey, SignatureAlgorithm.HS256)

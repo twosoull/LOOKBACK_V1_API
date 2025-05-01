@@ -2,10 +2,8 @@ package com.lookback.presentation.trainer.controller;
 
 import com.lookback.domain.user.service.TrainingService;
 import com.lookback.presentation.common.ApiResponse;
-import com.lookback.presentation.trainer.dto.CancelTrainingDto;
-import com.lookback.presentation.trainer.dto.UserTrainingDto;
+import com.lookback.presentation.trainer.dto.*;
 import com.lookback.presentation.users.dto.FindTrainingUsersRequest;
-import com.lookback.presentation.trainer.dto.UpdateTrainingUsersRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +36,23 @@ public class TrainerController {
 
         CancelTrainingDto cancelTrainingDto = trainingService.cancelTraining(updateTrainingUsersRequest);
         return new ResponseEntity(ApiResponse.success(cancelTrainingDto, response), HttpStatus.OK);
+    }
+
+    @GetMapping("/trainer/addMember/info")
+    public ResponseEntity<ApiResponse<T>> addMemberInfo(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AddMemberRequest addMemberRequest) {
+        AddMemberDto addMemberDto = trainingService.addMemberInfo(request, addMemberRequest);
+        return new ResponseEntity(ApiResponse.success(addMemberDto, response), HttpStatus.OK);
+    }
+
+    @PostMapping("/trainer/addMember")
+    public ResponseEntity<ApiResponse<T>> addMember(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestBody AddMemberRequest addMemberRequest) {
+        trainingService.addMember(request, addMemberRequest);
+        return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
     }
 }

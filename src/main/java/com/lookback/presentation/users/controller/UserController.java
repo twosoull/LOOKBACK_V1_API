@@ -1,5 +1,6 @@
 package com.lookback.presentation.users.controller;
 
+import com.lookback.domain.common.constant.enums.UserTypeEnum;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.service.TrainingService;
@@ -13,12 +14,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Optional;
 
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.INVALID_PARAMETER;
 
@@ -38,11 +40,9 @@ public class UserController {
         ), HttpStatus.OK);
     }
 
-
-/*
-    @GetMapping("/mockTest/test")
-    public ResponseEntity<ApiResponse<T>> Test() {
-        return new ResponseEntity(ApiResponse.success(new UsersDto()), HttpStatus.OK);
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse<T>> user(UsersDto usersDto, HttpServletResponse response) {
+        return new ResponseEntity(ApiResponse.success(userService.findById(usersDto), response), HttpStatus.OK);
     }
-*/
+
 }

@@ -34,7 +34,7 @@ public class ExerciseRecord {
     private LocalDateTime updatedAt;
     private String updatedBy;
 
-    @OneToMany(mappedBy = "exerciseRecord")
+    @OneToMany(mappedBy = "exerciseRecord", orphanRemoval = true)
     private List<ExerciseRecordDetail> exerciseRecordDetails;
 
     public void setRecordById(Long id) {

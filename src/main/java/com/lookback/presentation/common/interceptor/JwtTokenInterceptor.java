@@ -2,6 +2,8 @@ package com.lookback.presentation.common.interceptor;
 
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.UserRepository;
+import com.lookback.domain.user.service.UserService;
+import com.lookback.presentation.users.dto.UsersDto;
 import com.lookback.presentation.users.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +20,12 @@ import java.util.Optional;
 public class JwtTokenInterceptor implements HandlerInterceptor {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public JwtTokenInterceptor(JwtUtil jwtUtil, UserRepository userRepository) {
+    public JwtTokenInterceptor(JwtUtil jwtUtil, UserRepository userRepository, UserService userService) {
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -38,18 +42,20 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             // 🔹 JWT에서 사용자 정보 추출
             String token = authorizationHeader.replace("Bearer ", "");
             Claims claims = jwtUtil.extractClaims(request, response, token);
-            String kakaoId = (String) claims.get("kakaoId");
+            Integer idInt = (Integer) claims.get("id");
+            Long id = idInt.longValue();
 
             // 🔹 데이터베이스에서 사용자 조회
-            Optional<Users> userOptional = userRepository.findByKakaoId(kakaoId);
-            if (userOptional.isEmpty()) {
+            UsersDto build = UsersDto.builder().userId(id).build();
+            UsersDto findUsersDto = userService.findById(build);
+
+            if (findUsersDto == null) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Unauthorized: User not found");
                 return false;
             }
 
-            Users user = userOptional.get();
-            request.setAttribute("user", user); // ✅ 요청 속성에 유저 정보 저장
+            request.setAttribute("user", findUsersDto); // ✅ 요청 속성에 유저 정보 저장
 
             return true;
         } catch (Exception e) {

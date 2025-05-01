@@ -11,9 +11,7 @@ import com.lookback.domain.user.repository.TrainerRepository;
 import com.lookback.domain.user.repository.TrainingRepository;
 import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.infrastructure.queryDto.UserTrainingQueryDto;
-import com.lookback.presentation.trainer.dto.CancelTrainingDto;
-import com.lookback.presentation.trainer.dto.UpdateTrainingUsersRequest;
-import com.lookback.presentation.trainer.dto.UserTrainingDto;
+import com.lookback.presentation.trainer.dto.*;
 import com.lookback.presentation.users.dto.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -24,8 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
-import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RETRIEVE_ERROR;
+import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,8 +39,8 @@ public class TrainingService {
      * */
     @Transactional
     public UserTrainingDto findTrainingsForTrainer(HttpServletRequest request, FindTrainingUsersRequest requestDto){
-        Users user = UserContext.getUser(request);
-        Long trainerId = user.getId();
+        UsersDto user = UserContext.getUser(request);
+        Long trainerId = user.getUserId();
         String sortBy  = requestDto.getSortBy();
         if(!StringUtil.isNullOrEmpty(requestDto.getSortBy()) && requestDto.getSortBy().equals("userName")){
             sortBy = "userName";
@@ -157,4 +154,68 @@ public class TrainingService {
         return CancelTrainingDto.fromEntity(training);
     }
 
+    public AddMemberDto addMemberInfo(HttpServletRequest request, AddMemberRequest addMemberRequest) {
+        if (addMemberRequest == null) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+        if (addMemberRequest.getTrainerId() == null || addMemberRequest.getTrainerId() == 0) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+
+        UsersDto user = UserContext.getUser(request);
+        Long memberId = user.getUserId();
+        if(memberId == null || memberId == 0) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+        Trainer findTrainer = trainerRepository.findByUsersId(addMemberRequest.getTrainerId());
+
+        if (findTrainer == null) {
+            throw new RestApiException(NOT_FOUND_TRAINER);
+        }
+
+        Users findMember = userRepository.findById(memberId);
+        Training findTraining = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(findTrainer.getId(), findMember.getId(), TrainingStatus.IN_PROGRESS);
+
+        AddMemberDto addMemberDto = new AddMemberDto();
+        addMemberDto.setTrainerId(addMemberRequest.getTrainerId());
+        addMemberDto.setTrainerName(findTrainer.getUser().getUserName());
+        addMemberDto.setStudentName(findMember.getUserName());
+        addMemberDto.setStudentNickName(findMember.getNickName());
+        addMemberDto.setTrainingStatus(findTraining != null ? findTraining.getTrainingStatus().toString() : null);
+        return addMemberDto;
+
+    }
+
+    @Transactional
+    public void addMember(HttpServletRequest request, AddMemberRequest addMemberRequest) {
+        if (addMemberRequest == null) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+        if (addMemberRequest.getTrainerId() == null || addMemberRequest.getTrainerId() == 0) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+        UsersDto user = UserContext.getUser(request);
+        Long memberId = user.getUserId();
+        if(memberId == null || memberId == 0) {
+            throw new RestApiException(RESOURCE_NOT_FOUND);
+        }
+
+        Users findMember = userRepository.findById(memberId);
+        Trainer findTrainer = trainerRepository.findByUsersId(addMemberRequest.getTrainerId());
+        Training findTraining = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(findTrainer.getId(), findMember.getId(), TrainingStatus.IN_PROGRESS);
+        if(findTraining == null) {
+            Training training = new Training();
+            training.setTrainer(findTrainer);
+            training.setStudent(findMember);
+            training.setTrainingStatus(TrainingStatus.IN_PROGRESS);
+
+            trainingRepository.save(training);
+        } else {
+            throw new RestApiException(ALREADY_MEMBER);
+        }
+    }
+
+    public void save(Trainer trainer) {
+        trainerRepository.save(trainer);
+    }
 }

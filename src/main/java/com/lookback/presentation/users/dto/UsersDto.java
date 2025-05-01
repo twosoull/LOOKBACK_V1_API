@@ -3,13 +3,15 @@ package com.lookback.presentation.users.dto;
 import com.lookback.common.converter.CommonConverter;
 import com.lookback.domain.record.dto.UsersDomainDto;
 import com.lookback.domain.user.entity.Users;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsersDto {
     private Long userId;
     private String email;

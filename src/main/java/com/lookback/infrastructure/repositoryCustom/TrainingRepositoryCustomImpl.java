@@ -42,7 +42,7 @@ public class TrainingRepositoryCustomImpl implements TrainingRepositoryCustom{
                 .leftJoin(training.records, record)
                 .join(training.student, users)
                 .groupBy(users.id, users.userName, users.birthDt)
-                .where(training.trainer.id.eq(1L)
+                .where(training.trainer.id.eq(1L) // TODO 하드 풀기
                         .and(training.trainingStatus.eq(trainingStatus)))
                 .orderBy(getOrderSpecifier(sortBy, users, record))
                 //sortBy에 따라 두개 중 하나를 사용하고 싶음

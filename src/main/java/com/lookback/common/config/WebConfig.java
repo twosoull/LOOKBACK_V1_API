@@ -47,7 +47,8 @@ public class WebConfig implements WebMvcConfigurer {
                         "/auth/**",
                         "/resources/**",
                         "/static/**",
-                        "/uploads/**"); // ✅ 로그인, 회원가입 관련 API는 제외
+                        "/uploads/**",
+                        "/testLogin"); // ✅ 로그인, 회원가입 관련 API는 제외
     }
 
     @Override

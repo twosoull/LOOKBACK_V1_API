@@ -3,6 +3,8 @@ package com.lookback.presentation.users.controller;
 import com.lookback.domain.common.constant.enums.UserTypeEnum;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.UserRepository;
+import com.lookback.domain.user.service.LoginService;
+import com.lookback.domain.user.service.UserService;
 import com.lookback.presentation.users.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/auth/kakao")
 @Slf4j
 public class KakaoAuthController {
@@ -36,12 +39,8 @@ public class KakaoAuthController {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
-
-    public KakaoAuthController(JwtUtil jwtUtil, UserRepository userRepository) {
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-    }
+    private final LoginService loginService;
+    private final UserService userService;
 
     // 1. 로그인 URL 반환
     @GetMapping("/login")
@@ -90,8 +89,10 @@ public class KakaoAuthController {
         String nickname = profile != null ? (String) profile.get("nickname") : "익명";
         String profileImage = profile != null ? (String) profile.get("profile_image_url") : null;
 
+
         // 🔹 유저 존재 여부 확인
-        Optional<Users> existingUser = userRepository.findByKakaoId(kakaoId);
+        Optional<Users> existingUser = userService.findByKakaoId(kakaoId);
+
         String isProfileComplete = "N";
         Users user;
         if (existingUser.isPresent()) {
@@ -99,15 +100,7 @@ public class KakaoAuthController {
             isProfileComplete = existingUser.get().getIsProfileComplete();
         } else {
             // ✅ 신규 유저 → 회원가입 처리
-            user = Users.builder()
-                    .kakaoId(kakaoId)
-                    .email(email)
-                    .nickName(nickname)
-                    .profileImageUrl(profileImage)
-                    .isProfileComplete(isProfileComplete)
-                    .build();
-            userRepository.save(user);
-            log.debug("✅ 신규 회원 가입 완료: " + nickname);
+            user = loginService.joinFromKakao(kakaoId, email, nickname, profileImage, isProfileComplete);
         }
 
         //TODO 인가 후 이메일 발급 필요 (users 테이블 비운 후 & 토큰에 이메일 삽입 필요)
@@ -115,16 +108,11 @@ public class KakaoAuthController {
         //jwt를 이용해서 사용자 데이터 땡겨와야함
 
         // 🔹 JWT 발급
-        String jwtToken = jwtUtil.createToken(Map.of(
-                "id", user.getId(),
-                "kakaoId", user.getKakaoId(),
-                "nickname", user.getNickName()
-        ));
-
+        String jwtToken = jwtUtil.getJwtToken(user.getId(), user.getKakaoId(), user.getNickName());
         String refreshToken = jwtUtil.createRefreshToken(user.getKakaoId());
-
         UserTypeEnum userType = user.getUserType();
 
+        //가입시 초기 값
         if(userType == null){
             userType = UserTypeEnum.MEMBER;
         }
@@ -137,6 +125,8 @@ public class KakaoAuthController {
                     "userType",userType.name(),
                     "userId",user.getId()));
     }
+
+
 }
 
 

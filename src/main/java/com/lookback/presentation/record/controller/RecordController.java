@@ -51,4 +51,13 @@ public class RecordController {
         return new ResponseEntity(ApiResponse.success(findRecordDetailResponse, response), HttpStatus.OK);
     }
 
+    @PostMapping("/record/remove")
+    public ResponseEntity<ApiResponse<T>> remove(
+            @RequestBody RemoveRecordRequest removeRecordRequest,
+            HttpServletResponse response) {
+        recordService.removeRecordById(removeRecordRequest);
+
+        return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
+    }
+
 }

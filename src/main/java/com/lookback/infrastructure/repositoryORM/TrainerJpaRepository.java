@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TrainerJpaRepository extends JpaRepository<Trainer, Long> {
+    Trainer findByUserId(Long trainerId);
 }
