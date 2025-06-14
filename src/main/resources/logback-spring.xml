@@ -1,0 +1,59 @@
+<configuration>
+    <!-- 로컬 개발 환경용 콘솔 로그 설정 -->
+    <springProfile name="local">
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+        <!-- SQL 파라미터 로그 -->
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+            <appender-ref ref="ROLLING"/>
+        </logger>
+    </springProfile>
+
+    <!-- 운영 환경용 로그 설정 -->
+    <springProfile name="prod">
+        <!-- 파일 로그 설정 -->
+        <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/opt/spring/myapp/logs/myapp.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/opt/spring/myapp/logs/myapp-%d{yyyy-MM-dd}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <!-- Root: ERROR 이상 출력 -->
+        <root level="ERROR">
+            <appender-ref ref="ROLLING"/>
+        </root>
+
+        <!-- 컨트롤러 경로 추적용 (INFO 출력) -->
+        <logger name="com.lookback.presentation" level="INFO" additivity="false">
+            <appender-ref ref="ROLLING"/>
+        </logger>
+
+        <!-- Spring Web 로그 (DispatcherServlet 등) -->
+        <logger name="org.springframework.web" level="INFO" additivity="false">
+            <appender-ref ref="ROLLING"/>
+        </logger>
+
+        <!-- Hibernate SQL 로그 -->
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <appender-ref ref="ROLLING"/>
+        </logger>
+
+        <!-- SQL 파라미터 로그 -->
+        <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+            <appender-ref ref="ROLLING"/>
+        </logger>
+    </springProfile>
+
+</configuration>

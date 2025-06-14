@@ -29,7 +29,7 @@ public class TrainingRepositoryCustomImpl implements TrainingRepositoryCustom{
         QRecord record = QRecord.record;
         QUsers users = QUsers.users;
 
-        return jpaQueryFactory.select(
+        List<UserTrainingQueryDto> latestCreatedAt = jpaQueryFactory.select(
                         Projections.fields(
                                 UserTrainingQueryDto.class,
                                 users.id,
@@ -42,11 +42,13 @@ public class TrainingRepositoryCustomImpl implements TrainingRepositoryCustom{
                 .leftJoin(training.records, record)
                 .join(training.student, users)
                 .groupBy(users.id, users.userName, users.birthDt)
-                .where(training.trainer.id.eq(1L) // TODO 하드 풀기
+                .where(training.trainer.id.eq(trainerId)
                         .and(training.trainingStatus.eq(trainingStatus)))
                 .orderBy(getOrderSpecifier(sortBy, users, record))
                 //sortBy에 따라 두개 중 하나를 사용하고 싶음
                 .fetch();
+
+        return latestCreatedAt;
 
     }
     private OrderSpecifier<?>[] getOrderSpecifier(String sortBy, QUsers users, QRecord record) {

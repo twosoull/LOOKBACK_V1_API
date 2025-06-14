@@ -14,4 +14,6 @@ public interface TrainingJpaRepository extends JpaRepository<Training, Long>, Tr
     List<Training> findByTrainerIdAndTrainingStatus(@Param("trainerId")Long trainerId, @Param("trainingStatus")String trainingStatus);
 
     Training findByTrainerIdAndStudentIdAndTrainingStatus(Long trainerId, Long usersId, TrainingStatus trainingStatus);
+
+    Training findByStudentIdAndTrainingStatus(Long id, TrainingStatus trainingStatus);
 }

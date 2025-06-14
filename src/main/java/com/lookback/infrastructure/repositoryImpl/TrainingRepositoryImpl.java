@@ -58,4 +58,10 @@ public class TrainingRepositoryImpl implements TrainingRepository {
     public Training findByTrainerIdAndStudentIdAndTrainingStatus(Long trainerId, Long usersId, TrainingStatus trainingStatus) {
         return trainingJpaRepository.findByTrainerIdAndStudentIdAndTrainingStatus(trainerId, usersId, trainingStatus);
     }
+
+    @Override
+    public Training findByStudentIdAndTrainingStatus(Long id, TrainingStatus trainingStatus) {
+        return trainingJpaRepository.findByStudentIdAndTrainingStatus(id, trainingStatus);
+    }
+
 }

@@ -33,6 +33,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.RESOURCE_NOT_FOUND;
 
@@ -184,8 +185,11 @@ public class RecordService {
         Long usersId = UserContext.getUser(request).getUserId();
 
         Record saveRecord = null;
+
+        log.info("usersId : " + usersId);
+        log.info("save.getUsersId()):" + save.getUsersId());
         //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.
-        if (usersId != save.getUsersId()) {
+        if (!Objects.equals(usersId, save.getUsersId())) {
             //다른 사람이 작성하는 경우
             Training training = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(usersId,save.getUsersId(), TrainingStatus.IN_PROGRESS);
             if(training == null) {

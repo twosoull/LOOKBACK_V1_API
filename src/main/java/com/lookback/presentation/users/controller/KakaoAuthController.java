@@ -32,7 +32,7 @@ public class KakaoAuthController {
     private String clientId;
 
     @Value("${kakao.redirect-uri}")
-    private String redirectUri = "http://localhost:8080/auth/kakao/callback";
+    private String redirectUri;
 
     @Value("${kakao.client-secret}")
     private String clientSecret;

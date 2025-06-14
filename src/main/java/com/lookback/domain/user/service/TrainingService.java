@@ -167,14 +167,27 @@ public class TrainingService {
         if(memberId == null || memberId == 0) {
             throw new RestApiException(RESOURCE_NOT_FOUND);
         }
+        // 연결할 트레이너 찾기
         Trainer findTrainer = trainerRepository.findByUsersId(addMemberRequest.getTrainerId());
 
         if (findTrainer == null) {
             throw new RestApiException(NOT_FOUND_TRAINER);
         }
 
+        // 이미 해당 트레이너와 연결 되어있는지 확인
         Users findMember = userRepository.findById(memberId);
         Training findTraining = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(findTrainer.getId(), findMember.getId(), TrainingStatus.IN_PROGRESS);
+
+        // 다른 트레이너와 연결 중인 상태가 있는지 확인
+        Training otherTraining = trainingRepository.findByStudentIdAndTrainingStatus( findMember.getId(), TrainingStatus.IN_PROGRESS);
+        boolean hasOtherTraining = otherTraining != null ? true : false;
+        if (hasOtherTraining) {
+            // 현재 연결된 트레이너가 연결하려는 트레이너 인경우
+           if (otherTraining.getTrainer().getId() == findTraining.getTrainer().getId()) {
+               hasOtherTraining = false;
+           }
+        }
+
 
         AddMemberDto addMemberDto = new AddMemberDto();
         addMemberDto.setTrainerId(addMemberRequest.getTrainerId());
@@ -182,12 +195,13 @@ public class TrainingService {
         addMemberDto.setStudentName(findMember.getUserName());
         addMemberDto.setStudentNickName(findMember.getNickName());
         addMemberDto.setTrainingStatus(findTraining != null ? findTraining.getTrainingStatus().toString() : null);
+        addMemberDto.setHasOtherTraining(hasOtherTraining);
         return addMemberDto;
 
     }
 
     @Transactional
-    public void addMember(HttpServletRequest request, AddMemberRequest addMemberRequest) {
+    public AddMemberDto addMember(HttpServletRequest request, AddMemberRequest addMemberRequest) {
         if (addMemberRequest == null) {
             throw new RestApiException(RESOURCE_NOT_FOUND);
         }
@@ -203,16 +217,25 @@ public class TrainingService {
         Users findMember = userRepository.findById(memberId);
         Trainer findTrainer = trainerRepository.findByUsersId(addMemberRequest.getTrainerId());
         Training findTraining = trainingRepository.findByTrainerIdAndStudentIdAndTrainingStatus(findTrainer.getId(), findMember.getId(), TrainingStatus.IN_PROGRESS);
-        if(findTraining == null) {
+
+        // 이미 해당 트레이너와 연결되어있는지 확인
+        boolean alreadyTraining = findTraining != null ? true : false;
+        if(!alreadyTraining) {
             Training training = new Training();
             training.setTrainer(findTrainer);
             training.setStudent(findMember);
             training.setTrainingStatus(TrainingStatus.IN_PROGRESS);
 
             trainingRepository.save(training);
-        } else {
-            throw new RestApiException(ALREADY_MEMBER);
         }
+        AddMemberDto addMemberDto = new AddMemberDto();
+        addMemberDto.setTrainerId(addMemberRequest.getTrainerId());
+        addMemberDto.setTrainerName(findTrainer.getUser().getUserName());
+        addMemberDto.setStudentName(findMember.getUserName());
+        addMemberDto.setStudentNickName(findMember.getNickName());
+        addMemberDto.setTrainingStatus(findTraining != null ? findTraining.getTrainingStatus().toString() : null);
+        addMemberDto.setAlreadyTraining(alreadyTraining);
+        return addMemberDto;
     }
 
     public void save(Trainer trainer) {

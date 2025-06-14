@@ -52,7 +52,7 @@ public class TrainerController {
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestBody AddMemberRequest addMemberRequest) {
-        trainingService.addMember(request, addMemberRequest);
-        return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
+        AddMemberDto addMemberDto = trainingService.addMember(request, addMemberRequest);
+        return new ResponseEntity(ApiResponse.success(addMemberDto, response), HttpStatus.OK);
     }
 }
