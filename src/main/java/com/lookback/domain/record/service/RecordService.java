@@ -186,8 +186,6 @@ public class RecordService {
 
         Record saveRecord = null;
 
-        log.info("usersId : " + usersId);
-        log.info("save.getUsersId()):" + save.getUsersId());
         //같지 않을 경우 현재는 pt수업이다. 그러므로 training을 record에 저장해야한다.
         if (!Objects.equals(usersId, save.getUsersId())) {
             //다른 사람이 작성하는 경우
