@@ -163,6 +163,21 @@ public class JwtUtil {
         }
     }
 
+    public boolean validateToken(String token) {
+        try {
+            // JWT 검증
+            Jwts.parser().setSigningKey(accessKey).parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(accessKey).parseClaimsJws(token).getBody();
+        return claims.getSubject(); // 또는 claims.get("userId")
+    }
+
     /**
      * JWT 토큰 검증 (static 제거)
      */

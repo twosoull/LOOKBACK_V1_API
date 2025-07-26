@@ -6,6 +6,7 @@ import com.lookback.domain.user.service.UserService;
 import com.lookback.presentation.users.dto.UsersDto;
 import com.lookback.presentation.users.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +31,18 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String authorizationHeader = request.getHeader("Authorization");
+        // 쿠키에서 accessToken 추출
+        String token = extractTokenFromCookie(request, "accessToken");
 
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Unauthorized: Missing or invalid token");
+        if (token == null || !jwtUtil.validateToken(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"로그인이 필요합니다.\"}");
             return false;
         }
 
         try {
             // 🔹 JWT에서 사용자 정보 추출
-            String token = authorizationHeader.replace("Bearer ", "");
             Claims claims = jwtUtil.extractClaims(request, response, token);
             Integer idInt = (Integer) claims.get("id");
             Long id = idInt.longValue();
@@ -64,5 +66,15 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             response.getWriter().write("Unauthorized: Invalid token");
             return false;
         }
+    }
+
+    private String extractTokenFromCookie(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) return null;
+        for (Cookie cookie : request.getCookies()) {
+            if (name.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 }

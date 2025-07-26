@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of("http://localhost:3000", "http://211.188.52.141:3000", "http://pctup.com", "https://pctup.com")); // 프론트엔드 주소 지정
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type","Refresh-Token")); // Authorization 헤더 허용
+        config.setAllowedHeaders(List.of("*")); // Authorization 헤더 허용
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // OPTIONS 허용
         config.setMaxAge(3600L); // Preflight 결과 캐싱 (1시간)
 
@@ -47,7 +47,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtTokenInterceptor)
                 .excludePathPatterns(
+                        "/admin/**",
                         "/auth/**",
+                        "/entry/**",
                         "/resources/**",
                         "/static/**",
                         "/uploads/**",

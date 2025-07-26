@@ -6,6 +6,7 @@ import com.lookback.domain.user.repository.UserRepository;
 import com.lookback.domain.user.service.LoginService;
 import com.lookback.domain.user.service.UserService;
 import com.lookback.presentation.users.utils.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class KakaoAuthController {
 
     // 2. 카카오 인증 후 콜백
     @GetMapping("/callback")
-    public ResponseEntity<?> callback(@RequestParam("code") String code) {
+    public ResponseEntity<?> callback(@RequestParam("code") String code, HttpServletResponse res) {
         String tokenUrl = "https://kauth.kakao.com/oauth/token";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -116,6 +117,17 @@ public class KakaoAuthController {
         if(userType == null){
             userType = UserTypeEnum.MEMBER;
         }
+
+        // 쿠키 설정
+
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true).secure(true).path("/").sameSite("Strict").maxAge(15 * 60).build();
+
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true).secure(true).path("/").sameSite("Strict").maxAge(7 * 24 * 60 * 60).build();
+
+        res.addHeader("Set-Cookie", accessCookie.toString());
+        res.addHeader("Set-Cookie", refreshCookie.toString());
 
         // JWT 발급 후 반환
         return ResponseEntity.ok(
