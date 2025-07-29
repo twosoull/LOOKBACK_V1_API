@@ -1,5 +1,6 @@
 package com.lookback.presentation.users.controller;
 
+import com.lookback.common.utils.CommonUtil;
 import com.lookback.domain.common.constant.enums.UserTypeEnum;
 import com.lookback.domain.user.entity.Users;
 import com.lookback.domain.user.repository.UserRepository;
@@ -25,7 +26,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth/kakao")
+@RequestMapping("/public/auth/kakao")
 @Slf4j
 public class KakaoAuthController {
 
@@ -42,6 +43,12 @@ public class KakaoAuthController {
     private final JwtUtil jwtUtil;
     private final LoginService loginService;
     private final UserService userService;
+
+    @Value("${token.expiration.access}")
+    private long ACCESS_TOKEN_EXPIRATION;
+
+    @Value("${token.expiration.refresh}")
+    private long REFRESH_TOKEN_EXPIRATION;
 
     // 1. 로그인 URL 반환
     @GetMapping("/login")
@@ -119,12 +126,11 @@ public class KakaoAuthController {
         }
 
         // 쿠키 설정
-
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
-                .httpOnly(true).secure(true).path("/").sameSite("Strict").maxAge(15 * 60).build();
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", jwtToken)
+                .httpOnly(true).secure(CommonUtil.isLocalProfile()? false : true).path("/").sameSite("Lax").maxAge(ACCESS_TOKEN_EXPIRATION).build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
-                .httpOnly(true).secure(true).path("/").sameSite("Strict").maxAge(7 * 24 * 60 * 60).build();
+                .httpOnly(true).secure(CommonUtil.isLocalProfile()? false : true).path("/").sameSite("Lax").maxAge(REFRESH_TOKEN_EXPIRATION).build();
 
         res.addHeader("Set-Cookie", accessCookie.toString());
         res.addHeader("Set-Cookie", refreshCookie.toString());

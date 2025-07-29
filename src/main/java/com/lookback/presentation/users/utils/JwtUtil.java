@@ -23,8 +23,12 @@ public class JwtUtil {
 
     private final SecretKey accessKey;
     private final SecretKey refreshKey;
-    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24; //24시간
-    private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // ✅ 7일
+    @Value("${token.expiration.access}")
+    private long ACCESS_TOKEN_EXPIRATION;
+
+    @Value("${token.expiration.refresh}")
+    private long REFRESH_TOKEN_EXPIRATION;
+
     private final UserRepository userRepository;
 
 
@@ -94,58 +98,6 @@ public class JwtUtil {
     }
 
     /**
-     * Access Token이 만료되었을 때 Refresh Token 검증 후 새로운 Access Token 발급
-     */
-    private Claims handleExpiredAccessToken(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            String refreshToken = request.getHeader("Refresh-Token"); // ✅ 클라이언트가 Refresh Token을 보내야 함
-
-            if (refreshToken == null || refreshToken.isEmpty()) {
-                throw new RestApiException(REFRESH_TOKEN_EXPIRED);
-            }
-
-            // ✅ Refresh Token 검증
-            Claims refreshClaims = Jwts.parserBuilder()
-                    .setSigningKey(refreshKey)
-                    .build()
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
-            String kakaoId = refreshClaims.getSubject(); // ✅ Refresh Token의 subject(사용자 ID) 가져오기
-
-            // ✅ DB에서 사용자 정보 조회 (Refresh Token이 저장된 경우)
-            Optional<Users> userOptional = userRepository.findByKakaoId(kakaoId);
-            if (userOptional.isEmpty()) {
-                throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
-            }
-
-            Users user = userOptional.get();
-
-            // ✅ 새로운 Access Token 발급
-            String newAccessToken = createAccessToken(user.getKakaoId());
-
-            // ✅ 새로운 Refresh Token 발급 (보안을 위해)
-            String newRefreshToken = createRefreshToken(user.getKakaoId());
-
-            // ✅ 응답 헤더에 새로운 Access Token & Refresh Token 추가
-            response.setHeader("New-Access-Token", newAccessToken);
-            response.setHeader("New-Refresh-Token", newRefreshToken);
-
-            // ✅ Refresh Token 검증
-            return Jwts.parserBuilder()
-                    .setSigningKey(accessKey)
-                    .build()
-                    .parseClaimsJws(newAccessToken)
-                    .getBody(); // ✅ 새 토큰이 발급된 경우 기존 Refresh Token의 Claims 반환
-        } catch (ExpiredJwtException e) {
-            throw new RestApiException(REFRESH_TOKEN_EXPIRED);
-        } catch (JwtException e) {
-            throw new RuntimeException("유효하지 않은 Refresh Token입니다.", e);
-        }
-    }
-
-
-    /**
      * JWT 토큰에서 정보 추출 (유효시간 추출)
      */
     public Claims extractClaims(HttpServletRequest request, HttpServletResponse response, String token) {
@@ -155,11 +107,25 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (ExpiredJwtException e) {
-            // ✅ Access Token 만료 → Refresh Token 확인 후 Access Token 재발급
-            return handleExpiredAccessToken(request, response);
         } catch (JwtException ex) {
             throw new RuntimeException("유효하지 않은 토큰입니다.", ex);
+        }
+    }
+
+    public Claims extractRefreshKeyAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(refreshKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean validateRefreshToken(String token) {
+        try {
+            Claims claims = extractRefreshKeyAllClaims(token);
+            // 필요한 검증 추가 가능 (예: 블랙리스트)
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 
