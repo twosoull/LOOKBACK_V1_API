@@ -50,6 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
                         "/admin/**",
                         "/auth/**",
                         "/public/**",
+                        "/private/**",
                         "/mock/**",
                         "/resources/**",
                         "/static/**",

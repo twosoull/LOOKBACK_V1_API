@@ -31,7 +31,6 @@ public class JwtUtil {
 
     private final UserRepository userRepository;
 
-
     /**
      * jwtToken 생성 메소드
      * @param id, key(현재 snsId로 사용, 일반유저는 random key 값), name

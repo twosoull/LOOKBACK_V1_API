@@ -20,7 +20,8 @@ public enum CommonErrorCode implements ErrorCode {
     FILE_UPLOAD_FAIL(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패 했습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "Refresh Token이 만료되었습니다. 다시 로그인하세요."),
     ALREADY_MEMBER(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "이미 등록된 수강생 입니다."),
-    NOT_FOUND_TRAINER(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "트레이너를 찾을 수 없습니다.");
+    NOT_FOUND_TRAINER(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "트레이너를 찾을 수 없습니다."),
+    NOT_FOUND_CENTER(HttpStatus.NOT_FOUND.value(),HttpStatus.INTERNAL_SERVER_ERROR, "센터를 찾을 수 없습니다.");
     private final int status;
     private final HttpStatus httpStatus;
     private final String message;

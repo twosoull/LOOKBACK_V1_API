@@ -27,23 +27,23 @@ public class QTrainerInfo extends EntityPathBase<TrainerInfo> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final DateTimePath<java.time.LocalDateTime> endAt = createDateTime("endAt", java.time.LocalDateTime.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath infoContent = createString("infoContent");
-
-    public final StringPath infoName = createString("infoName");
-
-    public final StringPath infoType = createString("infoType");
-
-    public final StringPath inProgress = createString("inProgress");
-
-    public final StringPath privateYn = createString("privateYn");
-
-    public final DateTimePath<java.time.LocalDateTime> startAt = createDateTime("startAt", java.time.LocalDateTime.class);
-
     public final QTrainer trainerInfo;
+
+    public final DateTimePath<java.time.LocalDateTime> trainerInfoAcquisitionDate = createDateTime("trainerInfoAcquisitionDate", java.time.LocalDateTime.class);
+
+    public final StringPath trainerInfoContent = createString("trainerInfoContent");
+
+    public final DateTimePath<java.time.LocalDateTime> trainerInfoEndAt = createDateTime("trainerInfoEndAt", java.time.LocalDateTime.class);
+
+    public final StringPath trainerInfoInProgress = createString("trainerInfoInProgress");
+
+    public final StringPath trainerInfoName = createString("trainerInfoName");
+
+    public final DateTimePath<java.time.LocalDateTime> trainerInfoStartAt = createDateTime("trainerInfoStartAt", java.time.LocalDateTime.class);
+
+    public final EnumPath<com.lookback.domain.common.constant.enums.TrainerInfoType> trainerInfoType = createEnum("trainerInfoType", com.lookback.domain.common.constant.enums.TrainerInfoType.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
