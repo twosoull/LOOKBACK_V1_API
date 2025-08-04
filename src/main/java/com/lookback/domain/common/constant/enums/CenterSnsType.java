@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CenterSnsType {
 
-    BLOG("블로그"),
-    INSTAGRAM("인스타그램"),
-    YOUTUBE("유튜브"),
-    HOMEPAGE("홈페이지");
+    BLOG("BLOG"),
+    INSTAGRAM("INSTAGRAM"),
+    YOUTUBE("YOUTUBE"),
+    HOMEPAGE("HOMEPAGE");
 
     private final String message;
 

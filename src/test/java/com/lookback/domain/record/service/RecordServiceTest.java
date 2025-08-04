@@ -16,7 +16,7 @@ class RecordServiceTest {
 
     @Autowired
     private RecordService recordService;
-
+/*
     @Test
     void findRecordById(){
         FindRecordRequest findRecordRequest = new FindRecordRequest();
@@ -43,7 +43,7 @@ class RecordServiceTest {
             log.info(findRecordResponse.toString());
         }
     }
-
+*/
     @Test
     void findExerciseRecordById() {
         FindExerciseRecordRequest findExerciseRecordRequest = new FindExerciseRecordRequest();

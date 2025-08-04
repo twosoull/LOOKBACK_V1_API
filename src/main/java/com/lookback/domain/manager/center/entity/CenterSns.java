@@ -4,12 +4,14 @@ import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.CenterSnsType;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 센터 SNS
  */
 @Entity
 @Getter
+@Setter
 public class CenterSns extends BaseEntity {
 
     @Id @GeneratedValue

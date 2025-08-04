@@ -3,12 +3,14 @@ package com.lookback.domain.manager.center.entity;
 import com.lookback.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 /*
 * 센터 편의시설
 * */
 @Entity
 @Getter
+@Setter
 public class CenterFacility extends BaseEntity {
 
     @Id @GeneratedValue

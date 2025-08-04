@@ -16,4 +16,9 @@ public class CenterRepositoryImpl implements CenterRepository {
     public Center findById(Long id) {
         return centerJpaRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void save(Center center) {
+        centerJpaRepository.save(center);
+    }
 }

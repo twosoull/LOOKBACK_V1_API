@@ -8,4 +8,5 @@ public interface CenterRepository {
 
     Center findById(Long id);
 
+    void save(Center center);
 }

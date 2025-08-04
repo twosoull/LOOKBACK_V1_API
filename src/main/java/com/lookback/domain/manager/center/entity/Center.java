@@ -1,6 +1,7 @@
 package com.lookback.domain.manager.center.entity;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.presentation.manager.center.dto.SaveCenterRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class Center extends BaseEntity {
     private String centerLng;           // 센터_경도
     private String centerLicenseNumber; // 센터_사업자번호
     private String centerMasterName;    // 센터_대표자_이름
+    private String centerShowYn;        // 센터_공개_여부
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CenterSns> centerSnss = new ArrayList<>();
@@ -43,4 +45,42 @@ public class Center extends BaseEntity {
     private List<CenterProduct> centerProducts = new ArrayList<>();
 
 
+    public void update(SaveCenterRequest dto) {
+        this.centerName = dto.getCenterName();
+        this.centerTel = dto.getCenterTel();
+        this.centerIntro = dto.getCenterIntro();
+        this.centerTimeCode = dto.getCenterTimeCode();
+        this.centerAddress = dto.getCenterAddress();
+        this.centerAddressDetail = dto.getCenterAddressDetail();
+        this.centerPostcode = dto.getCenterPostcode();
+        this.centerLat = dto.getCenterLat();
+        this.centerLng = dto.getCenterLng();
+        this.centerLicenseNumber = dto.getCenterLicenseNumber();
+        this.centerMasterName = dto.getCenterMasterName();
+        this.centerShowYn = dto.getCenterShowYn();
+
+        // centerOperateTimes
+        if (dto.getCenterOperateTimes() != null) {
+            this.centerOperateTimes.clear();
+            dto.getCenterOperateTimes().forEach(operateDto ->
+                    this.centerOperateTimes.add(operateDto.toEntity(this))
+            );
+        }
+
+        // centerFacilities
+        if (dto.getCenterFacilities() != null) {
+            this.centerFacilities.clear();
+            dto.getCenterFacilities().forEach(facilityDto ->
+                    this.centerFacilities.add(facilityDto.toEntity(this))
+            );
+        }
+
+        // centerSnss
+        if (dto.getCenterSnss() != null) {
+            this.centerSnss.clear();
+            dto.getCenterSnss().forEach(snsDto ->
+                    this.centerSnss.add(snsDto.toEntity(this))
+            );
+        }
+    }
 }
