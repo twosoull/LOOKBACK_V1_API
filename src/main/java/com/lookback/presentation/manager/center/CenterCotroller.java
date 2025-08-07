@@ -5,6 +5,7 @@ import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.manager.center.dto.CenterDto;
 import com.lookback.presentation.manager.center.dto.FindCenterRequest;
 import com.lookback.presentation.manager.center.dto.SaveCenterRequest;
+import com.lookback.presentation.manager.center.dto.UpdateCenterShowYnRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
@@ -43,6 +44,19 @@ public class CenterCotroller {
                                                      HttpServletResponse response) {
 
         centerService.saveCenter(saveCenterRequest);
+        return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
+    }
+
+    /**
+     * [PMC-0003] 센터 관리 > 프로필 > 센터 프로필 공개 수정
+     * @param updateCenterShowYnRequest response
+     * @return
+     */
+    @PostMapping("/private/manager/center/profile/update/centerShowYn")
+    public ResponseEntity<ApiResponse<T>> updateCenterShowYn(@RequestBody UpdateCenterShowYnRequest updateCenterShowYnRequest,
+                                                             HttpServletResponse response) {
+
+        centerService.updateCenterShowYn(updateCenterShowYnRequest);
         return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
     }
 

@@ -132,6 +132,14 @@ public class CommonConverter {
         return dayOfWeekKorean;
     }
 
+    // 출력: 2025/07/12 14:15
+    public static String formatLocalDateTime(LocalDateTime date) {
+        LocalDateTime now = LocalDateTime.of(2025, 7, 12, 14, 15);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+        return date.format(formatter);
+    }
+
     public static String getDayOfWeekKorean(LocalDate date) {
         // 현재 연도 가져오기
         int currentYear = LocalDate.now().getYear();

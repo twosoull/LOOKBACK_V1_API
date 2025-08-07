@@ -7,10 +7,7 @@ import com.lookback.domain.manager.center.entity.CenterFacility;
 import com.lookback.domain.manager.center.entity.CenterOperateTime;
 import com.lookback.domain.manager.center.entity.CenterSns;
 import com.lookback.domain.manager.center.repository.CenterRepository;
-import com.lookback.presentation.manager.center.dto.CenterDto;
-import com.lookback.presentation.manager.center.dto.FindCenterRequest;
-import com.lookback.presentation.manager.center.dto.FindCenterResponse;
-import com.lookback.presentation.manager.center.dto.SaveCenterRequest;
+import com.lookback.presentation.manager.center.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +36,6 @@ public class CenterService {
         if (findCenter == null) {
             return null;
         }
-
 
         return FindCenterResponse.fromEntity(findCenter);
     }
@@ -71,5 +67,13 @@ public class CenterService {
             findCenter.update(saveCenterRequest);
         }
 
+    }
+
+    public void updateCenterShowYn(UpdateCenterShowYnRequest updateCenterShowYnRequest) {
+        Center findCenter = centerRepository.findById(updateCenterShowYnRequest.getCenterId());
+        if (findCenter == null) {
+            throw new RestApiException(INVALID_PARAMETER);
+        }
+        findCenter.setCenterShowYn(updateCenterShowYnRequest.getCenterShowYn());
     }
 }

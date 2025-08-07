@@ -2,6 +2,7 @@ package com.lookback.domain.manager.center.entity;
 
 import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.CenterProductType;
+import com.lookback.presentation.manager.center.dto.SaveCenterProductRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,11 +31,31 @@ public class CenterProduct extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CenterProductType centerProductType;               // 센터_상품_구분_유형
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "centerProduct", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CenterProductOption> centerProductOptions = new ArrayList<>(); // 센터_상품_옵션
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CENTER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Center center;
+
+    public void update(SaveCenterProductRequest dto) {
+        this.centerProductName = dto.getCenterProductName();
+        this.centerProductUsagePeriod = dto.getCenterProductUsagePeriod();
+        this.centerProductPricingBasisType = dto.getCenterProductPricingBasisType();
+        this.centerProductOriPrice = dto.getCenterProductOriPrice();
+        this.centerProductDiscountPrice = dto.getCenterProductDiscountPrice();
+        this.centerProductDiscountRate = dto.getCenterProductDiscountRate();
+        this.centerProductNotice = dto.getCenterProductNotice();
+        this.centerProductUseYn = dto.getCenterProductUseYn();
+        this.centerProductType = dto.getCenterProductType();
+
+        // 옵션 초기화 후 새로 설정 (연관관계 주의)
+        if (dto.getCenterProductOptions() != null) {
+            this.centerProductOptions.clear();
+            dto.getCenterProductOptions().forEach(operateDto ->
+                    this.centerProductOptions.add(operateDto.toEntity(this))
+            );
+        }
+    }
 
 }

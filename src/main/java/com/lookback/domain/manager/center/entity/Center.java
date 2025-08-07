@@ -44,7 +44,10 @@ public class Center extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CenterProduct> centerProducts = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "center", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CenterReview> centerReviews = new ArrayList<>();
 
+    // review 및 product 제외, center profile 관련만
     public void update(SaveCenterRequest dto) {
         this.centerName = dto.getCenterName();
         this.centerTel = dto.getCenterTel();

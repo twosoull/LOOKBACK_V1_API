@@ -1,6 +1,7 @@
 package com.lookback.presentation.manager.center.dto;
 
 import com.lookback.domain.manager.center.entity.Center;
+import com.lookback.domain.manager.center.entity.CenterReview;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,10 +28,13 @@ public class FindCenterResponse {
     private String centerLicenseNumber; // 센터_사업자번호
     private String centerMasterName;    // 센터_대표자_이름
     private String centerShowYn;        // 센터_공개_yn
+    private double centerReviewSumPoint; // 센터의 별점
 
     private List<CenterOperateTimeDto> centerOperateTimes = new ArrayList<>();
     private List<CenterFacilityDto> centerFacilities = new ArrayList<>();
     private List<CenterSnsDto> centerSnss = new ArrayList<>();
+    private List<CenterReviewDto> centerReviews = new ArrayList<>();
+
     // TODO 사진 추가
 
     public static FindCenterResponse fromEntity(Center center) {
@@ -63,6 +67,15 @@ public class FindCenterResponse {
                                 .map(CenterSnsDto::fromEntity)
                                 .collect(Collectors.toList())
                 )
+                .centerReviews(
+                        center.getCenterReviews().stream()
+                                .map(CenterReviewDto::fromEntity)
+                                .collect(Collectors.toList())
+                )
+                .centerReviewSumPoint(center.getCenterReviews().stream()
+                        .mapToLong(CenterReview::getCenterReviewPoint)
+                        .average()
+                        .orElse(0.0))
                 .build();
     }
 }

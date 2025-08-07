@@ -1,6 +1,7 @@
 package com.lookback.presentation.manager.center.dto;
 
 import com.lookback.common.BaseEntity;
+import com.lookback.common.converter.CommonConverter;
 import com.lookback.domain.common.constant.enums.CenterProductType;
 import com.lookback.domain.manager.center.entity.CenterProduct;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CenterProductDto extends BaseEntity {
+public class FindCenterProductDetailResponse extends BaseEntity {
 
     private Long centerProductId;
 
@@ -29,8 +30,10 @@ public class CenterProductDto extends BaseEntity {
 
     private List<CenterProductOptionDto> centerProductOptions = new ArrayList<>(); // 센터_상품_옵션
 
-    public static CenterProductDto fromEntity(CenterProduct centerProduct) {
-        return CenterProductDto.builder()
+    private String updateAt;
+
+    public static FindCenterProductDetailResponse fromEntity(CenterProduct centerProduct) {
+        return FindCenterProductDetailResponse.builder()
                 .centerProductId(centerProduct.getId())
                 .centerProductName(centerProduct.getCenterProductName())
                 .centerProductUsagePeriod(centerProduct.getCenterProductUsagePeriod())
@@ -44,6 +47,7 @@ public class CenterProductDto extends BaseEntity {
                 .centerProductOptions(centerProduct.getCenterProductOptions().stream().map(
                         centerProductOption -> CenterProductOptionDto.fromEntity(centerProductOption)
                 ).toList())
+                .updateAt(CommonConverter.formatLocalDateTime(centerProduct.getUpdatedAt()))
                 .build();
     }
 }
