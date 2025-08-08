@@ -25,5 +25,8 @@ public class Trainer extends BaseEntity {
     @OneToMany(mappedBy = "trainer")
     private List<Training> training;
 
+    @OneToMany(mappedBy= "trainer")
+    private List<TrainerInfo> trainerInfos;
+
     private String selfIntroduction;
 }

@@ -31,6 +31,8 @@ public class QTrainer extends EntityPathBase<Trainer> {
 
     public final StringPath selfIntroduction = createString("selfIntroduction");
 
+    public final ListPath<TrainerInfo, QTrainerInfo> trainerInfos = this.<TrainerInfo, QTrainerInfo>createList("trainerInfos", TrainerInfo.class, QTrainerInfo.class, PathInits.DIRECT2);
+
     public final ListPath<Training, QTraining> training = this.<Training, QTraining>createList("training", Training.class, QTraining.class, PathInits.DIRECT2);
 
     //inherited

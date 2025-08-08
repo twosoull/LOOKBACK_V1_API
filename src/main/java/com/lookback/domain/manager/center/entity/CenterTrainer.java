@@ -2,6 +2,7 @@ package com.lookback.domain.manager.center.entity;
 
 import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.CenterTrainerRole;
+import com.lookback.domain.common.constant.enums.CenterTrainerStatus;
 import com.lookback.domain.record.entity.ExerciseRecord;
 import com.lookback.domain.user.entity.Trainer;
 import jakarta.persistence.*;
@@ -23,6 +24,9 @@ public class CenterTrainer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CenterTrainerRole centerTrainerRole;
 
+    @Enumerated(EnumType.STRING)
+    private CenterTrainerStatus centerTrainerStatus; //승인 상태
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="CENTER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Center center;
@@ -33,5 +37,7 @@ public class CenterTrainer extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<CenterProduct> centerProducts = new ArrayList<>();
+
+
 
 }

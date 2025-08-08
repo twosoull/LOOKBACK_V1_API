@@ -20,7 +20,7 @@ public class QTrainerInfo extends EntityPathBase<TrainerInfo> {
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QTrainerInfo trainerInfo1 = new QTrainerInfo("trainerInfo1");
+    public static final QTrainerInfo trainerInfo = new QTrainerInfo("trainerInfo");
 
     public final com.lookback.common.QBaseEntity _super = new com.lookback.common.QBaseEntity(this);
 
@@ -29,7 +29,7 @@ public class QTrainerInfo extends EntityPathBase<TrainerInfo> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final QTrainer trainerInfo;
+    public final QTrainer trainer;
 
     public final DateTimePath<java.time.LocalDateTime> trainerInfoAcquisitionDate = createDateTime("trainerInfoAcquisitionDate", java.time.LocalDateTime.class);
 
@@ -66,7 +66,7 @@ public class QTrainerInfo extends EntityPathBase<TrainerInfo> {
 
     public QTrainerInfo(Class<? extends TrainerInfo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.trainerInfo = inits.isInitialized("trainerInfo") ? new QTrainer(forProperty("trainerInfo"), inits.get("trainerInfo")) : null;
+        this.trainer = inits.isInitialized("trainer") ? new QTrainer(forProperty("trainer"), inits.get("trainer")) : null;
     }
 
 }

@@ -3,18 +3,17 @@ package com.lookback.domain.common.constant.enums;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
+public enum CenterTrainerStatus {
 
-public enum CenterTrainerRole {
-
-    OWNER("OWNER", "소유자"),                // 센터의 실질적 소유자
-    SUPER_ADMIN("SUPER_ADMIN", "최고관리자"), // 센터 전체 관리
-    GENERAL("GENERAL", "일반 사용자");        // 기본 권한
+    REQUESTED("REQUESTED", "승인요청"),
+    APPROVED("APPROVED", "승인"),
+    LEFT("LEFT", "나감");
 
     @Getter
     private final String code;
     private final String message;
 
-    CenterTrainerRole(String code, String message) {
+    CenterTrainerStatus(String code, String message) {
         this.code = code;
         this.message = message;
     }
@@ -23,6 +22,4 @@ public enum CenterTrainerRole {
     public String getMessage() {
         return message;
     }
-
-
 }

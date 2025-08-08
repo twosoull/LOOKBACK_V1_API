@@ -4,6 +4,8 @@ import com.lookback.common.BaseEntity;
 import com.lookback.domain.common.constant.enums.TrainerInfoType;
 import com.lookback.domain.file.entity.UploadFile;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
 /**
  * TrainerInfoType 정보 유형에 따라 정보가 변경 됌
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "TRAINER_INFO")
 public class TrainerInfo extends BaseEntity {
@@ -20,7 +24,7 @@ public class TrainerInfo extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRAINER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Trainer trainerInfo;
+    private Trainer trainer;
 
     private String trainerInfoName;                    // 정보이름 (ex.경력명)
     private String trainerInfoContent;                 // 그외 내용(필요시)
