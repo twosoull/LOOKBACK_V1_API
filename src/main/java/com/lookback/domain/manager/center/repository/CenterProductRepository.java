@@ -17,4 +17,7 @@ public interface CenterProductRepository {
     Page<CenterProduct> findByCenterId(Long centerId, Pageable pageable);
 
     void deleteById(Long centerProductId);
+
+    Page<CenterProduct> findByCenterTrainerIdAndCenterId(Long centerTrainerId, Long centerId1, Pageable pageable);
+
 }

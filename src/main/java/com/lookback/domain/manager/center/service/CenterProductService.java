@@ -4,10 +4,12 @@ import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.manager.center.entity.Center;
 import com.lookback.domain.manager.center.entity.CenterProduct;
 import com.lookback.domain.manager.center.entity.CenterProductOption;
+import com.lookback.domain.manager.center.entity.CenterTrainer;
 import com.lookback.domain.manager.center.repository.CenterProductRepository;
 import com.lookback.domain.manager.center.repository.CenterRepository;
 import com.lookback.presentation.manager.center.dto.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -97,5 +99,17 @@ public class CenterProductService {
             throw new RestApiException(FAIL_REMOVE_PRODUCT);
         }
 
+    }
+
+    public FindCenterTrainerProductResponse findCenterTrainerProducts(HttpServletRequest request, FindCenterTrainerProductRequest findCenterTrainerProductRequest, Pageable pageable) {
+        CenterTrainerServiceValidate.findCenterTrainerProducts(findCenterTrainerProductRequest);
+
+        Page<CenterProduct> findCenterProduct = centerProductRepository.findByCenterTrainerIdAndCenterId(findCenterTrainerProductRequest.getCenterTrainerId(), findCenterTrainerProductRequest.getCenterId(), pageable);
+
+        List<CenterProduct> centerProducts = findCenterProduct.getContent();
+        int totalCount = findCenterProduct.getTotalPages();
+        int page = findCenterProduct.getNumber();
+
+        return FindCenterTrainerProductResponse.fromEntity(findCenterTrainerProductRequest.getCenterId(), centerProducts, page, totalCount);
     }
 }

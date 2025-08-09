@@ -40,4 +40,19 @@ public class CenterTrainer extends BaseEntity {
 
 
 
+    public void updateStatus(CenterTrainerStatus centerTrainerStatus) {
+        this.centerTrainerStatus = centerTrainerStatus;
+    }
+
+    public void updateStatusExclusion() {
+        this.centerTrainerStatus = CenterTrainerStatus.EXCLUSION;
+    }
+
+    public void updateRoleSuperAdmin() {
+        this.centerTrainerRole = CenterTrainerRole.SUPER_ADMIN;
+    }
+
+    public void updateRoleGeneral() {
+        this.centerTrainerRole = CenterTrainerRole.GENERAL;
+    }
 }

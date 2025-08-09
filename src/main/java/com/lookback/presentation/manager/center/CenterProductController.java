@@ -1,11 +1,15 @@
 package com.lookback.presentation.manager.center;
 
+import com.lookback.domain.manager.center.entity.CenterTrainer;
 import com.lookback.domain.manager.center.service.CenterProductService;
+import com.lookback.domain.manager.center.service.CenterTrainerServiceValidate;
 import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.manager.center.dto.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.formula.functions.T;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -14,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -91,6 +97,5 @@ public class CenterProductController {
 
         return new ResponseEntity(ApiResponse.success(null, response), HttpStatus.OK);
     }
-
 
 }

@@ -28,7 +28,6 @@ public class TrainerDto {
     public static TrainerDto fromEntity(Trainer trainer) {
         return TrainerDto.builder()
                 .trainerId(trainer.getId())
-                .user(UsersDto.fromEntity(trainer.getUser()))
                 .selfIntroduction(trainer.getSelfIntroduction())
                 .build();
     }

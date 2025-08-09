@@ -10,4 +10,6 @@ public interface CenterProductJpaRepository extends JpaRepository<CenterProduct,
     Page<CenterProduct> findByCenterIdAndCenterProductType(Long centerId, CenterProductType centerProductType, Pageable pageable);
 
     Page<CenterProduct> findByCenterId(Long centerId, Pageable pageable);
+
+    Page<CenterProduct> findByCenterTrainerIdAndCenterId(Long centerTrainerId, Long centerId, Pageable pageable);
 }

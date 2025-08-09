@@ -5,21 +5,21 @@ import lombok.Getter;
 
 public enum CenterTrainerStatus {
 
-    REQUESTED("REQUESTED", "승인요청"),
-    APPROVED("APPROVED", "승인"),
-    LEFT("LEFT", "나감");
+    REQUESTED("REQUESTED"), //"승인요청"
+    APPROVED("APPROVED"), //"승인"
+    EXCLUSION("EXCLUSION"), // 제외
+    REFUSAL("REFUSAL"), //"거절"
+    LEFT("LEFT"); // 나감
 
     @Getter
     private final String code;
-    private final String message;
 
-    CenterTrainerStatus(String code, String message) {
+    CenterTrainerStatus(String code) {
         this.code = code;
-        this.message = message;
     }
 
     @JsonValue
-    public String getMessage() {
-        return message;
+    public String getCode() {
+        return code;
     }
 }

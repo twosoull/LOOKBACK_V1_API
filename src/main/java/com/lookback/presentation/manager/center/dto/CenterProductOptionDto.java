@@ -18,6 +18,7 @@ public class CenterProductOptionDto {
     private Long centerProductOptionId;
 
     private CenterProductOptionType centerProductOptionType;
+
     private String centerProductOptionName;
 
     public static CenterProductOptionDto fromEntity(CenterProductOption centerProductOption) {

@@ -39,4 +39,10 @@ public class CenterProductRepositoryImpl implements CenterProductRepository {
     public void deleteById(Long centerProductId) {
         centerProductJpaRepository.deleteById(centerProductId);
     }
+
+    @Override
+    public Page<CenterProduct> findByCenterTrainerIdAndCenterId(Long centerTrainerId, Long centerId, Pageable pageable) {
+        return centerProductJpaRepository.findByCenterTrainerIdAndCenterId(centerTrainerId, centerId, pageable);
+    }
+
 }

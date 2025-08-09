@@ -6,22 +6,20 @@ import lombok.Getter;
 
 public enum CenterTrainerRole {
 
-    OWNER("OWNER", "소유자"),                // 센터의 실질적 소유자
-    SUPER_ADMIN("SUPER_ADMIN", "최고관리자"), // 센터 전체 관리
-    GENERAL("GENERAL", "일반 사용자");        // 기본 권한
+    OWNER("OWNER"),                // 센터의 실질적 소유자
+    SUPER_ADMIN("SUPER_ADMIN"), // 센터 전체 관리
+    GENERAL("GENERAL");        // 기본 권한
 
     @Getter
     private final String code;
-    private final String message;
 
-    CenterTrainerRole(String code, String message) {
+    CenterTrainerRole(String code) {
         this.code = code;
-        this.message = message;
     }
 
     @JsonValue
-    public String getMessage() {
-        return message;
+    public String getCode() {
+        return code;
     }
 
 

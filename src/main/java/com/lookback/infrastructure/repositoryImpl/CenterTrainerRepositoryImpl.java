@@ -18,4 +18,15 @@ public class CenterTrainerRepositoryImpl implements CenterTrainerRepository {
     public Page<CenterTrainer> findByCenterId(Long centerId, Pageable pageable) {
         return centerTrainerJpaRepository.findByCenterId(centerId, pageable);
     }
+
+    @Override
+    public CenterTrainer findByIdAndCenterId(Long centerTrainerId, Long centerId) {
+        CenterTrainer centerTrainer = centerTrainerJpaRepository.findByIdAndCenterId(centerTrainerId, centerId).orElse(null);
+        return centerTrainer;
+    }
+
+    @Override
+    public CenterTrainer findByTrainerIdAndCenterId(Long trainerId, Long centerId) {
+        return centerTrainerJpaRepository.findByTrainerIdAndCenterId(trainerId, centerId).orElse(null);
+    }
 }

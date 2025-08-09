@@ -38,6 +38,10 @@ public class CenterProduct extends BaseEntity {
     @JoinColumn(name="CENTER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Center center;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="CENTER_TRAINER_ID", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private CenterTrainer centerTrainer;
+
     public void update(SaveCenterProductRequest dto) {
         this.centerProductName = dto.getCenterProductName();
         this.centerProductUsagePeriod = dto.getCenterProductUsagePeriod();
