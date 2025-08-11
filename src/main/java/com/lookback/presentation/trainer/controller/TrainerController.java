@@ -1,5 +1,6 @@
 package com.lookback.presentation.trainer.controller;
 
+import com.lookback.domain.user.service.TrainerService;
 import com.lookback.domain.user.service.TrainingService;
 import com.lookback.presentation.common.ApiResponse;
 import com.lookback.presentation.trainer.dto.*;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TrainerController {
 
     private final TrainingService trainingService;
+    private final TrainerService trainerService;
 
     @GetMapping("/trainer/member")
     public ResponseEntity<ApiResponse<T>> trainerMember(
@@ -55,4 +57,5 @@ public class TrainerController {
         AddMemberDto addMemberDto = trainingService.addMember(request, addMemberRequest);
         return new ResponseEntity(ApiResponse.success(addMemberDto, response), HttpStatus.OK);
     }
+
 }

@@ -1,11 +1,13 @@
 package com.lookback.presentation.users.dto;
 
 import com.lookback.domain.common.constant.enums.TrainerInfoType;
+import com.lookback.domain.user.entity.Trainer;
 import com.lookback.domain.user.entity.TrainerInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.time.LocalDateTime;
 
@@ -40,5 +42,19 @@ public class TrainerInfoDto {
                 .trainerInfoStartAt(entity.getTrainerInfoStartAt())
                 .trainerInfoEndAt(entity.getTrainerInfoEndAt())
                 .build();
+    }
+
+    public TrainerInfo toEntity(Trainer trainer) {
+        TrainerInfo trainerInfo = new TrainerInfo();
+        trainerInfo.setTrainerInfoName(trainerInfoName);
+        trainerInfo.setTrainerInfoContent(trainerInfoContent);
+        trainerInfo.setTrainerInfoType(trainerInfoType);
+        trainerInfo.setTrainerInfoInProgress(trainerInfoInProgress);
+        trainerInfo.setTrainerInfoAcquisitionDate(trainerInfoAcquisitionDate);
+        trainerInfo.setTrainerInfoStartAt(trainerInfoStartAt);
+        trainerInfo.setTrainerInfoEndAt(trainerInfoEndAt);
+        trainerInfo.setTrainer(trainer);
+
+        return trainerInfo;
     }
 }
