@@ -1,13 +1,11 @@
 package com.lookback.domain.record.service;
 
 import com.lookback.common.context.UserContext;
-import com.lookback.domain.common.constant.enums.ExerciseDetailTypeEnum;
-import com.lookback.domain.common.constant.enums.FileStatus;
-import com.lookback.domain.common.constant.enums.ShareStatus;
-import com.lookback.domain.common.constant.enums.TrainingStatus;
+import com.lookback.domain.common.constant.enums.*;
 import com.lookback.domain.common.handler.exception.RestApiException;
 import com.lookback.domain.file.entity.UploadFile;
 import com.lookback.domain.file.repository.FileRepository;
+import com.lookback.domain.file.service.FileService;
 import com.lookback.domain.muscle.repository.MuscleGroupRepository;
 import com.lookback.domain.record.dto.RecordWithDetailsDto;
 import com.lookback.domain.record.dto.UsersDomainDto;
@@ -42,6 +40,7 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 @RequiredArgsConstructor
 public class RecordService {
 
+    private final FileService fileService;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -244,12 +243,7 @@ public class RecordService {
             //파일 부모키 연결
             //TODO SAVED가 아닌애들만 찾을 것
             if(er.getUploadFiles() != null && er.getUploadFiles().size() > 0) {
-                for(UploadFileDto uf : er.getUploadFiles()) {
-                    UploadFile findFile = fileRepository.findById(uf.getUuid());
-                    findFile.setReferenceId(targetRecord.getId());
-                    findFile.setOrd(uf.getOrd());
-                    findFile.setStatus(FileStatus.SAVED);
-                };
+                    fileService.linkToReferenceIdList(er.getUploadFiles(), targetRecord.getId(), FileType.EXERCISE_RECORD_MEDIA);
             }
 
             if(er.getDelFiles() != null && er.getDelFiles().size() > 0) {

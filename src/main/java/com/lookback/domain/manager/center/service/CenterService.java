@@ -1,18 +1,24 @@
 package com.lookback.domain.manager.center.service;
 
+import com.lookback.domain.common.constant.enums.FileType;
 import com.lookback.domain.common.handler.exception.RestApiException;
+import com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode;
 import com.lookback.domain.common.handler.response.ErrorCode;
+import com.lookback.domain.file.service.FileService;
 import com.lookback.domain.manager.center.entity.Center;
 import com.lookback.domain.manager.center.entity.CenterFacility;
 import com.lookback.domain.manager.center.entity.CenterOperateTime;
 import com.lookback.domain.manager.center.entity.CenterSns;
 import com.lookback.domain.manager.center.repository.CenterRepository;
 import com.lookback.presentation.manager.center.dto.*;
+import com.lookback.presentation.record.dto.UploadFileDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.lookback.domain.common.handler.exception.errorCode.CommonErrorCode.INVALID_PARAMETER;
@@ -23,6 +29,7 @@ import static com.lookback.domain.common.handler.exception.errorCode.CommonError
 public class CenterService {
 
     private final CenterRepository centerRepository;
+    private final FileService fileService;
 
     public FindCenterResponse findCenter(FindCenterRequest findCenterRequest) {
         Long centerId = findCenterRequest.getCenterId();
@@ -46,6 +53,7 @@ public class CenterService {
         // 등록
         boolean isCreate = saveCenterRequest.getCenterId() == null;
         boolean isUpdate = !isCreate;
+        Long centerId = null;
         if (isCreate) {
             Center center = saveCenterRequest.toEntity(new Center());
             List<CenterFacility> centerFacilities = saveCenterRequest.getCenterFacilities().stream().map(centerFacilityDto -> centerFacilityDto.toEntity(center)).toList();
@@ -55,7 +63,8 @@ public class CenterService {
             center.setCenterSnss(centerSnss);
             center.setCenterOperateTimes(centerOperateTimes);
 
-            centerRepository.save(center);
+            Center saveCenter = centerRepository.save(center);
+            centerId = saveCenter.getId();
         }
 
         if (isUpdate) {
@@ -65,6 +74,18 @@ public class CenterService {
             }
 
             findCenter.update(saveCenterRequest);
+            centerId = findCenter.getId();
+        }
+
+        // TODO FILE 예시로 사용
+        try {
+            List<UploadFileDto> uploadFileDtos = saveCenterRequest.getUploadFiles();
+            fileService.linkToReferenceIdList(uploadFileDtos, centerId, null);
+
+            // del도 만들기
+            fileService.deleteToRefernceIdList(saveCenterRequest.getDelFiles());
+        } catch (Exception e) {
+            throw new RestApiException(CommonErrorCode.FILE_UPLOAD_FAIL);
         }
 
     }

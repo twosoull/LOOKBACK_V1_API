@@ -1,6 +1,7 @@
 package com.lookback.presentation.manager.center.dto;
 
 import com.lookback.domain.manager.center.entity.Center;
+import com.lookback.presentation.record.dto.UploadFileDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class SaveCenterRequest {
     private List<CenterOperateTimeDto> centerOperateTimes = new ArrayList<>();
     private List<CenterFacilityDto> centerFacilities = new ArrayList<>();
     private List<CenterSnsDto> centerSnss = new ArrayList<>();
-    // TODO 사진 추가
+    private List<UploadFileDto> uploadFiles = new ArrayList<>();
+    private List<UploadFileDto> delFiles = new ArrayList<>();
 
     public Center toEntity(Center center) {
         center.setId(this.getCenterId()); // 새로 만드는 경우 null로 둘 수도 있음
